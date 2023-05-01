@@ -1,7 +1,7 @@
 import React from "react";
 import { IconButtonWithTooltip } from "@components/IconButtonWithTooltip";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { useRouter } from "next/router";
+import FigmaIssuesIcon from "./FigmaIssuesIcon";
 
 export const iconId = "figma-sticky-to-gitlab-issues";
 
@@ -14,8 +14,9 @@ export const FigmaStickyToGitLabIssuesIconButton: React.FC = () => {
 
   return (
     <IconButtonWithTooltip
-      icon={<FileDownloadOutlinedIcon />}
+      icon={<FigmaIssuesIcon />}
       tooltipText="FigJam Sticky To GitLab Issues"
+      tooltipPlacement="right"
       key="figjam-sticky-to-gitlab-issues"
       onClick={handleClick}
     />
