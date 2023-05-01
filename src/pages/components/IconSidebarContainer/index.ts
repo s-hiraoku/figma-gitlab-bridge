@@ -1,0 +1,1 @@
+export { IconSidebarContainer } from './IconSidebarContainer';

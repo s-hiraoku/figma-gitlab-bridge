@@ -1,22 +1,23 @@
 import Head from "next/head";
+import { Typography, Box } from "@mui/material";
 
-import { App } from "@features/App";
-import Box from "@mui/material/Box";
-
-export default function Home() {
+export default function Settings() {
   return (
     <>
       <Head>
-        <title>Figma GitLab Bridge</title>
+        <title>Settings - Figma GitLab Bridge</title>
         <meta
           name="description"
-          content="An application that links Figma and GitLab."
+          content="Settings for the Figma GitLab Bridge application."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Box component="main" sx={{ display: "flex", justifyContent: "center" }}>
-        <App />
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h2">Settings</Typography>
+          {/* Settings content goes here */}
+        </Box>
       </Box>
     </>
   );

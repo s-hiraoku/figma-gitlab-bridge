@@ -6,17 +6,56 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "fc:new": "hygen fc new",
+    "hook:new": "hygen hook new",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@types/node": "18.15.11",
-    "@types/react": "18.0.35",
-    "@types/react-dom": "18.0.11",
-    "eslint": "8.38.0",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@lexical/react": "^0.9.2",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.12.0",
     "eslint-config-next": "13.3.0",
+    "lexical": "^0.9.2",
     "next": "13.3.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "typescript": "5.0.4"
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@markuplint/jsx-parser": "^3.6.1",
+    "@markuplint/react-spec": "^3.6.1",
+    "@storybook/addon-essentials": "^7.0.5",
+    "@storybook/addon-interactions": "^7.0.5",
+    "@storybook/addon-links": "^7.0.5",
+    "@storybook/addon-postcss": "^2.0.0",
+    "@storybook/addon-styling": "^1.0.2",
+    "@storybook/blocks": "^7.0.5",
+    "@storybook/nextjs": "^7.0.5",
+    "@storybook/react": "^7.0.5",
+    "@storybook/testing-library": "^0.0.14-next.2",
+    "@testing-library/react": "^14.0.0",
+    "@types/node": "^18.16.0",
+    "@types/react": "^18.0.38",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
+    "autoprefixer": "^10.4.14",
+    "eslint": "^8.38.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-storybook": "^0.6.11",
+    "hygen": "^6.2.11",
+    "postcss": "^8.4.22",
+    "postcss-loader": "^7.2.4",
+    "storybook": "^7.0.5",
+    "tailwindcss": "^3.3.1",
+    "tsconfig-paths-webpack-plugin": "^4.0.1",
+    "typescript": "^5.0.4",
+    "webpack": "^5.80.0"
+  },
+  "volta": {
+    "node": "18.16.0"
   }
 }

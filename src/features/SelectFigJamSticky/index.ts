@@ -1,0 +1,1 @@
+export { SelectFigJamSticky } from './SelectFigJamSticky';
