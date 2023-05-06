@@ -14,7 +14,7 @@ export const FigmaStickyToGitLabIssuesIconButton: React.FC = () => {
   }
   const { setSelectedAppId } = context;
   const handleClick = () => {
-    router.push("/");
+    router.push("/figjamStickyToGitlabIssues");
     setSelectedAppId(FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID);
   };
 
