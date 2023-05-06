@@ -1,21 +1,19 @@
-import { useState } from "react";
-import { IconType } from "@types";
-import { AppRegisterContext } from "@stores/context/AppRegisterContext";
+import { useContext } from "react";
+import { AppType } from "@types";
+import { AppContext } from "@stores/context/AppContext";
 
 type UseAppRegister = {
-  icons: IconType[];
-  registerIcon: (icon: IconType) => void;
+  apps: AppType[];
+  registerApp: (app: AppType) => void;
+  unregisterApp: (appId: string) => void;
+  selectedAppId: string | null;
+  setSelectedAppId: (appId: string) => void;
 };
 
 export const useAppRegister = (): UseAppRegister => {
-  const [icons, setIcons] = useState<IconType[]>([]);
-
-  const registerIcon = (icon: IconType) => {
-    setIcons((prevIcons) => [...prevIcons, icon]);
-  };
-
-  return {
-    icons,
-    registerIcon,
-  };
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("useAppRegister must be used within a AppProvider");
+  }
+  return context;
 };

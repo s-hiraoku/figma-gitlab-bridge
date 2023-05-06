@@ -1,9 +1,15 @@
 import Head from "next/head";
-
 import { App } from "@features/App";
 import Box from "@mui/material/Box";
+import { useContext } from "react";
+import { AppContext } from "@stores/context/AppContext";
 
 export default function Home() {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("Home component must be wrapped within an AppProvider");
+  }
+  const { selectedAppId } = context;
   return (
     <>
       <Head>
@@ -16,7 +22,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Box component="main" sx={{ display: "flex", justifyContent: "center" }}>
-        <App />
+        <App appId={selectedAppId ?? null} />
       </Box>
     </>
   );

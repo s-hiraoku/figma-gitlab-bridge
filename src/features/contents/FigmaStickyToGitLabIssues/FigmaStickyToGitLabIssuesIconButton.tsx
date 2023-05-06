@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { IconButtonWithTooltip } from "@components/IconButtonWithTooltip";
-import { useRouter } from "next/router";
 import FigmaIssuesIcon from "./FigmaIssuesIcon";
-
-export const iconId = "figma-sticky-to-gitlab-issues";
+import { AppContext } from "@stores/context/AppContext/AppContext";
+import { FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID } from "./FigmaStickyToGitLabIssues";
 
 export const FigmaStickyToGitLabIssuesIconButton: React.FC = () => {
-  const router = useRouter();
-
+  // TODO: context が入り込んでるのでなんとかする
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("useAppRegister must be used within a AppProvider");
+  }
+  const { setSelectedAppId } = context;
   const handleClick = () => {
-    router.push("/figma-sticky-to-gitlab-issues");
+    setSelectedAppId(FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID);
   };
 
   return (

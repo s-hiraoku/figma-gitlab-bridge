@@ -1,9 +1,4 @@
-import { IconButtonWithTooltipProps } from "@components/IconButtonWithTooltip";
-import { IconButtonProps } from "@mui/material";
-
-export type IconType = {
+export type AppType = {
   id: string;
-  icon:
-    | React.ReactElement<IconButtonWithTooltipProps>
-    | React.ReactElement<IconButtonProps>;
+  icon: React.ReactNode;
 };

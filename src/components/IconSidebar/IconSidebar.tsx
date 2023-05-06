@@ -1,17 +1,11 @@
 import React from "react";
-import { AppBar, Box, IconButtonProps, Toolbar } from "@mui/material";
+import { AppBar, Box, Toolbar } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import {
-  IconButtonWithTooltip,
-  IconButtonWithTooltipProps,
-} from "@components/IconButtonWithTooltip";
+import { IconButtonWithTooltip } from "@components/IconButtonWithTooltip";
 import { useRouter } from "next/router";
 
 type IconSidebarProps = {
-  icons: Array<
-    | React.ReactElement<IconButtonWithTooltipProps>
-    | React.ReactElement<IconButtonProps>
-  >;
+  icons: Array<React.ReactNode>;
   showSettingsIcon?: boolean;
 };
 

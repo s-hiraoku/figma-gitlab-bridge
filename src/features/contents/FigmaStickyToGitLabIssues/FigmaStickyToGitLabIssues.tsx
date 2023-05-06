@@ -3,6 +3,9 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import React from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
+export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
+  "figma-sticky-to-gitlab-issues";
+
 export const FigmaStickyToGitLabIssues: React.FC = () => {
   const handleChange = (color: string) => {
     console.log(color);
