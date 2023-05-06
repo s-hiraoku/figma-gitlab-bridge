@@ -5,7 +5,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { CssBaseline } from "@mui/material";
 import { AppProvider } from "@stores/context/AppContext";
 import { blue, red } from "@mui/material/colors";
-import { AppContent } from "./components/AppContent";
+import { AppContent } from "./_components";
 
 export default function App({ Component, pageProps }: AppProps) {
   const isDarkMode = useMediaQuery("(prefers-color-scheme: dark)");

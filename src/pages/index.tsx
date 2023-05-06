@@ -3,6 +3,7 @@ import { App } from "@features/App";
 import Box from "@mui/material/Box";
 import { useContext } from "react";
 import { AppContext } from "@stores/context/AppContext";
+import { FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID } from "@features/contents/FigmaStickyToGitLabIssues";
 
 export default function Home() {
   const context = useContext(AppContext);
@@ -22,7 +23,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Box component="main" sx={{ display: "flex", justifyContent: "center" }}>
-        <App appId={selectedAppId ?? null} />
+        <App appId={selectedAppId ?? FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID} />
       </Box>
     </>
   );
