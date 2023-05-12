@@ -1,0 +1,13 @@
+.editorContainer {
+  @apply bg-white text-gray-900 relative leading-5 font-normal text-left rounded w-full;
+}
+
+.editorInput {
+  @apply min-h-[12rem] w-full resize-none text-base relative outline-none px-2.5 py-4;
+  caret-color: black;
+  tab-size: 1;
+}
+
+.editorPlaceholder {
+  @apply text-gray-500 overflow-hidden absolute top-4 left-2.5 text-base select-none inline-block pointer-events-none;
+}

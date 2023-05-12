@@ -1,9 +1,10 @@
-import { Box } from "@mui/material";
+import { Box, Link } from "@mui/material";
 import { AppProps } from "next/app";
 import React, { useEffect } from "react";
 import { IconSidebarContainer } from "./IconSidebarContainer";
 import { useAppRegister } from "@hooks/useAppRegister";
 import { appList } from "@features/contents/registerApps";
+import { GitHubIcon } from "@assets/Icons/GitHubIcon";
 
 export const AppContent: React.FC<AppProps> = ({ Component, pageProps }) => {
   const { registerApp, unregisterApp } = useAppRegister();
@@ -26,14 +27,22 @@ export const AppContent: React.FC<AppProps> = ({ Component, pageProps }) => {
       <Box component="nav">
         <IconSidebarContainer />
       </Box>
+
       <Box
-        component="main"
         flexGrow={1}
         height="100%"
         sx={{ overflowY: "scroll", overflowX: "hidden" }}
       >
         <Component {...pageProps} />
       </Box>
+      <Link
+        href="https://github.com/s-hiraoku/figma-gitlab-bridge"
+        className="github-corner"
+        aria-label="GitHubでソースコードを表示する"
+        underline="none"
+      >
+        <GitHubIcon />
+      </Link>
     </Box>
   );
 };

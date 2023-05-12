@@ -15,7 +15,7 @@ export default function FigmaStickyToGitLabIssuesWrapper() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Box component="main" sx={{ display: "flex", justifyContent: "center" }}>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
         <FigmaStickyToGitLabIssues />
       </Box>
     </>

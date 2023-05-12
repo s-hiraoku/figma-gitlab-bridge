@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { IconButtonWithTooltip } from "@components/IconButtonWithTooltip";
-import FigmaIssuesIcon from "./FigmaIssuesIcon";
 import { AppContext } from "@stores/context/AppContext/AppContext";
-import { FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID } from "./FigmaStickyToGitLabIssues";
 import { useRouter } from "next/router";
+import HomeIcon from "@mui/icons-material/Home";
+import { HOME_APP_ID } from "./Home";
 
-export const FigmaStickyToGitLabIssuesIconButton: React.FC = () => {
+export const HomeIconButton: React.FC = () => {
   const router = useRouter();
   const context = useContext(AppContext);
   if (!context) {
@@ -13,16 +13,16 @@ export const FigmaStickyToGitLabIssuesIconButton: React.FC = () => {
   }
   const { setSelectedAppId } = context;
   const handleClick = () => {
-    router.push("/figjamStickyToGitlabIssues");
-    setSelectedAppId(FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID);
+    router.push("/");
+    setSelectedAppId(HOME_APP_ID);
   };
 
   return (
     <IconButtonWithTooltip
-      icon={<FigmaIssuesIcon />}
-      tooltipText="FigJam Sticky To GitLab Issues"
+      icon={<HomeIcon />}
+      tooltipText="Home"
       tooltipPlacement="right"
-      key="figjam-sticky-to-gitlab-issues"
+      key="home"
       onClick={handleClick}
     />
   );

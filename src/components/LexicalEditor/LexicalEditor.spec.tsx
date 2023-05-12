@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { IconSidebarContainer } from './IconSidebarContainer';
+import { LexicalEditor } from './LexicalEditor';
 
 test('Enjoy Testing!', () => {
-  render(<IconSidebarContainer />);
+  render(<LexicalEditor />);
 });
