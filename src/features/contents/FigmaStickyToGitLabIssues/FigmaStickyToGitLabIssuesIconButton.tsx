@@ -19,11 +19,12 @@ export const FigmaStickyToGitLabIssuesIconButton: React.FC = () => {
 
   return (
     <IconButtonWithTooltip
-      icon={<FigmaIssuesIcon />}
+      icon={<FigmaIssuesIcon currentColor />}
       tooltipText="FigJam Sticky To GitLab Issues"
       tooltipPlacement="right"
       key="figjam-sticky-to-gitlab-issues"
       onClick={handleClick}
+      selected={context.selectedAppId === FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID}
     />
   );
 };

@@ -1,8 +1,9 @@
-import React from "react";
-import { AppBar, Box, Toolbar } from "@mui/material";
+import React, { useState } from "react";
+import { AppBar, Box, Toolbar, useTheme } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { IconButtonWithTooltip } from "@components/IconButtonWithTooltip";
 import { useRouter } from "next/router";
+import { parseCssSizeString } from "@utils/cssSize";
 
 type IconSidebarProps = {
   icons: Array<React.ReactNode>;
@@ -11,13 +12,25 @@ type IconSidebarProps = {
 
 export const IconSidebar: React.FC<IconSidebarProps> = ({
   icons,
-  showSettingsIcon = true, // TODO: componentsとしては具象化しているので、抽象化改善予定(トップダウンとボトムアップもみたいな)
+  showSettingsIcon = true,
 }) => {
-  const [selected, setSelected] = React.useState<number | null>(null);
+  const [selected, setSelected] = useState<number>(0);
   const router = useRouter();
+  const theme = useTheme();
+
+  const barTop =
+    parseCssSizeString(theme.spacing(4)).value +
+    parseCssSizeString(theme.spacing(5)).value * (selected || 0) +
+    (selected >= 1 ? parseCssSizeString(theme.spacing(1)).value : 0);
+
   const handleSettings = () => {
     router.push("/settings");
   };
+
+  const handleIconClick = (index: number) => {
+    setSelected(index);
+  };
+
   return (
     <AppBar
       position="static"
@@ -32,8 +45,20 @@ export const IconSidebar: React.FC<IconSidebarProps> = ({
             alignItems: "center",
             height: "100vh",
             py: 2,
+            position: "relative",
           }}
         >
+          <Box
+            sx={{
+              position: "absolute",
+              left: -5,
+              top: barTop,
+              width: 2,
+              height: theme.spacing(5),
+              backgroundColor: "white",
+              transition: "top 300ms",
+            }}
+          />
           <Box
             sx={{
               display: "flex",
@@ -48,8 +73,11 @@ export const IconSidebar: React.FC<IconSidebarProps> = ({
                 sx={{
                   mt: index === 0 ? 0 : 1,
                 }}
+                onClick={() => handleIconClick(index)}
               >
-                {icon}
+                {React.cloneElement(icon as React.ReactElement, {
+                  selected: selected === index,
+                })}
               </Box>
             ))}
           </Box>

@@ -1,5 +1,5 @@
 .editorContainer {
-  @apply bg-white text-gray-900 relative leading-5 font-normal text-left rounded w-full;
+  @apply relative leading-5 font-normal text-left rounded w-full;
 }
 
 .editorInput {

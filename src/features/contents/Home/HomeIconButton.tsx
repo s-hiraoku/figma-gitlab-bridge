@@ -24,6 +24,7 @@ export const HomeIconButton: React.FC = () => {
       tooltipPlacement="right"
       key="home"
       onClick={handleClick}
+      selected={context.selectedAppId === HOME_APP_ID}
     />
   );
 };

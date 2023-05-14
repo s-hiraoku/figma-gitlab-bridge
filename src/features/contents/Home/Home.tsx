@@ -15,7 +15,7 @@ export const Home = () => {
       }}
     >
       <Box>
-        <Typography variant="h2">Figma GitLab Bridge</Typography>
+        <Typography variant="h2">🚀 Figma GitLab Bridge</Typography>
       </Box>
     </Box>
   );

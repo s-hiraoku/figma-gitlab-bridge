@@ -3,6 +3,8 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import React from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { LexicalEditor } from "@components/LexicalEditor";
+import FigmaIssuesIcon from "./FigmaIssuesIcon";
+import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -22,7 +24,29 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
         width: "90%",
       }}
     >
-      <Typography variant="h2">FigJam Sticky To GitLab Issues</Typography>
+      <Typography variant="h2">
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            component={"span"}
+            sx={{
+              width: "72px",
+              height: "72px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FigmaIssuesIcon sx={{ fontSize: "48px" }} />
+          </Box>
+          FigJam Sticky To GitLab Issues
+        </Box>
+      </Typography>
       <Box sx={{ mt: 16, width: 800 }}>
         <TextField fullWidth label="Figma URL" variant="filled" />
       </Box>
@@ -39,6 +63,13 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       <Box sx={{ mt: 8, width: "100%" }}>
         <LexicalEditor />
       </Box>
+      <Button
+        variant="outlined"
+        startIcon={<PublishOutlinedIcon />}
+        sx={{ mt: 4 }}
+      >
+        Regist to GitLab
+      </Button>
     </Box>
   );
 };
