@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { SETTING_KEY, findValueInSettingsByKey } from "./models";
 import { Loading } from "@components/Loading";
 import { FetchError } from "@components/FetchError";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const FIELD_DEFAULT_STYLE: SxProps<Theme> = { mt: 8, width: 800 };
 
@@ -38,13 +40,27 @@ export default function Settings() {
   };
 
   const handleFigmaApiEndpointBlur = () => {
-    // TODO: Save to database
-    revalidate();
+    axios
+      .put("/api/settings/figmaAPIEndpoint", { value: figmaApiEndpoint })
+      .then(() => {
+        revalidate();
+      })
+      .catch((error) => {
+        console.error("Failed to update Figma API endpoint:", error);
+        toast.error("Failed to update Figma API endpoint");
+      });
   };
 
   const handleFigmaAccessTokenBlur = () => {
-    // TODO: Save to database
-    revalidate();
+    axios
+      .put("/api/settings/figmaAccessToken", { value: figmaAccessToken })
+      .then(() => {
+        revalidate();
+      })
+      .catch((error) => {
+        console.error("Failed to update Figma access token:", error);
+        toast.error("Failed to update Figma access token");
+      });
   };
 
   if (isValidating) {

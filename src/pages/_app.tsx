@@ -6,6 +6,8 @@ import { CssBaseline } from "@mui/material";
 import { AppProvider } from "@stores/context/AppContext";
 import { blue, red } from "@mui/material/colors";
 import { AppContent } from "./_components";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App({ Component, pageProps }: AppProps) {
   const isDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -26,6 +28,18 @@ export default function App({ Component, pageProps }: AppProps) {
       <CssBaseline />
       <AppProvider>
         <AppContent Component={Component} {...pageProps} />
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
       </AppProvider>
     </ThemeProvider>
   );
