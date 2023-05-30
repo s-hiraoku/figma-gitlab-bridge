@@ -4,23 +4,21 @@ const prisma = new PrismaClient();
 
 async function main() {
   // delete all
-  await prisma.settingsData.deleteMany();
+  await prisma.settings.deleteMany();
   // seeding
-  const settingsData: Prisma.SettingsDataCreateInput[] = [
+  const settings: Prisma.SettingsCreateInput[] = [
     {
-      appId: "figma-sticky-to-gitlab-issues",
-      key: "figmaToken",
+      key: "figmaAccessToken",
       value: "",
     },
     {
-      appId: "figma-sticky-to-gitlab-issues",
       key: "figmaAPIEndpoint",
       value: "https://api.figma.com/v1/",
     },
   ];
-  for (const settingData of settingsData) {
-    await prisma.settingsData.create({
-      data: settingData,
+  for (const setting of settings) {
+    await prisma.settings.create({
+      data: setting,
     });
   }
 }

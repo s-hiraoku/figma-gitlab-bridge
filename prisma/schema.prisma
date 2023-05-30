@@ -2,13 +2,12 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // Settings 情報を格納するテーブル
-model SettingsData {
+model Settings {
   id    Int    @id @default(autoincrement())
-  appId String 
   key   String @unique
   value String
 
-  @@unique(fields: [appId, key], name: "SettingsData")
+  @@map("settings")
 }
 
 generator client {
