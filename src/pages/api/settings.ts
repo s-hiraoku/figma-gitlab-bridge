@@ -2,7 +2,7 @@ import { zSettings } from "@lib/validators";
 import { prisma } from "@api/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { HTTP_STATUS_CODES } from "@utils/httpStatusCodes";
-import { SETTING_ID, findValueInSettingsByKey } from "@pages/settings/models";
+import { SETTING_KEY, findValueInSettingsByKey } from "@pages/settings/models";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,19 +18,19 @@ export default async function handler(
       const parsedData = zSettings.parse(data);
       const figmaAPIEndpoint = findValueInSettingsByKey(
         parsedData,
-        SETTING_ID.figmaAPIEndpoint
+        SETTING_KEY.figmaAPIEndpoint
       );
       const figmaToken = findValueInSettingsByKey(
         parsedData,
-        SETTING_ID.figmaAccessToken
+        SETTING_KEY.figmaAccessToken
       );
       await prisma.$transaction([
         prisma.settings.update({
-          where: { key: SETTING_ID.figmaAPIEndpoint },
+          where: { key: SETTING_KEY.figmaAPIEndpoint },
           data: { value: figmaAPIEndpoint ?? "" },
         }),
         prisma.settings.update({
-          where: { key: SETTING_ID.figmaAccessToken },
+          where: { key: SETTING_KEY.figmaAccessToken },
           data: { value: figmaToken ?? "" },
         }),
       ]);
