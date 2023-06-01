@@ -1,0 +1,1 @@
+export { FigmaPreview } from './FigmaPreview';
