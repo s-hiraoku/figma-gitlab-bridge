@@ -5,14 +5,23 @@ import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { LexicalEditor } from "@components/LexicalEditor";
 import FigmaIssuesIcon from "./FigmaIssuesIcon";
 import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
+import { FigmaPreview } from "@components/FigmaPreview";
+import { parseFigmaId } from "./utils";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
 
 export const FigmaStickyToGitLabIssues: React.FC = () => {
-  const handleChange = (color: string) => {
+  const [figmaUrl, setFigmaUrl] = React.useState("");
+
+  const handleFigmaUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFigmaUrl(event.target.value);
+  };
+
+  const handleFigJamStickyChange = (color: string) => {
     console.log(color);
   };
+
   return (
     <Box
       sx={{
@@ -47,11 +56,22 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
           FigJam Sticky To GitLab Issues
         </Box>
       </Typography>
-      <Box sx={{ mt: 16, width: 800 }}>
-        <TextField fullWidth label="Figma URL" variant="filled" />
+      <Box sx={{ mt: 8, width: 800 }}>
+        <TextField
+          fullWidth
+          label="GitLab URL"
+          variant="filled"
+          value={figmaUrl}
+          onChange={handleFigmaUrlChange}
+        />
       </Box>
+      {parseFigmaId(figmaUrl) && (
+        <Box sx={{ mt: 8, width: 1200, height: 800 }}>
+          <FigmaPreview url={figmaUrl} />
+        </Box>
+      )}
       <Box sx={{ mt: 8, width: 200 }}>
-        <SelectFigJamSticky onChange={handleChange} />
+        <SelectFigJamSticky onChange={handleFigJamStickyChange} />
       </Box>
       <Button
         variant="outlined"
@@ -60,7 +80,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       >
         Extraction of sticky notes
       </Button>
-      <Box sx={{ mt: 8, width: "100%" }}>
+      <Box sx={{ mt: 8, width: 1000 }}>
         <LexicalEditor />
       </Box>
       <Button
