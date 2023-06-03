@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import React from "react";
+import React, { useCallback } from "react";
 import { parseFigmaId } from "../utils";
 
 type Props = {
@@ -18,14 +18,20 @@ export const FigmaUrlTextField: React.FC<Props> = ({
   onPaste,
 }) => {
   const [error, setError] = React.useState(false);
-  const handleFigmaUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(event);
-    if (parseFigmaId(event.target.value) == null && event.target.value !== "") {
-      setError(true);
-      return;
-    }
-    setError(false);
-  };
+  const handleFigmaUrlChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onChange(event);
+      if (
+        parseFigmaId(event.target.value) == null &&
+        event.target.value !== ""
+      ) {
+        setError(true);
+        return;
+      }
+      setError(false);
+    },
+    [onChange]
+  );
   return (
     <TextField
       error={error}

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import {
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -22,6 +23,8 @@ export type SelectedMenuProps = {
   placeholder?: string;
   id?: string;
   ariaLabel?: string;
+  error?: boolean;
+  helperText?: string;
 };
 
 export const SelectedMenu: React.FC<SelectedMenuProps> = ({
@@ -31,6 +34,8 @@ export const SelectedMenu: React.FC<SelectedMenuProps> = ({
   onChange,
   ariaLabel,
   id,
+  error,
+  helperText,
 }) => {
   const [selectedItem, setSelectedItem] = useState<SelectedMenuItem["value"]>(
     initialSelectedItem ? initialSelectedItem.value : ""
@@ -45,7 +50,7 @@ export const SelectedMenu: React.FC<SelectedMenuProps> = ({
   );
 
   return (
-    <FormControl fullWidth variant="outlined">
+    <FormControl fullWidth variant="outlined" error={error}>
       <InputLabel htmlFor={`${id}-label`}>{label}</InputLabel>
       <Select
         labelId={`${id}-label`}
@@ -64,6 +69,7 @@ export const SelectedMenu: React.FC<SelectedMenuProps> = ({
           </MenuItem>
         ))}
       </Select>
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );
 };
