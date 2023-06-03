@@ -11,7 +11,12 @@ import { toast } from "react-toastify";
 const FIELD_DEFAULT_STYLE: SxProps<Theme> = { mt: 8, width: 800 };
 
 export default function Settings() {
-  const { settings, error, isValidating, revalidate } = useSettings();
+  const {
+    data: settings,
+    error,
+    isValidating,
+    mutate: revalidate,
+  } = useSettings();
 
   const [figmaApiEndpoint, setFigmaApiEndpoint] = useState<string>("");
   const [figmaAccessToken, setFigmaAccessToken] = useState<string>("");
@@ -62,10 +67,6 @@ export default function Settings() {
         toast.error("Failed to update Figma access token");
       });
   };
-
-  if (isValidating) {
-    return <Loading />;
-  }
 
   if (error) {
     return <FetchError />;

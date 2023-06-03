@@ -19,6 +19,7 @@ const nextConfig = {
       "@config": resolve(__dirname, "src/config"),
       "@api": resolve(__dirname, "src/pages/api"),
       "@lib": resolve(__dirname, "src/lib"),
+      "@services": resolve(__dirname, "src/services"),
     };
     return config;
   },

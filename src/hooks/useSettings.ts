@@ -1,36 +1,20 @@
-import useSWR, { KeyedMutator } from "swr";
-import axios, { AxiosResponse } from "axios";
+import { UseRequestReturnType, useRequest } from "./useRequest";
 import { Settings, zSettings } from "@lib/validators";
 
-type FetchResponse = Settings;
-type Error = any;
-
-const fetcher = (url: string): Promise<FetchResponse> =>
-  axios
-    .get<FetchResponse>(url)
-    .then((res: AxiosResponse<FetchResponse>) => res.data);
-
-export type UseSettingsResponse = {
-  settings: Settings | undefined;
-  error: Error | undefined;
-  isValidating: boolean;
-  revalidate: KeyedMutator<Settings>;
-};
-
-export const useSettings = (): UseSettingsResponse => {
-  const { data, error, mutate } = useSWR<FetchResponse, Error>(
+export const useSettings = (): UseRequestReturnType<Settings, any> => {
+  const { data, error, isValidating, mutate } = useRequest<Settings>(
     "/api/settings",
-    fetcher,
+    {},
     {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
+      fallbackData: undefined,
+      revalidateIfStale: false,
     }
   );
 
   return {
-    settings: data ? zSettings.parse(data) : undefined,
+    data: data ? zSettings.parse(data) : undefined,
     error,
-    isValidating: !error && !data,
-    revalidate: mutate,
+    isValidating,
+    mutate,
   };
 };

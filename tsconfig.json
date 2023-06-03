@@ -26,7 +26,8 @@
       "@stores/*": ["./src/stores/*"],
       "@config": ["./src/config"],
       "@api/*": ["./src/pages/api/*"],
-      "@lib/*": ["./src/lib/*"]
+      "@lib/*": ["./src/lib/*"],
+      "@services/*": ["./src/services/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
