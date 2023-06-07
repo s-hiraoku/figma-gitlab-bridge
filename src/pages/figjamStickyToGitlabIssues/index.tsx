@@ -1,5 +1,6 @@
 import { FigmaStickyToGitLabIssues } from "@features/contents/FigmaStickyToGitLabIssues";
 import { Box } from "@mui/material";
+
 import Head from "next/head";
 import React from "react";
 

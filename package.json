@@ -10,7 +10,8 @@
     "fc:new": "hygen fc new",
     "hook:new": "hygen hook new",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@babel/core": "^7.22.1",
@@ -59,7 +60,9 @@
     "eslint": "^8.38.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-storybook": "^0.6.12",
+    "husky": "^8.0.3",
     "hygen": "^6.2.11",
+    "lint-staged": "^13.2.2",
     "postcss": "^8.4.22",
     "postcss-loader": "^7.2.4",
     "prisma": "4.14.1",
@@ -75,5 +78,9 @@
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "eslint --fix",
+    "*": "prettier --write"
   }
 }

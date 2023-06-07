@@ -13,7 +13,7 @@ async function main() {
     },
     {
       key: "figmaAPIEndpoint",
-      value: "https://api.figma.com/v1/",
+      value: "https://api.figma.com/v1/files/",
     },
   ];
   for (const setting of settings) {

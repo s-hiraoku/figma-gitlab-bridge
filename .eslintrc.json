@@ -4,11 +4,5 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:storybook/recommended"
-  ],
-  "no-restricted-imports": [
-    "error",
-    {
-      "patterns": ["@features/*/*"]
-    }
   ]
 }

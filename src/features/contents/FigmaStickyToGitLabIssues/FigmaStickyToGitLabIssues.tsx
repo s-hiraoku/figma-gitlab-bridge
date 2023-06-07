@@ -1,20 +1,31 @@
-import { Box, Button, Typography } from "@mui/material";
-import React from "react";
+import { Box, Button } from "@mui/material";
+import React, { useState } from "react";
 import { LexicalEditor } from "@components/LexicalEditor";
 import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
 import { FigmaPreview } from "@components/FigmaPreview";
 import { parseFigmaId } from "./utils";
 import { STATUS, StatusType } from "./models";
 import { ExtractStickyNotes, FigmaUrlTextField, Title } from "./components";
+import { useFigJamStickyNotes } from "./hooks/useFigJamStickyNotes";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
 
 export const FigmaStickyToGitLabIssues: React.FC = () => {
-  const [figmaUrl, setFigmaUrl] = React.useState("");
-  const [status, setStatus] = React.useState<StatusType>(STATUS.initialStage);
+  const [figmaUrl, setFigmaUrl] = useState<string>("");
+  const [status, setStatus] = useState<StatusType>(STATUS.initialStage);
+  const {
+    data: stickyNotes,
+    error,
+    isValidating,
+    fetchStickyNotes,
+  } = useFigJamStickyNotes(figmaUrl);
 
   const checkFigmaIdAndSetStatus = (value: string) => {
+    if (value === "") {
+      setStatus(STATUS.initialStage);
+      return;
+    }
     if (parseFigmaId(value)) {
       setStatus(STATUS.fileSetupCompleted);
     }
@@ -38,7 +49,8 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   };
 
   const handleExtractStickyNoteClick = () => {
-    console.log("handleExtractStickyNoteClick");
+    // TODO: error handling
+    fetchStickyNotes();
   };
 
   return (

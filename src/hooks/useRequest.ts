@@ -1,7 +1,6 @@
 import { AxiosError } from "axios";
 import useSWR, { SWRConfiguration, SWRResponse } from "swr";
 import { apiClient, RequestConfig } from "@services/api";
-import { Key } from "@mui/icons-material";
 
 const REQUEST_CONFIG: RequestConfig = {
   headers: {
