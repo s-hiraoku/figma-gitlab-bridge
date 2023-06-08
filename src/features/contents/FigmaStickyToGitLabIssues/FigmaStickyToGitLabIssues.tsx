@@ -98,7 +98,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
             startIcon={<PublishOutlinedIcon />}
             sx={{ mt: 4 }}
           >
-            Regist to GitLab
+            Resist to GitLab
           </Button>
         </>
       )}
