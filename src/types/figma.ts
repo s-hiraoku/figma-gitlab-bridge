@@ -1124,3 +1124,8 @@ export interface FileStylesResponse {
     readonly styles: ReadonlyArray<FullStyleMetadata>;
   };
 }
+
+export interface ErrorResponse {
+  readonly status: number;
+  readonly err: string;
+}
