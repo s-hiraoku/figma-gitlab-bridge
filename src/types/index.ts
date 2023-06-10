@@ -1,5 +1,7 @@
 export * as Figma from "./figma";
 
+export type { RequestConfig } from "./axios";
+
 export type valueOf<T> = T[keyof T];
 
 export type AppType = {

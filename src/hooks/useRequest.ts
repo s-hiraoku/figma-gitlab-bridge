@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 import useSWR, { SWRConfiguration, SWRResponse } from "swr";
-import { apiClient, RequestConfig } from "@services/api";
+import { RequestConfig } from "@types";
+import { useApiClient } from "@hooks/useApiClient";
 
 const REQUEST_CONFIG: RequestConfig = {
   headers: {
@@ -29,16 +30,6 @@ const baseConfig: SWRConfiguration = {
   shouldRetryOnError: false,
 };
 
-const fetcher =
-  (requestConfig: RequestConfig) =>
-  async <Data>(url: string): Promise<Data> => {
-    const res = await apiClient(url, {
-      ...REQUEST_CONFIG,
-      ...requestConfig,
-    });
-    return res.data;
-  };
-
 function createConfig(
   customConfig: Partial<SWRConfiguration> = {}
 ): SWRConfiguration {
@@ -50,6 +41,15 @@ export function useRequest<Data = unknown, Error = unknown>(
   requestConfig: RequestConfig = {},
   { fallbackData, ...config }: UseRequestSWRConfig<Data, Error> = {}
 ): UseRequestReturnType<Data, Error> {
+  const { apiClient } = useApiClient();
+  const fetcher = async (url: string): Promise<Data> => {
+    const res = await apiClient.get(url, {
+      ...REQUEST_CONFIG,
+      ...requestConfig,
+    });
+    return res.data;
+  };
+
   const finalConfig = createConfig({
     ...config,
     fallbackData,
@@ -58,7 +58,7 @@ export function useRequest<Data = unknown, Error = unknown>(
     Data,
     AxiosError<Error>,
     string | null
-  >(url, fetcher(requestConfig), finalConfig);
+  >(url, fetcher, finalConfig);
 
   return {
     data,

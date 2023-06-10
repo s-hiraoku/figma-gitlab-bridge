@@ -29,6 +29,7 @@ export default function Settings() {
         findValueInSettingsByKey(settings, SETTING_KEY.figmaAccessToken) ?? ""
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isValidating]);
 
   const handleFigmaApiEndpointChange = (

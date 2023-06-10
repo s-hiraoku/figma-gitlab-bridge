@@ -4,7 +4,7 @@ import { useSettings } from "@hooks/useSettings";
 import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 import { parseFigmaId } from "../../utils";
 import { Figma } from "@types";
-import { useFigmaApiClient } from "@services/useFigmaApiClient";
+import { useFigmaApiClient } from "@hooks/useFigmaApiClient";
 
 export const useFigJamStickyNotes = (figmaUrl: string) => {
   const [data, setData] = useState<Figma.FileResponse | undefined>(undefined);
