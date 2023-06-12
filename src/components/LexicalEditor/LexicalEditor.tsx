@@ -4,18 +4,23 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
-import MyCustomAutoFocusPlugin from "./plugins/MyCustomAutoFocusPlugin";
 import editorConfig from "./editorConfig";
 import onChange from "./onChange";
 import styles from "./LexicalEditor.module.css";
 import { useTheme } from "@mui/material";
 import { useState } from "react";
+import InitializePlugin from "./plugins/InitializePlugin";
 
-export function LexicalEditor() {
+type LexicalEditorProps = {
+  initialText: string;
+};
+
+export function LexicalEditor(props: LexicalEditorProps) {
   const theme = useTheme();
+  const { initialText } = props;
 
-  const [borderColor, setBorderColor] = useState(theme.palette.divider);
-  const [isFocused, setIsFocused] = useState(false);
+  const [borderColor, setBorderColor] = useState<string>(theme.palette.divider);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const cursorColor = theme.palette.text.primary;
 
@@ -66,14 +71,12 @@ export function LexicalEditor() {
         />
         <OnChangePlugin onChange={onChange} />
         <HistoryPlugin />
-        <MyCustomAutoFocusPlugin />
+        <InitializePlugin text={initialText} />
       </div>
     </LexicalComposer>
   );
 }
 
 function Placeholder() {
-  return (
-    <div className={styles.editorPlaceholder}>Enter some plain text...</div>
-  );
+  return <div className={styles.editorPlaceholder}>Enter import data...</div>;
 }

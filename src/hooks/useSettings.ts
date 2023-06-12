@@ -1,7 +1,7 @@
 import { UseRequestReturnType, useRequest } from "./useRequest";
 import { Settings, zSettings } from "@lib/validators";
 
-export const useSettings = (): UseRequestReturnType<Settings, any> => {
+export const useSettings = (): UseRequestReturnType<Settings, unknown> => {
   const { data, error, isValidating, mutate } = useRequest<Settings>(
     "/api/settings",
     {},

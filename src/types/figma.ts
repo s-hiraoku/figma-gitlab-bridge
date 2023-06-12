@@ -106,7 +106,8 @@ export type NodeType =
   | "SLICE"
   | "COMPONENT"
   | "COMPONENT_SET"
-  | "INSTANCE";
+  | "INSTANCE"
+  | "STICKY";
 
 export type Node =
   | Document
@@ -124,7 +125,8 @@ export type Node =
   | Slice
   | Component
   | ComponentSet
-  | Instance;
+  | Instance
+  | Sticky;
 
 /** Node Properties */
 
@@ -583,6 +585,21 @@ export interface Instance extends FrameBase {
    * table (see endpoints section below)
    */
   readonly componentId: string;
+}
+
+export interface Sticky {
+  readonly id: string;
+  readonly name: string;
+  readonly type: "STICKY";
+  readonly characters: string;
+  readonly scrollBehavior: string; // e.g., "SCROLLS"
+  readonly absoluteBoundingBox: Rect;
+  readonly absoluteRenderBounds: Rect;
+  readonly constraints: LayoutConstraint;
+  readonly blendMode: BlendMode; // e.g., "PASS_THROUGH"
+  readonly fills: ReadonlyArray<Paint>;
+  readonly authorVisible: boolean;
+  readonly effects: ReadonlyArray<Effect>;
 }
 
 // Types

@@ -1,6 +1,7 @@
 import { HTTP_STATUS_CODES } from "@utils/httpStatusCodes";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 type UseHttpErrorHandlerReturnType = {
   handleHttpError: <E extends AxiosError>(error: E) => void;
@@ -10,6 +11,7 @@ export const useHttpErrorHandler = (): UseHttpErrorHandlerReturnType => {
   const router = useRouter();
 
   const handleHttpError = <E extends AxiosError>(error: E) => {
+    toast.error("エラーが発生しました。");
     switch (error.response?.status) {
       case HTTP_STATUS_CODES.UNAUTHORIZED:
         // TODO: Uncomment this line when login page is ready.

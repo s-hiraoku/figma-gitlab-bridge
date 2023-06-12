@@ -9,5 +9,7 @@ export default function onChange(editorState: EditorState) {
     const selection = $getSelection();
 
     console.log(root, selection);
+
+    console.log(editorState.read(() => $getRoot()));
   });
 }

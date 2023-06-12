@@ -1,12 +1,13 @@
 import { Box, Button } from "@mui/material";
-import React, { useState } from "react";
-import { LexicalEditor } from "@components/LexicalEditor";
+import React, { useEffect, useState } from "react";
+import { LexicalEditorWrapper } from "@components/LexicalEditor";
 import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
 import { FigmaPreview } from "@components/FigmaPreview";
 import { parseFigmaId } from "./utils";
 import { STATUS, StatusType } from "./models";
 import { ExtractStickyNotes, FigmaUrlTextField, Title } from "./components";
 import { useFigJamStickyNotes } from "./hooks/useFigJamStickyNotes";
+import { useFigJamResponseConverter } from "./hooks/useFigJamResponseConverter";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -14,12 +15,15 @@ export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
 export const FigmaStickyToGitLabIssues: React.FC = () => {
   const [figmaUrl, setFigmaUrl] = useState<string>("");
   const [status, setStatus] = useState<StatusType>(STATUS.initialStage);
+  const [stickyNote, setStickyNote] = useState<string>("");
   const {
-    data: stickyNotes,
+    data: fileResponse,
     error,
     isValidating,
     fetchStickyNotes,
   } = useFigJamStickyNotes(figmaUrl);
+  const { converter: convertFileResponseToStickyNotes } =
+    useFigJamResponseConverter();
 
   const checkFigmaIdAndSetStatus = (value: string) => {
     if (value === "") {
@@ -49,9 +53,34 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   };
 
   const handleExtractStickyNoteClick = () => {
-    // TODO: error handling
     fetchStickyNotes();
   };
+
+  const handleEditorChange = (text: string) => {
+    setStickyNote(text);
+  };
+
+  useEffect(() => {
+    if (!error && !isValidating && fileResponse) {
+      setStatus(STATUS.extractStickyNote);
+      console.log(
+        convertFileResponseToStickyNotes(figmaUrl, fileResponse).join("\n")
+      );
+      setStickyNote(
+        convertFileResponseToStickyNotes(figmaUrl, fileResponse).join("\n")
+      );
+    }
+    // return () => {
+    //   setStatus(STATUS.fileSetupCompleted);
+    //   setStickyNote("");
+    // };
+  }, [
+    convertFileResponseToStickyNotes,
+    error,
+    figmaUrl,
+    fileResponse,
+    isValidating,
+  ]);
 
   return (
     <Box
@@ -91,7 +120,10 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       {status >= STATUS.extractStickyNote && (
         <>
           <Box sx={{ mt: 8, width: 1200 }}>
-            <LexicalEditor />
+            <LexicalEditorWrapper
+              initialText={stickyNote}
+              onChange={handleEditorChange}
+            />
           </Box>
           <Button
             variant="outlined"
