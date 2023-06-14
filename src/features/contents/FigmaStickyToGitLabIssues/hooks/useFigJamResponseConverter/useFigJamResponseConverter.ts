@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Figma } from "@types";
 import {
   StickyNote,
@@ -27,40 +27,45 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
     );
   }, [settings]);
 
-  const createFigmaNodeURL = (figmaId: string, nodeId: string) => {
-    return `${figmaAPIEndpoint}/files/${figmaId}?node-id=${nodeId}`;
-  };
+  const createFigmaNodeURL = useCallback(
+    (figmaId: string, nodeId: string) => {
+      return `${figmaAPIEndpoint}/files/${figmaId}?node-id=${nodeId}`;
+    },
+    [figmaAPIEndpoint]
+  );
 
-  const convertFileResponseToStickyNotes = (
-    figmaUrl: string,
-    fileResponse: Figma.FileResponse | undefined
-  ): StickyNote[] => {
-    if (fileResponse == null) {
-      return [];
-    }
-    const figmaId = parseFigmaId(figmaUrl);
-    const { document } = fileResponse;
-    const { children } = document;
-
-    const searchStickyNotes = (node: Figma.Node): StickyNote[] => {
-      console.log(node);
-      if (isStickyNode(node)) {
-        const { id, characters: text } = node;
-        const url = createFigmaNodeURL(figmaId ?? "", id);
-        const stickyNote: StickyNote = {
-          text,
-          url,
-        };
-        return [stickyNote];
+  const convertFileResponseToStickyNotes = useCallback(
+    (
+      figmaUrl: string,
+      fileResponse: Figma.FileResponse | undefined
+    ): StickyNote[] => {
+      if (fileResponse == null) {
+        return [];
       }
-      if (!isNodeWithChildren(node)) return [];
-      return node.children.flatMap(searchStickyNotes);
-    };
+      const figmaId = parseFigmaId(figmaUrl);
+      const { document } = fileResponse;
+      const { children } = document;
 
-    const stickyNotes: StickyNote[] = children.flatMap(searchStickyNotes);
+      const searchStickyNotes = (node: Figma.Node): StickyNote[] => {
+        if (isStickyNode(node)) {
+          const { id, characters: text } = node;
+          const url = createFigmaNodeURL(figmaId ?? "", id);
+          const stickyNote: StickyNote = {
+            text,
+            url,
+          };
+          return [stickyNote];
+        }
+        if (!isNodeWithChildren(node)) return [];
+        return node.children.flatMap(searchStickyNotes);
+      };
 
-    return stickyNotes;
-  };
+      const stickyNotes: StickyNote[] = children.flatMap(searchStickyNotes);
+
+      return stickyNotes;
+    },
+    [createFigmaNodeURL]
+  );
 
   return { converter: convertFileResponseToStickyNotes };
 };

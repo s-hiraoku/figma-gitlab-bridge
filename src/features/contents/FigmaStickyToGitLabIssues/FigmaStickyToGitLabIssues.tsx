@@ -1,9 +1,9 @@
 import { Box, Button } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { LexicalEditorWrapper } from "@components/LexicalEditor";
 import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
 import { FigmaPreview } from "@components/FigmaPreview";
-import { parseFigmaId } from "./utils";
+import { parseFigmaId, stickyNotesToText } from "./utils";
 import { STATUS, StatusType } from "./models";
 import { ExtractStickyNotes, FigmaUrlTextField, Title } from "./components";
 import { useFigJamStickyNotes } from "./hooks/useFigJamStickyNotes";
@@ -25,7 +25,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const { converter: convertFileResponseToStickyNotes } =
     useFigJamResponseConverter();
 
-  const checkFigmaIdAndSetStatus = (value: string) => {
+  const checkFigmaIdAndSetStatus = useCallback((value: string) => {
     if (value === "") {
       setStatus(STATUS.initialStage);
       return;
@@ -33,17 +33,23 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     if (parseFigmaId(value)) {
       setStatus(STATUS.fileSetupCompleted);
     }
-  };
+  }, []);
 
-  const handleFigmaUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setFigmaUrl(value);
-    checkFigmaIdAndSetStatus(value);
-  };
+  const handleFigmaUrlChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
+      setFigmaUrl(value);
+      checkFigmaIdAndSetStatus(value);
+    },
+    [checkFigmaIdAndSetStatus]
+  );
 
-  const handleFigmaUrlBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    checkFigmaIdAndSetStatus(event.target.value);
-  };
+  const handleFigmaUrlBlur = useCallback(
+    (event: React.FocusEvent<HTMLInputElement>) => {
+      checkFigmaIdAndSetStatus(event.target.value);
+    },
+    [checkFigmaIdAndSetStatus]
+  );
 
   const handleFigmaUrlPaste = (
     event: React.ClipboardEvent<HTMLInputElement>
@@ -52,28 +58,29 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     checkFigmaIdAndSetStatus(pastedText);
   };
 
-  const handleExtractStickyNoteClick = () => {
+  const handleExtractStickyNoteClick = useCallback(() => {
     fetchStickyNotes();
-  };
+  }, [fetchStickyNotes]);
 
-  const handleEditorChange = (text: string) => {
+  const handleEditorChange = useCallback((text: string) => {
     setStickyNote(text);
-  };
+  }, []);
 
   useEffect(() => {
     if (!error && !isValidating && fileResponse) {
       setStatus(STATUS.extractStickyNote);
-      console.log(
-        convertFileResponseToStickyNotes(figmaUrl, fileResponse).join("\n")
+
+      const stickyNotes = convertFileResponseToStickyNotes(
+        figmaUrl,
+        fileResponse
       );
-      setStickyNote(
-        convertFileResponseToStickyNotes(figmaUrl, fileResponse).join("\n")
-      );
+      console.log(stickyNotesToText(stickyNotes));
+      setStickyNote(stickyNotesToText(stickyNotes));
     }
-    // return () => {
-    //   setStatus(STATUS.fileSetupCompleted);
-    //   setStickyNote("");
-    // };
+    return () => {
+      //  setStatus(STATUS.fileSetupCompleted);
+      setStickyNote("");
+    };
   }, [
     convertFileResponseToStickyNotes,
     error,

@@ -36,6 +36,15 @@ export default function InitializePlugin(props: Props) {
       // Finally, append the paragraph to the root
       root.append(paragraphNode);
     });
+    return () => {
+      // Cleanup
+      editor.update(() => {
+        // Get the RootNode from the EditorState
+        const root = $getRoot();
+        // Remove all children from the root
+        root.removeChildren();
+      });
+    };
   }, [editor, text]);
 
   return null;

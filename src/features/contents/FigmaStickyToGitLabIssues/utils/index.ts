@@ -50,7 +50,7 @@ export const parseFigmaId = (figmaURL: string) => {
   return null;
 };
 
-export const rgbaToHex = (rgba: Figma.Color) => {
+export const rgbaToHexWithoutAlpha = (rgba: Figma.Color) => {
   const { r, g, b } = rgba;
   const red = Math.round(r * 255)
     .toString(16)
@@ -62,4 +62,8 @@ export const rgbaToHex = (rgba: Figma.Color) => {
     .toString(16)
     .padStart(2, "0");
   return `#${red}${green}${blue}`;
+};
+
+export const stickyNotesToText = (stickyNotes: StickyNote[]): string => {
+  return stickyNotes.map((note) => `${note.text},${note.url}`).join("\n");
 };
