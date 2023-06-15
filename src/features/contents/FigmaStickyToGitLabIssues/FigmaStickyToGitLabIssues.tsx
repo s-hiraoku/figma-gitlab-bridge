@@ -74,10 +74,10 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
         figmaUrl,
         fileResponse
       );
-      console.log(stickyNotesToText(stickyNotes));
       setStickyNote(stickyNotesToText(stickyNotes));
     }
     return () => {
+      // TODO: Needs to be fixed
       //  setStatus(STATUS.fileSetupCompleted);
       setStickyNote("");
     };

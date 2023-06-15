@@ -24,7 +24,7 @@ export default function InitializePlugin(props: Props) {
     editor.focus();
     editor.update(() => {
       // Get the RootNode from the EditorState
-      const root = $getRoot();
+      const rootNode = $getRoot();
       // Get the selection from the EditorState
       // const selection = $getSelection();
       // Create a new ParagraphNode
@@ -34,15 +34,18 @@ export default function InitializePlugin(props: Props) {
       // Append the text node to the paragraph
       paragraphNode.append(textNode);
       // Finally, append the paragraph to the root
-      root.append(paragraphNode);
+      rootNode.append(paragraphNode);
+
+      rootNode.clear().append(paragraphNode);
+      rootNode.selectEnd();
     });
     return () => {
       // Cleanup
       editor.update(() => {
         // Get the RootNode from the EditorState
-        const root = $getRoot();
+        const rootNode = $getRoot();
         // Remove all children from the root
-        root.removeChildren();
+        rootNode.removeChildren();
       });
     };
   }, [editor, text]);

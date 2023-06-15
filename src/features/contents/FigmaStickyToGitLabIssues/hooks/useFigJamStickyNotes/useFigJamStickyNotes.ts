@@ -6,6 +6,8 @@ import { parseFigmaId } from "../../utils";
 import { Figma } from "@types";
 import { useFigmaApiClient } from "@hooks/useFigmaApiClient";
 
+const FIGMA_FILES_PATH = "/files";
+
 export const useFigJamStickyNotes = (figmaUrl: string) => {
   const [data, setData] = useState<Figma.FileResponse | undefined>(undefined);
   const [error, setError] = useState<AxiosError | undefined>(undefined);
@@ -20,7 +22,9 @@ export const useFigJamStickyNotes = (figmaUrl: string) => {
     "";
 
   const figmaId = parseFigmaId(figmaUrl);
-  const requestUrl = figmaId ?? "";
+  const requestUrl = figmaId
+    ? `${FIGMA_FILES_PATH}/${figmaId}`
+    : `${FIGMA_FILES_PATH}`;
 
   const fetchStickyNotes = useCallback(async () => {
     setIsValidating(true);
