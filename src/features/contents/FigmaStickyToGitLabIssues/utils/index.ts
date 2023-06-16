@@ -50,7 +50,12 @@ export const parseFigmaId = (figmaURL: string) => {
   return null;
 };
 
-export const rgbaToHexWithoutAlpha = (rgba: Figma.Color) => {
+export const rgbaToHexWithoutAlpha = (
+  rgba: Figma.Color | undefined
+): string => {
+  if (rgba == null) {
+    return "";
+  }
   const { r, g, b } = rgba;
   const red = Math.round(r * 255)
     .toString(16)

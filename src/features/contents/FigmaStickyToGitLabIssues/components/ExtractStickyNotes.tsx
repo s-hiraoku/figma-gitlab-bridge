@@ -3,35 +3,20 @@ import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useCallback } from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import { FigJamColor } from "../types";
 
 type Props = {
-  onExtractStickyNoteClick: () => void;
+  onChangeSelectStickyColor: (color: FigJamColor) => void;
+  onClickExtractStickyNote: () => void;
 };
 
 export const ExtractStickyNotes: React.FC<Props> = ({
-  onExtractStickyNoteClick,
+  onChangeSelectStickyColor,
+  onClickExtractStickyNote,
 }) => {
-  const [selectStickyColor, setSelectStickyColor] = React.useState<string>("");
-  const [error, setError] = React.useState(false);
-  const handleFigJamStickyChange = (color: string) => {
-    setSelectStickyColor(color);
-  };
-
-  const checkSelectStickyColor = useCallback(() => {
-    if (selectStickyColor === "") {
-      return false;
-    }
-    return true;
-  }, [selectStickyColor]);
-
   const handleExtractStickyNoteClick = useCallback(() => {
-    if (checkSelectStickyColor()) {
-      setError(false);
-      onExtractStickyNoteClick();
-      return;
-    }
-    setError(true);
-  }, [checkSelectStickyColor, onExtractStickyNoteClick]);
+    onClickExtractStickyNote();
+  }, [onClickExtractStickyNote]);
 
   return (
     <Box
@@ -41,7 +26,7 @@ export const ExtractStickyNotes: React.FC<Props> = ({
       alignItems="center"
     >
       <Box sx={{ width: 264 }}>
-        <SelectFigJamSticky onChange={handleFigJamStickyChange} error={error} />
+        <SelectFigJamSticky onChange={onChangeSelectStickyColor} />
       </Box>
       <Button
         variant="outlined"

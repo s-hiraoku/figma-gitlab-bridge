@@ -1,4 +1,5 @@
 import { ComponentPropsWithoutRef, ElementType } from "react";
+import styles from "./ColorCircle.module.css";
 
 type ColorCircleProps<T extends ElementType> = {
   tag?: T;
@@ -14,12 +15,15 @@ export const ColorCircle = <T extends ElementType>({
 }: ColorCircleProps<T>) => {
   const circleSize = typeof size === "number" ? `${size}px` : size;
   const Tag = tag || "div";
+
+  const animationClass = color === "all" ? styles.colorChange : "";
+
   return (
     <Tag
       {...props}
-      className={`rounded-full ${props.className || ""}`}
+      className={`rounded-full ${props.className || ""} ${animationClass}`}
       style={{
-        backgroundColor: color,
+        backgroundColor: color !== "all" ? color : undefined,
         width: circleSize,
         height: circleSize,
       }}

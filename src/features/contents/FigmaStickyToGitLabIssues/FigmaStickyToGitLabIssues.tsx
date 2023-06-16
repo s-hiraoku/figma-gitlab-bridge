@@ -4,17 +4,27 @@ import { LexicalEditorWrapper } from "@components/LexicalEditor";
 import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
 import { FigmaPreview } from "@components/FigmaPreview";
 import { parseFigmaId, stickyNotesToText } from "./utils";
-import { STATUS, StatusType } from "./models";
 import { ExtractStickyNotes, FigmaUrlTextField, Title } from "./components";
 import { useFigJamStickyNotes } from "./hooks/useFigJamStickyNotes";
 import { useFigJamResponseConverter } from "./hooks/useFigJamResponseConverter";
+import {
+  DEFAULT_FIGMA_STICKY_COLOR,
+  FIGJAM_STATUS,
+  FigJamColor,
+  FigJamStatusType,
+} from "./types";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
 
 export const FigmaStickyToGitLabIssues: React.FC = () => {
   const [figmaUrl, setFigmaUrl] = useState<string>("");
-  const [status, setStatus] = useState<StatusType>(STATUS.initialStage);
+  const [stickyColor, setStickyColor] = React.useState<FigJamColor>(
+    DEFAULT_FIGMA_STICKY_COLOR
+  );
+  const [status, setStatus] = useState<FigJamStatusType>(
+    FIGJAM_STATUS.initialStage
+  );
   const [stickyNote, setStickyNote] = useState<string>("");
   const {
     data: fileResponse,
@@ -27,11 +37,11 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
 
   const checkFigmaIdAndSetStatus = useCallback((value: string) => {
     if (value === "") {
-      setStatus(STATUS.initialStage);
+      setStatus(FIGJAM_STATUS.initialStage);
       return;
     }
     if (parseFigmaId(value)) {
-      setStatus(STATUS.fileSetupCompleted);
+      setStatus(FIGJAM_STATUS.fileSetupCompleted);
     }
   }, []);
 
@@ -66,12 +76,20 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     setStickyNote(text);
   }, []);
 
+  const handleChangeSelectStickyColor = useCallback(
+    (stickyColor: FigJamColor) => {
+      setStickyColor(stickyColor);
+    },
+    []
+  );
+
   useEffect(() => {
     if (!error && !isValidating && fileResponse) {
-      setStatus(STATUS.extractStickyNote);
+      setStatus(FIGJAM_STATUS.extractStickyNote);
 
       const stickyNotes = convertFileResponseToStickyNotes(
         figmaUrl,
+        stickyColor,
         fileResponse
       );
       setStickyNote(stickyNotesToText(stickyNotes));
@@ -87,6 +105,8 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     figmaUrl,
     fileResponse,
     isValidating,
+    setStickyColor,
+    stickyColor,
   ]);
 
   return (
@@ -101,7 +121,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       }}
     >
       <Title title="FigJam Sticky To GitLab Issues" />
-      {status >= STATUS.initialStage && (
+      {status >= FIGJAM_STATUS.initialStage && (
         <Box sx={{ mt: 8, width: 800 }}>
           <FigmaUrlTextField
             figmaUrl={figmaUrl}
@@ -111,7 +131,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
           />
         </Box>
       )}
-      {status >= STATUS.fileSetupCompleted && (
+      {status >= FIGJAM_STATUS.fileSetupCompleted && (
         <>
           <Box sx={{ mt: 8, width: 1200, height: 800 }}>
             <FigmaPreview url={figmaUrl} />
@@ -119,12 +139,13 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
 
           <Box sx={{ mt: 8 }}>
             <ExtractStickyNotes
-              onExtractStickyNoteClick={handleExtractStickyNoteClick}
+              onChangeSelectStickyColor={handleChangeSelectStickyColor}
+              onClickExtractStickyNote={handleExtractStickyNoteClick}
             />
           </Box>
         </>
       )}
-      {status >= STATUS.extractStickyNote && (
+      {status >= FIGJAM_STATUS.extractStickyNote && (
         <>
           <Box sx={{ mt: 8, width: 1200 }}>
             <LexicalEditorWrapper

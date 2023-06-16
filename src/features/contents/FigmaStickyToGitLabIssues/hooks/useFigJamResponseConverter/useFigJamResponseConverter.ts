@@ -5,13 +5,16 @@ import {
   isStickyNode,
   parseFigmaId,
   isNodeWithChildren,
+  rgbaToHexWithoutAlpha,
 } from "../../utils";
 import { useSettings } from "@hooks/useSettings";
 import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
+import { FIGJAM_COLOR_VALUE, FigJamColor } from "../../types";
 
 export type UseFigJamResponseConverter = () => {
   converter: (
     figmaUrl: string,
+    pickColor: FigJamColor,
     fileResponse: Figma.FileResponse | undefined
   ) => StickyNote[];
 };
@@ -37,6 +40,7 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
   const convertFileResponseToStickyNotes = useCallback(
     (
       figmaUrl: string,
+      pickColor: FigJamColor,
       fileResponse: Figma.FileResponse | undefined
     ): StickyNote[] => {
       if (fileResponse == null) {
@@ -48,7 +52,14 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
 
       const searchStickyNotes = (node: Figma.Node): StickyNote[] => {
         if (isStickyNode(node)) {
-          const { id, characters: text } = node;
+          const { id, characters: text, fills } = node;
+          if (
+            pickColor.value !== FIGJAM_COLOR_VALUE.All &&
+            rgbaToHexWithoutAlpha(fills[0].color).toUpperCase() !==
+              pickColor.value
+          ) {
+            return [];
+          }
           const url = createFigmaNodeURL(figmaId ?? "", id);
           const stickyNote: StickyNote = {
             text,
