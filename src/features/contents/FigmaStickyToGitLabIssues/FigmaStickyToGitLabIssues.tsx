@@ -90,7 +90,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
 
   const handleFigmaUrlError = useCallback((error: boolean) => {
     if (error) {
-      setStatus(FIGJAM_STATUS.initialStage);
+      debounce(() => setStatus(FIGJAM_STATUS.initialStage));
     }
   }, []);
 
