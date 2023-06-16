@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AxiosError, isAxiosError } from "axios";
 import { useSettings } from "@hooks/useSettings";
 import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
@@ -14,6 +14,13 @@ export const useFigJamStickyNotes = (figmaUrl: string) => {
   const [isValidating, setIsValidating] = useState<boolean>(false);
   const { figmaApiClient } = useFigmaApiClient();
 
+  useEffect(() => {
+    if (figmaUrl) {
+      setData(undefined);
+      setError(undefined);
+    }
+  }, [figmaUrl]);
+
   const { data: settings } = useSettings();
   const adjustedSettings = settings ?? [];
 
@@ -28,6 +35,7 @@ export const useFigJamStickyNotes = (figmaUrl: string) => {
 
   const fetchStickyNotes = useCallback(async () => {
     setIsValidating(true);
+    setData(undefined);
     try {
       const response = await figmaApiClient.get<Figma.FileResponse>(
         requestUrl,

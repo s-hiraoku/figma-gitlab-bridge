@@ -13,6 +13,7 @@ import {
   FigJamColor,
   FigJamStatusType,
 } from "./types";
+import { useDebounce } from "@hooks/useDebounce";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -34,6 +35,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   } = useFigJamStickyNotes(figmaUrl);
   const { converter: convertFileResponseToStickyNotes } =
     useFigJamResponseConverter();
+  const { debounce } = useDebounce();
 
   const checkFigmaIdAndSetStatus = useCallback((value: string) => {
     if (value === "") {
@@ -42,16 +44,18 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     }
     if (parseFigmaId(value)) {
       setStatus(FIGJAM_STATUS.fileSetupCompleted);
+      return;
     }
+    setStatus(FIGJAM_STATUS.initialStage);
   }, []);
 
   const handleFigmaUrlChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       setFigmaUrl(value);
-      checkFigmaIdAndSetStatus(value);
+      debounce(() => checkFigmaIdAndSetStatus(value));
     },
-    [checkFigmaIdAndSetStatus]
+    [checkFigmaIdAndSetStatus, debounce]
   );
 
   const handleFigmaUrlBlur = useCallback(
@@ -79,9 +83,16 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const handleChangeSelectStickyColor = useCallback(
     (stickyColor: FigJamColor) => {
       setStickyColor(stickyColor);
+      setStickyNote("");
     },
     []
   );
+
+  const handleFigmaUrlError = useCallback((error: boolean) => {
+    if (error) {
+      setStatus(FIGJAM_STATUS.initialStage);
+    }
+  }, []);
 
   useEffect(() => {
     if (!error && !isValidating && fileResponse) {
@@ -95,8 +106,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       setStickyNote(stickyNotesToText(stickyNotes));
     }
     return () => {
-      // TODO: Needs to be fixed
-      //  setStatus(STATUS.fileSetupCompleted);
       setStickyNote("");
     };
   }, [
@@ -128,6 +137,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
             onChange={handleFigmaUrlChange}
             onBlur={handleFigmaUrlBlur}
             onPaste={handleFigmaUrlPaste}
+            onError={handleFigmaUrlError}
           />
         </Box>
       )}

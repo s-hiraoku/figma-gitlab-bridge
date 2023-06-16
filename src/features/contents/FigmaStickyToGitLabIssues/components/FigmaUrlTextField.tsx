@@ -7,6 +7,7 @@ type Props = {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
   onPaste: (event: React.ClipboardEvent<HTMLInputElement>) => void;
+  onError: (error: boolean) => void;
 };
 
 const ERROR_MESSAGE = "Figma URL is invalid";
@@ -16,6 +17,7 @@ export const FigmaUrlTextField: React.FC<Props> = ({
   onChange,
   onBlur,
   onPaste,
+  onError,
 }) => {
   const [error, setError] = React.useState(false);
   const handleFigmaUrlChange = useCallback(
@@ -26,11 +28,12 @@ export const FigmaUrlTextField: React.FC<Props> = ({
         event.target.value !== ""
       ) {
         setError(true);
+        onError(error);
         return;
       }
       setError(false);
     },
-    [onChange]
+    [error, onChange, onError]
   );
   return (
     <TextField
