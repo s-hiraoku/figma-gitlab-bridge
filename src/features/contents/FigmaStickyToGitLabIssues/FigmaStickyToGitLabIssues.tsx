@@ -88,11 +88,14 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     []
   );
 
-  const handleFigmaUrlError = useCallback((error: boolean) => {
-    if (error) {
-      debounce(() => setStatus(FIGJAM_STATUS.initialStage));
-    }
-  }, []);
+  const handleFigmaUrlError = useCallback(
+    (error: boolean) => {
+      if (error) {
+        debounce(() => setStatus(FIGJAM_STATUS.initialStage));
+      }
+    },
+    [debounce]
+  );
 
   useEffect(() => {
     if (!error && !isValidating && fileResponse) {

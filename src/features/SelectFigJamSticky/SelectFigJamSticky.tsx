@@ -33,11 +33,13 @@ export const SelectFigJamSticky: React.FC<SelectFigJamStickyProps> = ({
   error = false,
   onChange,
 }) => {
-  const handleChange = (event: SelectChangeEvent<SelectedMenuItem>) => {
-    onChange(event.target as unknown as FigJamColor);
+  const handleChange = (item: SelectedMenuItem) => {
+    onChange(item as unknown as FigJamColor);
   };
   return (
     <SelectedMenu
+      id="select-figjam-sticky"
+      initialSelectedItem={items[0]}
       error={error}
       label="Select Sticky Color"
       items={items}

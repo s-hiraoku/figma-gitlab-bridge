@@ -18,7 +18,7 @@ export type SelectedMenuItems<T = string> = SelectedMenuItem<T>[];
 export type SelectedMenuProps = {
   initialSelectedItem?: SelectedMenuItem;
   items: SelectedMenuItems;
-  onChange: (event: SelectChangeEvent<SelectedMenuItem>) => void;
+  onChange: (event: SelectedMenuItem) => void;
   label?: string;
   placeholder?: string;
   id?: string;
@@ -26,8 +26,6 @@ export type SelectedMenuProps = {
   error?: boolean;
   helperText?: string;
 };
-
-const DEFAULT_ITEM = { label: "", value: "" };
 
 export const SelectedMenu: React.FC<SelectedMenuProps> = ({
   label,
@@ -39,16 +37,21 @@ export const SelectedMenu: React.FC<SelectedMenuProps> = ({
   error,
   helperText,
 }) => {
-  const [selectedItem, setSelectedItem] = useState<SelectedMenuItem>(
-    initialSelectedItem ?? DEFAULT_ITEM
-  );
+  const [selectedItem, setSelectedItem] = useState<
+    SelectedMenuItem | undefined
+  >(initialSelectedItem ?? undefined);
 
   const handleChange = useCallback(
-    (event: SelectChangeEvent<SelectedMenuItem>) => {
-      setSelectedItem(event.target.value as SelectedMenuItem);
-      onChange(event);
+    (event: SelectChangeEvent<string>) => {
+      const selectedItem = items.find(
+        (item) => item.value === event.target.value
+      );
+      setSelectedItem(selectedItem);
+      if (selectedItem != null) {
+        onChange(selectedItem);
+      }
     },
-    [onChange]
+    [items, onChange]
   );
 
   return (
@@ -56,7 +59,7 @@ export const SelectedMenu: React.FC<SelectedMenuProps> = ({
       <InputLabel htmlFor={`${id}-label`}>{label}</InputLabel>
       <Select
         labelId={`${id}-label`}
-        value={selectedItem}
+        defaultValue={selectedItem?.value}
         onChange={handleChange}
         label={label}
         inputProps={{
