@@ -1,6 +1,5 @@
 import React from "react";
 import { SelectedMenu } from "@components/SelectedMenu";
-import { SelectChangeEvent } from "@mui/material";
 import { SelectFigJamStickyLabel } from "./SelectFigJamStickyLabel";
 import {
   FigJamColorLabel,
