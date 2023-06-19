@@ -97,6 +97,10 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     [debounce]
   );
 
+  const handleReset = useCallback(() => {
+    setStatus(FIGJAM_STATUS.initialStage);
+  }, []);
+
   useEffect(() => {
     if (!error && !isValidating && fileResponse) {
       setStatus(FIGJAM_STATUS.extractStickyNote);
@@ -133,29 +137,32 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       }}
     >
       <Title title="FigJam Sticky To GitLab Issues" />
-      {status >= FIGJAM_STATUS.initialStage && (
-        <Box sx={{ mt: 8, width: 800 }}>
-          <FigmaUrlTextField
-            figmaUrl={figmaUrl}
-            onChange={handleFigmaUrlChange}
-            onBlur={handleFigmaUrlBlur}
-            onPaste={handleFigmaUrlPaste}
-            onError={handleFigmaUrlError}
-          />
-        </Box>
-      )}
+      {status >= FIGJAM_STATUS.initialStage &&
+        status !== FIGJAM_STATUS.extractStickyNote && (
+          <Box sx={{ mt: 8, width: 800 }}>
+            <FigmaUrlTextField
+              figmaUrl={figmaUrl}
+              onChange={handleFigmaUrlChange}
+              onBlur={handleFigmaUrlBlur}
+              onPaste={handleFigmaUrlPaste}
+              onError={handleFigmaUrlError}
+            />
+          </Box>
+        )}
       {status >= FIGJAM_STATUS.fileSetupCompleted && (
         <>
           <Box sx={{ mt: 8, width: 1200, height: 800 }}>
             <FigmaPreview url={figmaUrl} />
           </Box>
 
-          <Box sx={{ mt: 8 }}>
-            <ExtractStickyNotes
-              onChangeSelectStickyColor={handleChangeSelectStickyColor}
-              onClickExtractStickyNote={handleExtractStickyNoteClick}
-            />
-          </Box>
+          {status !== FIGJAM_STATUS.extractStickyNote && (
+            <Box sx={{ mt: 8 }}>
+              <ExtractStickyNotes
+                onChangeSelectStickyColor={handleChangeSelectStickyColor}
+                onClickExtractStickyNote={handleExtractStickyNoteClick}
+              />
+            </Box>
+          )}
         </>
       )}
       {status >= FIGJAM_STATUS.extractStickyNote && (
@@ -166,13 +173,22 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
               onChange={handleEditorChange}
             />
           </Box>
-          <Button
-            variant="outlined"
-            startIcon={<PublishOutlinedIcon />}
-            sx={{ mt: 4 }}
-          >
-            Resist to GitLab
-          </Button>
+          <Box sx={{ mt: 4 }}>
+            <Button
+              variant="outlined"
+              startIcon={<PublishOutlinedIcon />}
+              onClick={handleReset}
+            >
+              Reset
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<PublishOutlinedIcon />}
+              sx={{ ml: 4 }}
+            >
+              Resist to GitLab
+            </Button>
+          </Box>
         </>
       )}
     </Box>
