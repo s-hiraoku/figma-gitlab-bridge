@@ -14,6 +14,7 @@ import {
   FigJamStatusType,
 } from "./types";
 import { useDebounce } from "@hooks/useDebounce";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -176,7 +177,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
           <Box sx={{ mt: 4 }}>
             <Button
               variant="outlined"
-              startIcon={<PublishOutlinedIcon />}
+              startIcon={<RestartAltIcon />}
               onClick={handleReset}
             >
               Reset
