@@ -8,13 +8,15 @@ import { parseCssSizeString } from "@utils/cssSize";
 type IconSidebarProps = {
   icons: Array<React.ReactNode>;
   showSettingsIcon?: boolean;
+  initialSelected: number;
 };
 
 export const IconSidebar: React.FC<IconSidebarProps> = ({
   icons,
   showSettingsIcon = true,
+  initialSelected,
 }) => {
-  const [selected, setSelected] = useState<number>(0);
+  const [selected, setSelected] = useState(initialSelected);
   const router = useRouter();
   const theme = useTheme();
 

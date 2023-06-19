@@ -9,9 +9,11 @@ export const appList: AppType[] = [
   {
     id: HOME_APP_ID,
     icon: <HomeIconButton />,
+    path: "/",
   },
   {
     id: FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID,
     icon: <FigmaStickyToGitLabIssuesIconButton />,
+    path: "/figjamStickyToGitlabIssues",
   },
 ];

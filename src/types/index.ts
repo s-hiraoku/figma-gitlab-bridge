@@ -7,6 +7,7 @@ export type valueOf<T> = T[keyof T];
 export type AppType = {
   id: string;
   icon: React.ReactNode;
+  path: string;
 };
 
 export type ArrayElementType<T extends ReadonlyArray<unknown>> =
