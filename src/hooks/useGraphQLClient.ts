@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
-import { GraphQLClient } from "graphql-request";
+import { GraphQLClient, ClientError } from "graphql-request";
 
 type GraphQLClientHook<T> = {
   data: T | null;
@@ -39,7 +39,11 @@ export const useGraphQLClient = <T>(
         setData(result as T);
         setError(null);
       } catch (err) {
-        setError(err as Error);
+        if (err instanceof ClientError) {
+          setError(err);
+        } else {
+          setError(new Error("Unknown error occurred"));
+        }
       } finally {
         setIsLoading(false);
       }
