@@ -15,6 +15,8 @@ import {
 } from "./types";
 import { useDebounce } from "@hooks/useDebounce";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/system";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -37,6 +39,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const { converter: convertFileResponseToStickyNotes } =
     useFigJamResponseConverter();
   const { debounce } = useDebounce();
+  const theme = useTheme();
 
   const checkFigmaIdAndSetStatus = useCallback((value: string) => {
     if (value === "") {
@@ -169,16 +172,26 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       {status >= FIGJAM_STATUS.extractStickyNote && (
         <>
           <Box sx={{ mt: 8, width: 1200 }}>
-            <LexicalEditorWrapper
-              initialText={stickyNote}
-              onChange={handleEditorChange}
-            />
+            <Typography
+              variant="subtitle1"
+              component="h2"
+              sx={{ ml: 1, color: theme.palette.primary.main }}
+            >
+              Edit Issues Data for Import
+            </Typography>
+            <Box sx={{ mt: 1 }}>
+              <LexicalEditorWrapper
+                initialText={stickyNote}
+                onChange={handleEditorChange}
+              />
+            </Box>
           </Box>
           <Box sx={{ mt: 4 }}>
             <Button
               variant="outlined"
               startIcon={<RestartAltIcon />}
               onClick={handleReset}
+              color="warning"
             >
               Reset
             </Button>
