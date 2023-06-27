@@ -129,6 +129,10 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     stickyColor,
   ]);
 
+  const handleRegisterIssuesWithGitLab = useCallback(() => {
+    setStatus(FIGJAM_STATUS.registerWithIssuesGitLab);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -199,8 +203,9 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
               variant="outlined"
               startIcon={<PublishOutlinedIcon />}
               sx={{ ml: 4 }}
+              onClick={handleRegisterIssuesWithGitLab}
             >
-              Resist to GitLab
+              Registering issues with GitLab
             </Button>
           </Box>
         </>
