@@ -13,7 +13,8 @@
     "build-storybook": "storybook build",
     "prepare": "husky install",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "migrate:sqlite": "dotenv -e .env.local -- npx prisma migrate dev"
   },
   "dependencies": {
     "@babel/core": "^7.22.1",
@@ -29,6 +30,7 @@
     "@mui/system": "^5.13.2",
     "@prisma/client": "4.14.1",
     "axios": "^1.4.0",
+    "dotenv-cli": "^7.2.1",
     "eslint-config-next": "13.3.0",
     "lexical": "^0.9.2",
     "next": "13.4.3",

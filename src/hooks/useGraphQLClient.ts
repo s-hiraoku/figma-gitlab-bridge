@@ -15,6 +15,7 @@ type GraphQLClientHook<T> = {
 export const useGraphQLClient = <T>(
   endpoint: string,
   defaultQuery: string,
+  defaultVariables: Record<string, unknown>,
   token: string
 ): GraphQLClientHook<T> => {
   const [data, setData] = useState<T | null>(null);
@@ -52,10 +53,10 @@ export const useGraphQLClient = <T>(
   );
 
   const fetchGraphQLData = useCallback(
-    async (query = defaultQuery) => {
-      await executeGraphQLRequest(query);
+    async (query = defaultQuery, variables = defaultVariables) => {
+      await executeGraphQLRequest(query, variables);
     },
-    [defaultQuery, executeGraphQLRequest]
+    [defaultQuery, defaultVariables, executeGraphQLRequest]
   );
 
   const mutateGraphQLData = useCallback(
@@ -67,7 +68,8 @@ export const useGraphQLClient = <T>(
 
   useEffect(() => {
     fetchGraphQLData();
-  }, [fetchGraphQLData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     data,

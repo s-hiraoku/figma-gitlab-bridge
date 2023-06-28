@@ -15,6 +15,14 @@ async function main() {
       key: "figmaAPIEndpoint",
       value: "https://api.figma.com/v1",
     },
+    {
+      key: "GitLabAccessToken",
+      value: "",
+    },
+    {
+      key: "GitLabAPIEndpoint",
+      value: "https://gitlab.com/api/graphql",
+    },
   ];
   for (const setting of settings) {
     await prisma.settings.create({
