@@ -19,6 +19,8 @@ export default function Settings() {
 
   const [figmaApiEndpoint, setFigmaApiEndpoint] = useState<string>("");
   const [figmaAccessToken, setFigmaAccessToken] = useState<string>("");
+  const [gitLabApiEndpoint, setGitLabApiEndpoint] = useState<string>("");
+  const [gitLabAccessToken, setGitLabAccessToken] = useState<string>("");
 
   useEffect(() => {
     if (settings) {
@@ -44,6 +46,18 @@ export default function Settings() {
     setFigmaAccessToken(event.target.value);
   };
 
+  const handleGitLabApiEndpointChange = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    setGitLabApiEndpoint(event.target.value);
+  };
+
+  const handleGitLabAccessTokenChange = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    setGitLabAccessToken(event.target.value);
+  };
+
   const handleFigmaApiEndpointBlur = () => {
     axios
       .put("/api/settings/figmaAPIEndpoint", { value: figmaApiEndpoint })
@@ -65,6 +79,30 @@ export default function Settings() {
       .catch((error) => {
         console.error("Failed to update Figma access token:", error);
         toast.error("Failed to update Figma access token");
+      });
+  };
+
+  const handleGitLabApiEndpointBlur = () => {
+    axios
+      .put("/api/settings/gitLabAPIEndpoint", { value: gitLabApiEndpoint })
+      .then(() => {
+        revalidate();
+      })
+      .catch((error) => {
+        console.error("Failed to update GitLab API endpoint:", error);
+        toast.error("Failed to update GitLab API endpoint");
+      });
+  };
+
+  const handleGitLabAccessTokenBlur = () => {
+    axios
+      .put("/api/settings/gitLabAccessToken", { value: gitLabAccessToken })
+      .then(() => {
+        revalidate();
+      })
+      .catch((error) => {
+        console.error("Failed to update GitLab access token:", error);
+        toast.error("Failed to update GitLab access token");
       });
   };
 
@@ -112,6 +150,26 @@ export default function Settings() {
             value={figmaAccessToken}
             onChange={handleFigmaAccessTokenChange}
             onBlur={handleFigmaAccessTokenBlur}
+          />
+        </Box>{" "}
+        <Box sx={FIELD_DEFAULT_STYLE}>
+          <TextField
+            fullWidth
+            label=" GitLab API endpoint"
+            variant="filled"
+            value={gitLabApiEndpoint}
+            onChange={handleGitLabApiEndpointChange}
+            onBlur={handleGitLabApiEndpointBlur}
+          />
+        </Box>
+        <Box sx={FIELD_DEFAULT_STYLE}>
+          <TextField
+            fullWidth
+            label=" GitLab access token"
+            variant="filled"
+            value={gitLabAccessToken}
+            onChange={handleGitLabAccessTokenChange}
+            onBlur={handleGitLabAccessTokenBlur}
           />
         </Box>
       </Box>

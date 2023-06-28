@@ -16,11 +16,11 @@ async function main() {
       value: "https://api.figma.com/v1",
     },
     {
-      key: "GitLabAccessToken",
+      key: "gitLabAccessToken",
       value: "",
     },
     {
-      key: "GitLabAPIEndpoint",
+      key: "gitLabAPIEndpoint",
       value: "https://gitlab.com/api/graphql",
     },
   ];
