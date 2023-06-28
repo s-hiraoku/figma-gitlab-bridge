@@ -6,10 +6,17 @@ import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 import { FetchError } from "@components/FetchError";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useTheme } from "@mui/system";
 
 const FIELD_DEFAULT_STYLE: SxProps<Theme> = { mt: 8, width: 800 };
+const FIELD_DEFAULT_TITLE_STYLE: SxProps<Theme> = {
+  mt: 8,
+  mr: `calc(${FIELD_DEFAULT_STYLE.width}px/2 + 200px)`,
+  width: 200,
+};
 
 export default function Settings() {
+  const theme = useTheme();
   const {
     data: settings,
     error,
@@ -124,15 +131,25 @@ export default function Settings() {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
           alignItems: "center",
+          justifyContent: "center",
           flexDirection: "column",
         }}
       >
         <Box sx={{ mt: 8 }}>
           <Typography variant="h2">⚙️ Settings</Typography>
         </Box>
-        <Box sx={FIELD_DEFAULT_STYLE}>
+        <Typography
+          variant="h6"
+          component="h2"
+          sx={{
+            ...FIELD_DEFAULT_TITLE_STYLE,
+            color: theme.palette.primary.main,
+          }}
+        >
+          Figma API Settings
+        </Typography>
+        <Box sx={{ ...FIELD_DEFAULT_STYLE, mt: 2 }}>
           <TextField
             fullWidth
             label=" Figma API endpoint"
@@ -151,8 +168,18 @@ export default function Settings() {
             onChange={handleFigmaAccessTokenChange}
             onBlur={handleFigmaAccessTokenBlur}
           />
-        </Box>{" "}
-        <Box sx={FIELD_DEFAULT_STYLE}>
+        </Box>
+        <Typography
+          variant="h6"
+          component="h2"
+          sx={{
+            ...FIELD_DEFAULT_TITLE_STYLE,
+            color: theme.palette.primary.main,
+          }}
+        >
+          GitLab API Settings
+        </Typography>
+        <Box sx={{ ...FIELD_DEFAULT_STYLE, mt: 2 }}>
           <TextField
             fullWidth
             label=" GitLab API endpoint"
