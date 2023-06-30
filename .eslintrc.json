@@ -4,5 +4,16 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:storybook/recommended"
+  ],
+  "rules": {
+    "no-restricted-imports": ["error", { "paths": ["axios"] }]
+  },
+  "overrides": [
+    {
+      "files": ["src/hooks/*"],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
   ]
 }
