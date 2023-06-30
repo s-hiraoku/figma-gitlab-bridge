@@ -24,6 +24,14 @@ export default async function handler(
         parsedData,
         SETTING_KEY.figmaAccessToken
       );
+      const gitLabAPIEndpoint = findValueInSettingsByKey(
+        parsedData,
+        SETTING_KEY.gitLabAPIEndpoint
+      );
+      const gitLabToken = findValueInSettingsByKey(
+        parsedData,
+        SETTING_KEY.gitLabAccessToken
+      );
       await prisma.$transaction([
         prisma.settings.update({
           where: { key: SETTING_KEY.figmaAPIEndpoint },
@@ -32,6 +40,14 @@ export default async function handler(
         prisma.settings.update({
           where: { key: SETTING_KEY.figmaAccessToken },
           data: { value: figmaToken ?? "" },
+        }),
+        prisma.settings.update({
+          where: { key: SETTING_KEY.gitLabAPIEndpoint },
+          data: { value: gitLabAPIEndpoint ?? "" },
+        }),
+        prisma.settings.update({
+          where: { key: SETTING_KEY.gitLabAccessToken },
+          data: { value: gitLabToken ?? "" },
         }),
       ]);
       res.status(HTTP_STATUS_CODES.NO_CONTENT).end();

@@ -4,9 +4,9 @@ import { useSettings } from "@hooks/useSettings";
 import { useEffect, useState } from "react";
 import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 import { FetchError } from "@components/FetchError";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useTheme } from "@mui/system";
+import { useApiClient } from "@hooks/useApiClient";
 
 const FIELD_DEFAULT_STYLE: SxProps<Theme> = { mt: 8, width: 800 };
 const FIELD_DEFAULT_TITLE_STYLE: SxProps<Theme> = {
@@ -23,6 +23,7 @@ export default function Settings() {
     isValidating,
     mutate: revalidate,
   } = useSettings();
+  const { apiClient } = useApiClient();
 
   const [figmaApiEndpoint, setFigmaApiEndpoint] = useState<string>("");
   const [figmaAccessToken, setFigmaAccessToken] = useState<string>("");
@@ -36,6 +37,12 @@ export default function Settings() {
       );
       setFigmaAccessToken(
         findValueInSettingsByKey(settings, SETTING_KEY.figmaAccessToken) ?? ""
+      );
+      setGitLabApiEndpoint(
+        findValueInSettingsByKey(settings, SETTING_KEY.gitLabAPIEndpoint) ?? ""
+      );
+      setGitLabAccessToken(
+        findValueInSettingsByKey(settings, SETTING_KEY.gitLabAccessToken) ?? ""
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -66,7 +73,7 @@ export default function Settings() {
   };
 
   const handleFigmaApiEndpointBlur = () => {
-    axios
+    apiClient
       .put("/api/settings/figmaAPIEndpoint", { value: figmaApiEndpoint })
       .then(() => {
         revalidate();
@@ -78,7 +85,7 @@ export default function Settings() {
   };
 
   const handleFigmaAccessTokenBlur = () => {
-    axios
+    apiClient
       .put("/api/settings/figmaAccessToken", { value: figmaAccessToken })
       .then(() => {
         revalidate();
@@ -90,7 +97,7 @@ export default function Settings() {
   };
 
   const handleGitLabApiEndpointBlur = () => {
-    axios
+    apiClient
       .put("/api/settings/gitLabAPIEndpoint", { value: gitLabApiEndpoint })
       .then(() => {
         revalidate();
@@ -102,7 +109,7 @@ export default function Settings() {
   };
 
   const handleGitLabAccessTokenBlur = () => {
-    axios
+    apiClient
       .put("/api/settings/gitLabAccessToken", { value: gitLabAccessToken })
       .then(() => {
         revalidate();

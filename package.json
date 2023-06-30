@@ -14,7 +14,8 @@
     "prepare": "husky install",
     "test": "jest",
     "test:watch": "jest --watch",
-    "migrate:sqlite": "dotenv -e .env.local -- npx prisma migrate dev"
+    "migrate:sqlite": "dotenv -e .env.local -- npx prisma migrate dev",
+    "prisma:studio": "dotenv -e .env.local -- npx prisma studio"
   },
   "dependencies": {
     "@babel/core": "^7.22.1",
@@ -28,7 +29,7 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.2",
     "@mui/system": "^5.13.2",
-    "@prisma/client": "4.14.1",
+    "@prisma/client": "^4.16.1",
     "axios": "^1.4.0",
     "dotenv-cli": "^7.2.1",
     "eslint-config-next": "13.3.0",
@@ -82,7 +83,7 @@
     "lint-staged": "^13.2.2",
     "postcss": "^8.4.22",
     "postcss-loader": "^7.2.4",
-    "prisma": "4.14.1",
+    "prisma": "^4.16.1",
     "storybook": "^7.0.9",
     "tailwindcss": "^3.3.1",
     "ts-node": "^10.9.1",

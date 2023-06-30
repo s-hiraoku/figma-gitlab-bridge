@@ -21,6 +21,10 @@ export const useHttpErrorHandler = (): UseHttpErrorHandlerReturnType => {
         console.log("404 error");
         router.push("/404");
         return Promise.reject(error.response?.data);
+      default:
+        console.log(error);
+        // TODO: Uncomment this line when error page is ready.
+        return Promise.reject(error.response?.data);
     }
   };
 
