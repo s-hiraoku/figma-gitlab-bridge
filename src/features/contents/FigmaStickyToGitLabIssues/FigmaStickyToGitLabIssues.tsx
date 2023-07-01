@@ -158,6 +158,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
             />
           </Box>
         )}
+      <GitLabIssues />
       {status >= FIGJAM_STATUS.fileSetupCompleted && (
         <>
           <Box sx={{ mt: 8, width: 1200, height: 800 }}>

@@ -16,6 +16,10 @@ async function main() {
       value: "https://api.figma.com/v1",
     },
     {
+      key: "gitLabProjectPath",
+      value: "",
+    },
+    {
       key: "gitLabAccessToken",
       value: "",
     },

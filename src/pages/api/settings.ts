@@ -42,6 +42,10 @@ export default async function handler(
           data: { value: figmaToken ?? "" },
         }),
         prisma.settings.update({
+          where: { key: SETTING_KEY.gitLabProjectPath },
+          data: { value: gitLabToken ?? "" },
+        }),
+        prisma.settings.update({
           where: { key: SETTING_KEY.gitLabAPIEndpoint },
           data: { value: gitLabAPIEndpoint ?? "" },
         }),

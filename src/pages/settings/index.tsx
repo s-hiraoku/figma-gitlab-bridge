@@ -12,7 +12,7 @@ import {
   FormControl,
 } from "@mui/material";
 import { useSettings } from "@hooks/useSettings";
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 import { FetchError } from "@components/FetchError";
 import { toast } from "react-toastify";
@@ -41,6 +41,7 @@ export default function Settings() {
 
   const [figmaApiEndpoint, setFigmaApiEndpoint] = useState<string>("");
   const [figmaAccessToken, setFigmaAccessToken] = useState<string>("");
+  const [gitLabProjectPath, setGitLabProjectPath] = useState<string>("");
   const [gitLabApiEndpoint, setGitLabApiEndpoint] = useState<string>("");
   const [gitLabAccessToken, setGitLabAccessToken] = useState<string>("");
 
@@ -56,6 +57,9 @@ export default function Settings() {
       );
       setFigmaAccessToken(
         findValueInSettingsByKey(settings, SETTING_KEY.figmaAccessToken) ?? ""
+      );
+      setGitLabProjectPath(
+        findValueInSettingsByKey(settings, SETTING_KEY.gitLabProjectPath) ?? ""
       );
       setGitLabApiEndpoint(
         findValueInSettingsByKey(settings, SETTING_KEY.gitLabAPIEndpoint) ?? ""
@@ -77,6 +81,12 @@ export default function Settings() {
     event: React.FocusEvent<HTMLInputElement>
   ) => {
     setFigmaAccessToken(event.target.value);
+  };
+
+  const handleGitLabProjectPathChange = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    setGitLabProjectPath(event.target.value);
   };
 
   const handleGitLabApiEndpointChange = (
@@ -114,6 +124,18 @@ export default function Settings() {
         toast.error("Failed to update Figma access token");
       });
   }, [apiClient, figmaAccessToken, revalidate]);
+
+  const handleGitLabProjectPathBlur = useCallback(() => {
+    apiClient
+      .put("/api/settings/gitLabProjectPath", { value: gitLabProjectPath })
+      .then(() => {
+        revalidate();
+      })
+      .catch((error) => {
+        console.error("Failed to update GitLab project path:", error);
+        toast.error("Failed to update GitLab project path");
+      });
+  }, [apiClient, gitLabProjectPath, revalidate]);
 
   const handleGitLabApiEndpointBlur = useCallback(() => {
     apiClient
@@ -247,6 +269,16 @@ export default function Settings() {
           GitLab API Settings
         </Typography>
         <Box sx={{ ...FIELD_DEFAULT_STYLE, mt: 2 }}>
+          <TextField
+            fullWidth
+            label=" GitLab Project Path"
+            variant="filled"
+            value={gitLabProjectPath}
+            onChange={handleGitLabProjectPathChange}
+            onBlur={handleGitLabProjectPathBlur}
+          />
+        </Box>
+        <Box sx={FIELD_DEFAULT_STYLE}>
           <TextField
             fullWidth
             label=" GitLab API endpoint"
