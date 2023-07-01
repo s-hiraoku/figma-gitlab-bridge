@@ -8,6 +8,7 @@ import {
   FilledInput,
   InputLabel,
   InputAdornment,
+  Button,
   IconButton,
   FormControl,
 } from "@mui/material";
@@ -21,6 +22,8 @@ import { useApiClient } from "@hooks/useApiClient";
 import { useBoolean } from "@hooks/useBoolean";
 import { FIllED_INPUT_TYPE } from "@utils/ui";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useRouter } from "next/router";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const FIELD_DEFAULT_STYLE: SxProps<Theme> = { mt: 8, width: 800 };
 const FIELD_DEFAULT_TITLE_STYLE: SxProps<Theme> = {
@@ -38,6 +41,7 @@ export default function Settings() {
     mutate: revalidate,
   } = useSettings();
   const { apiClient } = useApiClient();
+  const router = useRouter();
 
   const [figmaApiEndpoint, setFigmaApiEndpoint] = useState<string>("");
   const [figmaAccessToken, setFigmaAccessToken] = useState<string>("");
@@ -181,6 +185,10 @@ export default function Settings() {
     event.preventDefault();
   };
 
+  const handleGoBack = () => {
+    router.back();
+  };
+
   if (error) {
     return <FetchError />;
   }
@@ -196,6 +204,21 @@ export default function Settings() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Box>
+        <Button
+          sx={{
+            position: "absolute",
+            left: 20,
+            top: 20,
+            fontSize: "1rem",
+          }}
+          onClick={handleGoBack}
+          color="secondary"
+          startIcon={<ArrowBackIcon />}
+        >
+          Back
+        </Button>
+      </Box>
       <Box
         sx={{
           display: "flex",
