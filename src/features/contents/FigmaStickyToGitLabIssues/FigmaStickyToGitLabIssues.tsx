@@ -17,7 +17,6 @@ import { useDebounce } from "@hooks/useDebounce";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/system";
-import { GitLabIssues } from "./components/sample/GitLabIssues";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -158,7 +157,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
             />
           </Box>
         )}
-      <GitLabIssues />
       {status >= FIGJAM_STATUS.fileSetupCompleted && (
         <>
           <Box sx={{ mt: 8, width: 1200, height: 800 }}>
