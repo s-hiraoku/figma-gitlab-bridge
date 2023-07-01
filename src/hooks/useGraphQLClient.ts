@@ -1,11 +1,11 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { GraphQLClient, ClientError } from "graphql-request";
 
 type GraphQLClientHook<T> = {
   data: T | null;
   error: Error | null;
   isLoading: boolean;
-  refetch: (query?: string) => Promise<void>;
+  fetch: () => Promise<void>;
   mutate: (
     mutation: string,
     variables?: Record<string, unknown>
@@ -15,7 +15,7 @@ type GraphQLClientHook<T> = {
 export const useGraphQLClient = <T>(
   endpoint: string,
   defaultQuery: string,
-  defaultVariables: Record<string, unknown>,
+  defaultVariables: Record<string, unknown> = {},
   token: string
 ): GraphQLClientHook<T> => {
   const [data, setData] = useState<T | null>(null);
@@ -25,26 +25,22 @@ export const useGraphQLClient = <T>(
   const client = useMemo(
     () =>
       new GraphQLClient(endpoint, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: { authorization: `Bearer ${token}` },
       }),
     [endpoint, token]
   );
 
-  const executeGraphQLRequest = useCallback(
-    async (query: string, variables?: Record<string, unknown>) => {
+  const executeRequest = useCallback(
+    async (query: string, variables: Record<string, unknown> = {}) => {
       setIsLoading(true);
       try {
         const result = await client.request(query, variables);
         setData(result as T);
         setError(null);
       } catch (err) {
-        if (err instanceof ClientError) {
-          setError(err);
-        } else {
-          setError(new Error("Unknown error occurred"));
-        }
+        setError(
+          err instanceof ClientError ? err : new Error("Unknown error occurred")
+        );
       } finally {
         setIsLoading(false);
       }
@@ -52,30 +48,16 @@ export const useGraphQLClient = <T>(
     [client]
   );
 
-  const fetchGraphQLData = useCallback(
-    async (query = defaultQuery, variables = defaultVariables) => {
-      await executeGraphQLRequest(query, variables);
-    },
-    [defaultQuery, defaultVariables, executeGraphQLRequest]
+  const fetch = useCallback(
+    () => executeRequest(defaultQuery, defaultVariables),
+    [defaultQuery, defaultVariables, executeRequest]
   );
 
-  const mutateGraphQLData = useCallback(
-    async (mutation: string, variables?: Record<string, unknown>) => {
-      await executeGraphQLRequest(mutation, variables);
-    },
-    [executeGraphQLRequest]
+  const mutate = useCallback(
+    (mutation: string, variables?: Record<string, unknown>) =>
+      executeRequest(mutation, variables),
+    [executeRequest]
   );
 
-  useEffect(() => {
-    fetchGraphQLData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return {
-    data,
-    error,
-    isLoading,
-    refetch: fetchGraphQLData,
-    mutate: mutateGraphQLData,
-  };
+  return { data, error, isLoading, fetch, mutate };
 };

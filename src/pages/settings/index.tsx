@@ -12,7 +12,7 @@ import {
   FormControl,
 } from "@mui/material";
 import { useSettings } from "@hooks/useSettings";
-import { use, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 import { FetchError } from "@components/FetchError";
 import { toast } from "react-toastify";

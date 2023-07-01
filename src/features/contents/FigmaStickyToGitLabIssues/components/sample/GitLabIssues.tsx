@@ -71,26 +71,28 @@ export const GitLabIssues = () => {
     );
   }, [settings]);
 
-  console.log("gitLabProjectPath", gitLabProjectPath);
+  const defaultVariables = useMemo(() => {
+    return { fullPath: gitLabProjectPath };
+  }, [gitLabProjectPath]);
 
-  const { data, error, isLoading, refetch } = useGraphQLClient<Data>(
+  const { data, error, isLoading, fetch } = useGraphQLClient<Data>(
     gitLabAPIEndpoint ?? "", // GraphQL API endpoint
     GET_PROJECT_ISSUES, // Default query
-    { fullPath: gitLabProjectPath },
+    defaultVariables,
     gitLabAccessToken ?? "" // Personal access token
   );
+
   useEffect(() => {
-    refetch(GET_PROJECT_ISSUES);
-  }, [gitLabProjectPath]);
+    if (gitLabAPIEndpoint && gitLabAccessToken && gitLabProjectPath) {
+      fetch();
+    }
+  }, [gitLabAPIEndpoint, gitLabAccessToken, gitLabProjectPath, fetch]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
-      <button onClick={() => refetch(GET_PROJECT_ISSUES)}>
-        Refetch Issues
-      </button>
       {data &&
         data.project &&
         data.project.issues.nodes.map((issue: any, index: any) => (
