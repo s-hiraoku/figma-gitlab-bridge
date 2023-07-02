@@ -75,11 +75,17 @@ export const GitLabIssues = () => {
     return { fullPath: gitLabProjectPath };
   }, [gitLabProjectPath]);
 
+  const requestHeaders = useMemo(() => {
+    return {
+      authorization: `Bearer ${gitLabAccessToken}`,
+    };
+  }, [gitLabAccessToken]);
+
   const { data, error, isLoading, fetch } = useGraphQLClient<Data>(
     gitLabAPIEndpoint ?? "", // GraphQL API endpoint
     GET_PROJECT_ISSUES, // Default query
     defaultVariables,
-    gitLabAccessToken ?? "" // Personal access token
+    requestHeaders
   );
 
   useEffect(() => {

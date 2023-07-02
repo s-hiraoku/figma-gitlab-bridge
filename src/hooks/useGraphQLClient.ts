@@ -16,7 +16,7 @@ export const useGraphQLClient = <T>(
   endpoint: string,
   defaultQuery: string,
   defaultVariables: Record<string, unknown> = {},
-  token: string
+  requestHeaders: Record<string, string> = {}
 ): GraphQLClientHook<T> => {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -25,9 +25,9 @@ export const useGraphQLClient = <T>(
   const client = useMemo(
     () =>
       new GraphQLClient(endpoint, {
-        headers: { authorization: `Bearer ${token}` },
+        headers: requestHeaders,
       }),
-    [endpoint, token]
+    [endpoint, requestHeaders]
   );
 
   const executeRequest = useCallback(
