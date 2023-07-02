@@ -1,5 +1,5 @@
 export const GET_ISSUES_QUERY = `
-  query GetIssuesWithLabels($fullPath: ID!) {
+  query GetIssues($fullPath: ID!) {
     project(fullPath: $fullPath) {
       issues {
         nodes {
@@ -21,27 +21,13 @@ export const GET_ISSUES_QUERY = `
 `;
 
 export const CREATE_ISSUE_MUTATION = `
-  mutation CreateIssueWithLabel($fullPath: ID!, $title: String!, $description: String!, $labelName: String!, $labelColor: String!) {
-    createIssue(input: {projectPath: $fullPath, title: $title, description: $description}) {
-      issue {
-        id
-        title
-        description
-      }
-    }
-    createLabel(input: {projectPath: $fullPath, title: $labelName, color: $labelColor}) {
-      label {
-        id
-        title
-        color
-      }
-    }
-    assignLabel(input: {labelId: LabelId, issueId: IssueId}) {
-      labelEdge {
-        node {
-          title
-        }
-      }
+mutation CreateIssue($projectPath: ID!, $title: String!, $description: String!) {
+  createIssue(input: {projectPath: $projectPath, title: $title, description: $description}) {
+    issue {
+      id
+      title
+      description
     }
   }
+}
 `;

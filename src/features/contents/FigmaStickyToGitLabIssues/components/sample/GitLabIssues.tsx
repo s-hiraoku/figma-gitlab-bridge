@@ -1,51 +1,10 @@
 // GitLab の issues を取得して表示するサンプルコンポーネント
 
-import React, { useEffect, useMemo } from "react";
-import { useGraphQLClient } from "@hooks/useGraphQLClient";
+import React, { useCallback, useEffect, useMemo } from "react";
+import { useGitLabRequest } from "@hooks/useGitLabRequest";
 import { useSettings } from "@hooks/useSettings";
 import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
-
-export const GET_ISSUES_QUERY = `
-  query GetIssuesWithLabels($fullPath: ID!) {
-    project(fullPath: $fullPath) {
-      issues {
-        nodes {
-          id
-          title
-          description
-          labels {
-            nodes {
-              id
-              title
-              color
-              description
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-// Define the type for the issue
-type Issue = {
-  title: string;
-  description: string;
-  labels: any;
-  createdAt: string;
-};
-
-// Define the type for the project
-type Project = {
-  issues: {
-    nodes: Issue[];
-  };
-};
-
-// Define the type for the data
-type Data = {
-  project: Project;
-};
+import { Button } from "@mui/material";
 
 export const GitLabIssues = () => {
   const { data: settings } = useSettings();
@@ -74,34 +33,24 @@ export const GitLabIssues = () => {
     );
   }, [settings]);
 
-  const defaultVariables = useMemo(() => {
-    return { fullPath: gitLabProjectPath };
-  }, [gitLabProjectPath]);
+  const { data, error, isLoading, getIssues, createIssue } = useGitLabRequest();
 
-  const requestHeaders = useMemo(() => {
-    return {
-      authorization: `Bearer ${gitLabAccessToken}`,
-    };
-  }, [gitLabAccessToken]);
-
-  const { data, error, isLoading, fetch } = useGraphQLClient<Data>(
-    gitLabAPIEndpoint ?? "", // GraphQL API endpoint
-    GET_ISSUES_QUERY, // Default query
-    defaultVariables,
-    requestHeaders
-  );
+  const handleMutate = useCallback(() => {
+    createIssue("title test1", "title test1 description");
+  }, [createIssue]);
 
   useEffect(() => {
     if (gitLabAPIEndpoint && gitLabAccessToken && gitLabProjectPath) {
-      fetch();
+      getIssues();
     }
-  }, [gitLabAPIEndpoint, gitLabAccessToken, gitLabProjectPath, fetch]);
+  }, [gitLabAPIEndpoint, gitLabAccessToken, gitLabProjectPath, getIssues]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
+      <Button onClick={handleMutate}>Mutate Test</Button>
       {data &&
         data.project &&
         data.project.issues.nodes.map((issue: any, index: any) => (

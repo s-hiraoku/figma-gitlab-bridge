@@ -5,7 +5,7 @@ import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 import { Data } from "./models";
 import { GET_ISSUES_QUERY, CREATE_ISSUE_MUTATION } from "./graphqlQueries";
 
-export const useGitLabRequest = (projectId: string) => {
+export const useGitLabRequest = () => {
   const { data: settings } = useSettings();
 
   const gitLabAPIEndpoint = useMemo(() => {
@@ -51,7 +51,11 @@ export const useGitLabRequest = (projectId: string) => {
 
   const getIssues = fetch;
   const createIssue = async (title: string, description: string) => {
-    return mutate(CREATE_ISSUE_MUTATION, { projectId, title, description });
+    return mutate(CREATE_ISSUE_MUTATION, {
+      projectPath: gitLabProjectPath,
+      title,
+      description,
+    });
   };
 
   return {
