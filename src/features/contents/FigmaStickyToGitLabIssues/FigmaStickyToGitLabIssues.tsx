@@ -18,6 +18,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/system";
 import { GitLabIssues } from "./components/sample/GitLabIssues";
+import { GitLabLabels } from "./components/sample/GitLabLabels";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -147,6 +148,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     >
       <Title title="FigJam Sticky To GitLab Issues" />
       <GitLabIssues />
+      <GitLabLabels />
       {status >= FIGJAM_STATUS.initialStage &&
         status !== FIGJAM_STATUS.extractStickyNote && (
           <Box sx={{ mt: 8, width: 800 }}>

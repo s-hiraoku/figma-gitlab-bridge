@@ -1,4 +1,3 @@
-// Define the type for the label
 export type Label = {
   id: string;
   title: string;
@@ -6,7 +5,6 @@ export type Label = {
   description?: string;
 };
 
-// Define the type for the issue
 export type Issue = {
   title: string;
   description: string;
@@ -14,14 +12,22 @@ export type Issue = {
   createdAt: string;
 };
 
-// Define the type for the project
-export type Project = {
+export type IssuesProject = {
   issues: {
     nodes: Issue[];
   };
 };
 
-// Define the type for the data
-export type Data = {
-  project: Project;
+export type LabelsProject = {
+  labels: {
+    nodes: Label[];
+  };
+};
+
+export type IssueData = {
+  project: IssuesProject;
+};
+
+export type LabelData = {
+  project: LabelsProject;
 };

@@ -1,4 +1,5 @@
 export * as Figma from "./figma";
+export * as GitLab from "./gitLab";
 
 export type { RequestConfig } from "./axios";
 

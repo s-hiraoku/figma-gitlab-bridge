@@ -2,10 +2,10 @@ import { useMemo } from "react";
 import { useGraphQLClient } from "../useGraphQLClient";
 import { useSettings } from "../useSettings";
 import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
-import { Data } from "./models";
-import { GET_ISSUES_QUERY, CREATE_ISSUE_MUTATION } from "./graphqlQueries";
+import { GitLab } from "@types";
+import { GET_ISSUES_QUERY, CREATE_ISSUE_MUTATION } from "./queries";
 
-export const useGitLabRequest = () => {
+export const useGitLabIssues = () => {
   const { data: settings } = useSettings();
 
   const gitLabAPIEndpoint = useMemo(() => {
@@ -42,12 +42,13 @@ export const useGitLabRequest = () => {
     };
   }, [gitLabAccessToken]);
 
-  const { data, error, isLoading, fetch, mutate } = useGraphQLClient<Data>(
-    gitLabAPIEndpoint ?? "",
-    GET_ISSUES_QUERY,
-    defaultVariables,
-    requestHeaders
-  );
+  const { data, error, isLoading, fetch, mutate } =
+    useGraphQLClient<GitLab.IssueData>(
+      gitLabAPIEndpoint ?? "",
+      GET_ISSUES_QUERY,
+      defaultVariables,
+      requestHeaders
+    );
 
   const getIssues = fetch;
   const createIssue = async (
