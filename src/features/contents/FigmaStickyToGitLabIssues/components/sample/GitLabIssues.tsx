@@ -5,19 +5,22 @@ import { useGraphQLClient } from "@hooks/useGraphQLClient";
 import { useSettings } from "@hooks/useSettings";
 import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 
-const GET_PROJECT_ISSUES = `
-  query GetProjectIssues($fullPath: ID!) {
+export const GET_ISSUES_QUERY = `
+  query GetIssuesWithLabels($fullPath: ID!) {
     project(fullPath: $fullPath) {
       issues {
         nodes {
+          id
           title
           description
           labels {
             nodes {
+              id
               title
+              color
+              description
             }
           }
-          createdAt
         }
       }
     }
@@ -83,7 +86,7 @@ export const GitLabIssues = () => {
 
   const { data, error, isLoading, fetch } = useGraphQLClient<Data>(
     gitLabAPIEndpoint ?? "", // GraphQL API endpoint
-    GET_PROJECT_ISSUES, // Default query
+    GET_ISSUES_QUERY, // Default query
     defaultVariables,
     requestHeaders
   );
