@@ -23,7 +23,7 @@ export const useHttpErrorHandler = (): UseHttpErrorHandlerReturnType => {
         return Promise.reject(error.response?.data);
       default:
         console.log(error);
-        // TODO: Uncomment this line when error page is ready.
+        router.push("/unexpectedError");
         return Promise.reject(error.response?.data);
     }
   };
