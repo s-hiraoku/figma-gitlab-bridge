@@ -36,7 +36,7 @@ export const GitLabIssues = () => {
   const { data, error, isLoading, getIssues, createIssue } = useGitLabRequest();
 
   const handleMutate = useCallback(() => {
-    createIssue("title test1", "title test1 description");
+    createIssue("title test1", "title test1 description", ["青色ラベル"]);
   }, [createIssue]);
 
   useEffect(() => {

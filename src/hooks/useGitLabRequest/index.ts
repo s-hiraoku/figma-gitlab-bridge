@@ -50,11 +50,16 @@ export const useGitLabRequest = () => {
   );
 
   const getIssues = fetch;
-  const createIssue = async (title: string, description: string) => {
+  const createIssue = async (
+    title: string,
+    description: string,
+    labels: string[]
+  ) => {
     return mutate(CREATE_ISSUE_MUTATION, {
       projectPath: gitLabProjectPath,
       title,
       description,
+      labels,
     });
   };
 
