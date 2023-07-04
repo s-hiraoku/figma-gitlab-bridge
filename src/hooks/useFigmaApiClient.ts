@@ -1,26 +1,18 @@
-import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 import { useHttpErrorHandler } from "@hooks/useHttpErrorHandler";
-import { useSettings } from "@hooks/useSettings";
-
 import Axios, { AxiosInstance } from "axios";
-
 import { useEffect, useMemo } from "react";
+import { useFigmaSettings } from "./useFigmaSettings";
 
 type UseFigmaApiClientReturnType = {
   figmaApiClient: AxiosInstance;
 };
 
 export const useFigmaApiClient = (): UseFigmaApiClientReturnType => {
-  const { data: settings } = useSettings();
+  const { getFigmaAPIEndpoint } = useFigmaSettings();
+
   const { handleHttpError } = useHttpErrorHandler();
 
-  const figmaAPIEndpoint = useMemo(() => {
-    const adjustedSettings = settings ?? [];
-    return findValueInSettingsByKey(
-      adjustedSettings,
-      SETTING_KEY.figmaAPIEndpoint
-    );
-  }, [settings]);
+  const figmaAPIEndpoint = getFigmaAPIEndpoint();
   const figmaApiClient = useMemo(() => {
     return Axios.create({
       baseURL: figmaAPIEndpoint ?? "",

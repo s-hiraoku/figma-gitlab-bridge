@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { AxiosError, isAxiosError } from "axios";
-import { useSettings } from "@hooks/useSettings";
-import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 import { parseFigmaId } from "../../utils";
 import { Figma } from "@types";
 import { useFigmaApiClient } from "@hooks/useFigmaApiClient";
+import { useFigmaSettings } from "@hooks/useFigmaSettings";
 
 const FIGMA_FILES_PATH = "/files";
 
@@ -21,12 +20,9 @@ export const useFigJamStickyNotes = (figmaUrl: string) => {
     }
   }, [figmaUrl]);
 
-  const { data: settings } = useSettings();
-  const adjustedSettings = settings ?? [];
+  const { getFigmaAccessToken } = useFigmaSettings();
 
-  const apiKey =
-    findValueInSettingsByKey(adjustedSettings, SETTING_KEY.figmaAccessToken) ??
-    "";
+  const figmaAccessToken = getFigmaAccessToken();
 
   const figmaId = parseFigmaId(figmaUrl);
   const requestUrl = figmaId
@@ -41,7 +37,7 @@ export const useFigJamStickyNotes = (figmaUrl: string) => {
         requestUrl,
         {
           headers: {
-            "X-Figma-Token": apiKey,
+            "X-Figma-Token": figmaAccessToken,
             "Content-Type": "application/json",
           },
         }
@@ -56,7 +52,7 @@ export const useFigJamStickyNotes = (figmaUrl: string) => {
     } finally {
       setIsValidating(false);
     }
-  }, [apiKey, figmaApiClient, requestUrl]);
+  }, [figmaAccessToken, figmaApiClient, requestUrl]);
 
   return {
     data,

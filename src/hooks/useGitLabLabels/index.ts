@@ -1,36 +1,16 @@
 import { useMemo } from "react";
 import { useGraphQLClient } from "../useGraphQLClient";
-import { useSettings } from "../useSettings";
-import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 import { GitLab } from "@types";
 import { GET_LABELS_QUERY } from "./queries";
+import { useGitLabSettings } from "@hooks/useGitLabSettings";
 
 export const useGitLabLabels = () => {
-  const { data: settings } = useSettings();
+  const { getGitLabAPIEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
+    useGitLabSettings();
 
-  const gitLabAPIEndpoint = useMemo(() => {
-    const adjustedSettings = settings ?? [];
-    return findValueInSettingsByKey(
-      adjustedSettings,
-      SETTING_KEY.gitLabAPIEndpoint
-    );
-  }, [settings]);
-
-  const gitLabAccessToken = useMemo(() => {
-    const adjustedSettings = settings ?? [];
-    return findValueInSettingsByKey(
-      adjustedSettings,
-      SETTING_KEY.gitLabAccessToken
-    );
-  }, [settings]);
-
-  const gitLabProjectPath = useMemo(() => {
-    const adjustedSettings = settings ?? [];
-    return findValueInSettingsByKey(
-      adjustedSettings,
-      SETTING_KEY.gitLabProjectPath
-    );
-  }, [settings]);
+  const gitLabAPIEndpoint = getGitLabAPIEndpoint();
+  const gitLabAccessToken = getGitLabAccessToken();
+  const gitLabProjectPath = getGitLabProjectPath();
 
   const defaultVariables = useMemo(() => {
     return { fullPath: gitLabProjectPath };

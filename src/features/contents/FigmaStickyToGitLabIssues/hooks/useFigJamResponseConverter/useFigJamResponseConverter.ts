@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { Figma } from "@types";
 import {
   StickyNote,
@@ -7,9 +7,8 @@ import {
   isNodeWithChildren,
   rgbaToHexWithoutAlpha,
 } from "../../utils";
-import { useSettings } from "@hooks/useSettings";
-import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 import { FIGJAM_COLOR_VALUE, FigJamColor } from "../../types";
+import { useFigmaSettings } from "@hooks/useFigmaSettings";
 
 export type UseFigJamResponseConverter = () => {
   converter: (
@@ -20,15 +19,9 @@ export type UseFigJamResponseConverter = () => {
 };
 
 export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
-  const { data: settings } = useSettings();
+  const { getFigmaAPIEndpoint } = useFigmaSettings();
 
-  const figmaAPIEndpoint = useMemo(() => {
-    const adjustedSettings = settings ?? [];
-    return findValueInSettingsByKey(
-      adjustedSettings,
-      SETTING_KEY.figmaAPIEndpoint
-    );
-  }, [settings]);
+  const figmaAPIEndpoint = getFigmaAPIEndpoint();
 
   const createFigmaNodeURL = useCallback(
     (figmaId: string, nodeId: string) => {

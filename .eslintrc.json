@@ -6,7 +6,7 @@
     "plugin:storybook/recommended"
   ],
   "rules": {
-    "no-restricted-imports": ["error", { "paths": ["axios"] }]
+    "no-restricted-imports": ["error", { "patterns": ["axios$"] }]
   },
   "overrides": [
     {

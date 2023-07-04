@@ -9,3 +9,4 @@ export const zSetting = z.object({
 export const zSettings = z.array(zSetting);
 
 export type Settings = z.infer<typeof zSettings>;
+export type Setting = z.infer<typeof zSetting>;

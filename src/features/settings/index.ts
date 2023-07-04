@@ -1,6 +1,6 @@
 import { Settings } from "@lib/validators";
 
-type settingKey = figmaSettingKey | gitLabSettingKey;
+export type settingKey = figmaSettingKey | gitLabSettingKey;
 type figmaSettingKey = "figmaAccessToken" | "figmaAPIEndpoint";
 type gitLabSettingKey =
   | "gitLabProjectPath"
