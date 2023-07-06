@@ -8,6 +8,12 @@ import { blue, red } from "@mui/material/colors";
 import { AppContent } from "./_components";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react";
+import {
+  Hydrate,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
 export default function App({ Component, pageProps }: AppProps) {
   const isDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -22,24 +28,29 @@ export default function App({ Component, pageProps }: AppProps) {
           }),
     },
   });
+  const [queryClient] = useState(() => new QueryClient());
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppProvider>
-        <AppContent Component={Component} {...pageProps} />
-        <ToastContainer
-          position="top-right"
-          autoClose={2000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <AppContent Component={Component} {...pageProps} />
+            <ToastContainer
+              position="top-right"
+              autoClose={2000}
+              hideProgressBar
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"
+            />
+          </Hydrate>
+        </QueryClientProvider>
       </AppProvider>
     </ThemeProvider>
   );
