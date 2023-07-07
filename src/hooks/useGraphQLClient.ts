@@ -1,21 +1,18 @@
 import { useState, useMemo, useCallback } from "react";
-import { GraphQLClient, ClientError } from "graphql-request";
+import { GraphQLClient, ClientError, Variables } from "graphql-request";
 
 type GraphQLClientHook<T> = {
   data: T | null;
   error: Error | null;
   isLoading: boolean;
   fetch: () => Promise<void>;
-  mutate: (
-    mutation: string,
-    variables?: Record<string, unknown>
-  ) => Promise<void>;
+  mutate: (mutation: string, variables?: Variables) => Promise<void>;
 };
 
 export const useGraphQLClient = <T>(
   endpoint: string,
   defaultQuery: string,
-  defaultVariables: Record<string, unknown> = {},
+  defaultVariables: Variables = {},
   requestHeaders: Record<string, string> = {}
 ): GraphQLClientHook<T> => {
   const [data, setData] = useState<T | null>(null);
@@ -31,7 +28,7 @@ export const useGraphQLClient = <T>(
   );
 
   const executeRequest = useCallback(
-    async (query: string, variables: Record<string, unknown> = {}) => {
+    async (query: string, variables: Variables = {}) => {
       setIsLoading(true);
       try {
         const result = await client.request(query, variables);
