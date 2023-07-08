@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { useSettings } from "./useSettings";
 import {
   SETTING_KEY,
@@ -9,23 +9,17 @@ import {
 export const useGitLabSettings = () => {
   const { data: settings } = useSettings();
 
-  const getSetting = useMemo(() => {
-    const adjustedSettings = settings ?? [];
-    return (key: settingKey) => findValueInSettingsByKey(adjustedSettings, key);
-  }, [settings]);
+  const getSetting = useCallback(
+    (key: settingKey) => {
+      const adjustedSettings = settings ?? [];
+      return findValueInSettingsByKey(adjustedSettings, key);
+    },
+    [settings]
+  );
 
   return {
-    getGitLabAPIEndpoint: useCallback(
-      () => getSetting(SETTING_KEY.gitLabAPIEndpoint),
-      [getSetting]
-    ),
-    getGitLabAccessToken: useCallback(
-      () => getSetting(SETTING_KEY.gitLabAccessToken),
-      [getSetting]
-    ),
-    getGitLabProjectPath: useCallback(
-      () => getSetting(SETTING_KEY.gitLabProjectPath),
-      [getSetting]
-    ),
+    getGitLabAPIEndpoint: () => getSetting(SETTING_KEY.gitLabAPIEndpoint),
+    getGitLabAccessToken: () => getSetting(SETTING_KEY.gitLabAccessToken),
+    getGitLabProjectPath: () => getSetting(SETTING_KEY.gitLabProjectPath),
   };
 };
