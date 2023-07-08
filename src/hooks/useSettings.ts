@@ -1,20 +1,23 @@
-import { UseRequestReturnType, useRequest } from "./useRequest";
+import { UseRequestSuspenseReturnType, useRequest } from "./useRequest";
 import { Settings, zSettings } from "@lib/validators";
 
-export const useSettings = (): UseRequestReturnType<Settings, unknown> => {
-  const { data, error, isValidating, mutate } = useRequest<Settings>(
+export const useSettings = (): UseRequestSuspenseReturnType<
+  Settings,
+  unknown
+> => {
+  const { data, mutate } = useRequest<Settings>(
     "/api/settings",
     {},
     {
-      fallbackData: undefined,
+      fallbackData: [],
       revalidateIfStale: false,
+      revalidateOnMount: true,
+      suspense: true,
     }
   );
 
   return {
     data: data ? zSettings.parse(data) : undefined,
-    error,
-    isValidating,
     mutate,
   };
 };
