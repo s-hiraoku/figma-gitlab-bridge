@@ -16,9 +16,16 @@ export type UseRequestReturnType<Data, Error> = Pick<
   data: Data | undefined;
 };
 
+export type UseRequestSuspenseReturnType<Data, Error> = Pick<
+  SWRResponse<Data, AxiosError<Error>>,
+  "mutate"
+> & {
+  data: Data | undefined;
+};
+
 type UseRequestSWRConfig<Data = unknown, Error = unknown> = Pick<
   SWRConfiguration<Data, AxiosError<Error>>,
-  "revalidateIfStale"
+  "revalidateIfStale" | "suspense" | "revalidateOnMount"
 > & {
   fallbackData?: Data;
 };
@@ -54,6 +61,7 @@ export function useRequest<Data = unknown, Error = unknown>(
     ...config,
     fallbackData,
   });
+
   const { data, error, isValidating, mutate } = useSWR<
     Data,
     AxiosError<Error>,
