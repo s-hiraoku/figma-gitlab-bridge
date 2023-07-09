@@ -18,8 +18,17 @@ export const useGitLabSettings = () => {
   );
 
   return {
-    getGitLabAPIEndpoint: () => getSetting(SETTING_KEY.gitLabAPIEndpoint),
-    getGitLabAccessToken: () => getSetting(SETTING_KEY.gitLabAccessToken),
-    getGitLabProjectPath: () => getSetting(SETTING_KEY.gitLabProjectPath),
+    getGitLabAPIEndpoint: useCallback(
+      () => getSetting(SETTING_KEY.gitLabAPIEndpoint),
+      [getSetting]
+    ),
+    getGitLabAccessToken: useCallback(
+      () => getSetting(SETTING_KEY.gitLabAccessToken),
+      [getSetting]
+    ),
+    getGitLabProjectPath: useCallback(
+      () => getSetting(SETTING_KEY.gitLabProjectPath),
+      [getSetting]
+    ),
   };
 };

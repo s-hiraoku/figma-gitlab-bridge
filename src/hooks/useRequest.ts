@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 import useSWR, { SWRConfiguration, SWRResponse } from "swr";
 import { RequestConfig } from "@types";
 import { useApiClient } from "@hooks/useApiClient";
+import { useCallback } from "react";
 
 const REQUEST_CONFIG: RequestConfig = {
   headers: {
@@ -49,13 +50,16 @@ export function useRequest<Data = unknown, Error = unknown>(
   { fallbackData, ...config }: UseRequestSWRConfig<Data, Error> = {}
 ): UseRequestReturnType<Data, Error> {
   const { apiClient } = useApiClient();
-  const fetcher = async (url: string): Promise<Data> => {
-    const res = await apiClient.get(url, {
-      ...REQUEST_CONFIG,
-      ...requestConfig,
-    });
-    return res.data;
-  };
+  const fetcher = useCallback(
+    async (url: string): Promise<Data> => {
+      const res = await apiClient.get(url, {
+        ...REQUEST_CONFIG,
+        ...requestConfig,
+      });
+      return res.data;
+    },
+    [apiClient, requestConfig]
+  );
 
   const finalConfig = createConfig({
     ...config,

@@ -18,7 +18,13 @@ export const useFigmaSettings = () => {
   );
 
   return {
-    getFigmaAccessToken: () => getSetting(SETTING_KEY.figmaAccessToken),
-    getFigmaAPIEndpoint: () => getSetting(SETTING_KEY.figmaAPIEndpoint),
+    getFigmaAccessToken: useCallback(
+      () => getSetting(SETTING_KEY.figmaAccessToken),
+      [getSetting]
+    ),
+    getFigmaAPIEndpoint: useCallback(
+      () => getSetting(SETTING_KEY.figmaAPIEndpoint),
+      [getSetting]
+    ),
   };
 };

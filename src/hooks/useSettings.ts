@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { UseRequestSuspenseReturnType, useRequest } from "./useRequest";
 import { Settings, zSettings } from "@lib/validators";
 
@@ -16,8 +17,12 @@ export const useSettings = (): UseRequestSuspenseReturnType<
     }
   );
 
+  const parsedData = useMemo(() => {
+    return data ? zSettings.parse(data) : undefined;
+  }, [data]);
+
   return {
-    data: data ? zSettings.parse(data) : undefined,
+    data: parsedData,
     mutate,
   };
 };
