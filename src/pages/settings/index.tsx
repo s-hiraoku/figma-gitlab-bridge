@@ -220,7 +220,13 @@ export default function Settings() {
         <Box sx={{ mt: 8 }}>
           <Typography variant="h2">⚙️ Settings</Typography>
         </Box>
-        <ErrorBoundary fallback={<FetchError />}>
+        <ErrorBoundary
+          fallback={
+            <div className="mt-8">
+              <FetchError />
+            </div>
+          }
+        >
           <Typography
             variant="h6"
             component="h2"
