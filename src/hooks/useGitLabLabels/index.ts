@@ -1,16 +1,26 @@
-import { useMemo } from "react";
-import { useGraphQLClient } from "../useGraphQLClient";
+import { useEffect, useMemo, useState } from "react";
 import { GitLab } from "@types";
-import { GET_LABELS_QUERY } from "./queries";
+import { gitLabLabelsQueries } from "./queries";
 import { useGitLabSettings } from "@hooks/useGitLabSettings";
+import { useGraphQLApiClient } from "@hooks/useGraphQLApiClient";
+import {
+  UseSuspenseQueryResultOnSuccess,
+  useSuspenseQuery,
+} from "@suspensive/react-query";
 
 export const useGitLabLabels = () => {
   const { getGitLabAPIEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
     useGitLabSettings();
 
-  const gitLabAPIEndpoint = getGitLabAPIEndpoint();
-  const gitLabAccessToken = getGitLabAccessToken();
-  const gitLabProjectPath = getGitLabProjectPath();
+  const [gitLabAPIEndpoint, setGitLabAPIEndpoint] = useState<string>("");
+  const [gitLabAccessToken, setGitLabAccessToken] = useState<string>("");
+  const [gitLabProjectPath, setGitLabProjectPath] = useState<string>("");
+
+  useEffect(() => {
+    setGitLabAPIEndpoint(getGitLabAPIEndpoint() ?? "");
+    setGitLabAccessToken(getGitLabAccessToken() ?? "");
+    setGitLabProjectPath(getGitLabProjectPath() ?? "");
+  }, [getGitLabAPIEndpoint, getGitLabAccessToken, getGitLabProjectPath]);
 
   const defaultVariables = useMemo(() => {
     return { fullPath: gitLabProjectPath };
@@ -22,19 +32,17 @@ export const useGitLabLabels = () => {
     };
   }, [gitLabAccessToken]);
 
-  const { data, error, isLoading, fetch } = useGraphQLClient<GitLab.LabelData>(
+  const { graphQLApiClient } = useGraphQLApiClient(
     gitLabAPIEndpoint ?? "",
-    GET_LABELS_QUERY,
-    defaultVariables,
     requestHeaders
   );
 
-  const getLabels = fetch;
+  const query: UseSuspenseQueryResultOnSuccess<GitLab.LabelData> =
+    useSuspenseQuery(
+      gitLabLabelsQueries.all(graphQLApiClient, defaultVariables)
+    );
 
   return {
-    data,
-    error,
-    isLoading,
-    getLabels,
+    data: query.data,
   };
 };
