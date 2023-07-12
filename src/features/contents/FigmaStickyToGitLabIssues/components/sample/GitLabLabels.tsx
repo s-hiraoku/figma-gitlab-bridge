@@ -1,22 +1,11 @@
 // GitLab の issues を取得して表示するサンプルコンポーネント
 
-import React, { useEffect } from "react";
+import React from "react";
 
 import { useGitLabLabels } from "@hooks/useGitLabLabels";
 
 export const GitLabLabels = () => {
-  const { data, error, isLoading, getLabels } = useGitLabLabels();
-
-  useEffect(
-    () => {
-      getLabels();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  const { data } = useGitLabLabels();
 
   return (
     <div>
