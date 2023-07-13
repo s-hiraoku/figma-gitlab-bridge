@@ -3,6 +3,7 @@ export type Label = {
   title: string;
   color: string;
   description?: string;
+  createdAt: string;
 };
 
 export type Issue = {

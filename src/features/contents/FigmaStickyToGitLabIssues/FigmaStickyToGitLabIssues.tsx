@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { LexicalEditorWrapper } from "@components/LexicalEditor";
 import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
 import { FigmaPreview } from "@components/FigmaPreview";
@@ -147,8 +147,11 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       }}
     >
       <Title title="FigJam Sticky To GitLab Issues" />
+      {/* Components for testing. I'll turn it off when I'm done testing. */}
       <GitLabIssues />
-      <GitLabLabels />
+      <Suspense fallback={<div>Loading...</div>}>
+        <GitLabLabels />
+      </Suspense>
       {status >= FIGJAM_STATUS.initialStage &&
         status !== FIGJAM_STATUS.extractStickyNote && (
           <Box sx={{ mt: 8, width: 800 }}>
