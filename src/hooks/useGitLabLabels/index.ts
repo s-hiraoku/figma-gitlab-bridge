@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { GitLab } from "@types";
 import { gitLabLabelsQueries } from "./queries";
 import { useGitLabSettings } from "@hooks/useGitLabSettings";
@@ -33,12 +33,12 @@ export const useGitLabLabels = () => {
   }, [gitLabAccessToken]);
 
   const { graphQLApiClient } = useGraphQLApiClient(
-    gitLabAPIEndpoint ?? "https://gitlab.com/api/graphql",
+    gitLabAPIEndpoint ?? "",
     requestHeaders
   );
 
   const query: UseQueryResult<GitLab.LabelData> = useQuery({
-    ...gitLabLabelsQueries.all(graphQLApiClient, defaultVariables),
+    ...gitLabLabelsQueries.list(graphQLApiClient, defaultVariables),
     suspense: true,
     enabled: !!gitLabAPIEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
   });
