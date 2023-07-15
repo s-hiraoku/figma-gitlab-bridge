@@ -1,16 +1,32 @@
 import { useMemo } from "react";
-import { useGraphQLClient } from "../useGraphQLClient";
 import { GitLab } from "@types";
-import { GET_ISSUES_QUERY, CREATE_ISSUE_MUTATION } from "./queries";
+import { CREATE_ISSUE_MUTATION, gitLabIssuesQueries } from "./queries";
 import { useGitLabSettings } from "@hooks/useGitLabSettings";
+import { useGraphQLApiClient } from "@hooks/useGraphQLApiClient";
+import {
+  UseQueryResult,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { DeepPartial } from "@utils/deepPartial";
 
 export const useGitLabIssues = () => {
   const { getGitLabAPIEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
     useGitLabSettings();
 
-  const gitLabAPIEndpoint = getGitLabAPIEndpoint();
-  const gitLabAccessToken = getGitLabAccessToken();
-  const gitLabProjectPath = getGitLabProjectPath();
+  const gitLabAPIEndpoint = useMemo(
+    () => getGitLabAPIEndpoint(),
+    [getGitLabAPIEndpoint]
+  );
+  const gitLabAccessToken = useMemo(
+    () => getGitLabAccessToken(),
+    [getGitLabAccessToken]
+  );
+  const gitLabProjectPath = useMemo(
+    () => getGitLabProjectPath(),
+    [getGitLabProjectPath]
+  );
 
   const defaultVariables = useMemo(() => {
     return { fullPath: gitLabProjectPath };
@@ -22,33 +38,48 @@ export const useGitLabIssues = () => {
     };
   }, [gitLabAccessToken]);
 
-  const { data, error, isLoading, fetch, mutate } =
-    useGraphQLClient<GitLab.IssueData>(
-      gitLabAPIEndpoint ?? "",
-      GET_ISSUES_QUERY,
-      defaultVariables,
-      requestHeaders
-    );
+  const { graphQLApiClient } = useGraphQLApiClient(
+    gitLabAPIEndpoint ?? "",
+    requestHeaders
+  );
 
-  const getIssues = fetch;
-  const createIssue = async (
-    title: string,
-    description: string,
-    labels: string[]
+  const query: UseQueryResult<GitLab.LabelData> = useQuery({
+    ...gitLabIssuesQueries.list(graphQLApiClient, defaultVariables),
+    suspense: true,
+    enabled: !!gitLabAPIEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
+  });
+
+  const queryClient = useQueryClient();
+  const { queryKey } = gitLabIssuesQueries.list(
+    graphQLApiClient,
+    defaultVariables
+  );
+
+  const createIssue = (
+    variables: Omit<DeepPartial<GitLab.Issue>, "createAt">
   ) => {
-    return mutate(CREATE_ISSUE_MUTATION, {
+    const { title, description, labels } = variables;
+    const stringLabels = labels?.map((label) => label.title);
+    return graphQLApiClient.request(CREATE_ISSUE_MUTATION, {
       projectPath: gitLabProjectPath,
       title,
       description,
-      labels,
+      labels: stringLabels,
     });
   };
 
+  const mutation = useMutation(createIssue, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(queryKey);
+    },
+    onError: (error) => {
+      throw error;
+    },
+  });
+
   return {
-    data,
-    error,
-    isLoading,
-    getIssues,
-    createIssue,
+    data: query.data,
+    getIssues: query.refetch,
+    createIssue: mutation.mutate,
   };
 };

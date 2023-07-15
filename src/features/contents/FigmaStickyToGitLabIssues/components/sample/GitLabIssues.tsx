@@ -5,10 +5,14 @@ import { useGitLabIssues } from "@hooks/useGitLabIssues";
 import { Button } from "@mui/material";
 
 export const GitLabIssues = () => {
-  const { data, error, isLoading, getIssues, createIssue } = useGitLabIssues();
+  const { data, getIssues, createIssue } = useGitLabIssues();
 
   const handleMutate = useCallback(() => {
-    createIssue("title test1", "title test1 description", ["青色ラベル"]);
+    createIssue({
+      title: "title test1",
+      description: "title test1 description",
+      labels: [{ title: "青色ラベル" }],
+    });
   }, [createIssue]);
 
   useEffect(
@@ -18,9 +22,6 @@ export const GitLabIssues = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
