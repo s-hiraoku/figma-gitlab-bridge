@@ -43,7 +43,7 @@ export const useGitLabIssues = () => {
     requestHeaders
   );
 
-  const query: UseQueryResult<GitLab.LabelData> = useQuery({
+  const query: UseQueryResult<GitLab.IssueData> = useQuery({
     ...gitLabIssuesQueries.list(graphQLApiClient, defaultVariables),
     suspense: true,
     enabled: !!gitLabAPIEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
@@ -59,7 +59,7 @@ export const useGitLabIssues = () => {
     variables: Omit<DeepPartial<GitLab.Issue>, "createAt">
   ) => {
     const { title, description, labels } = variables;
-    const stringLabels = labels?.map((label) => label.title);
+    const stringLabels = labels?.nodes?.map((label) => label.title);
     return graphQLApiClient.request(CREATE_ISSUE_MUTATION, {
       projectPath: gitLabProjectPath,
       title,

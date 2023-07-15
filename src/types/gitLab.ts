@@ -9,20 +9,24 @@ export type Label = {
 export type Issue = {
   title: string;
   description: string;
-  labels: Label[];
+  labels: LabelNodes;
   createdAt: string;
 };
 
+export type IssueNodes = {
+  nodes: Issue[];
+};
+
 export type IssuesProject = {
-  issues: {
-    nodes: Issue[];
-  };
+  issues: IssueNodes;
+};
+
+export type LabelNodes = {
+  nodes: Label[];
 };
 
 export type LabelsProject = {
-  labels: {
-    nodes: Label[];
-  };
+  labels: LabelNodes;
 };
 
 export type IssueData = {
