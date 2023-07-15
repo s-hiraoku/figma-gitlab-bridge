@@ -147,13 +147,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       }}
     >
       <Title title="FigJam Sticky To GitLab Issues" />
-      {/* GitLabIssues and GitLabLabels Components for testing. I'll turn it off when I'm done testing. */}
-      <Suspense fallback={<div>Loading...</div>}>
-        <GitLabIssues />
-      </Suspense>
-      <Suspense fallback={<div>Loading...</div>}>
-        <GitLabLabels />
-      </Suspense>
       {status >= FIGJAM_STATUS.initialStage &&
         status !== FIGJAM_STATUS.extractStickyNote && (
           <Box sx={{ mt: 8, width: 800 }}>
