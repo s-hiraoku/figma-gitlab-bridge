@@ -8,17 +8,17 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 
-export type SelectedMenuItem<T = string> = {
+export type SelectedMenuItem<T extends string> = {
   label: React.ReactNode | string;
   value: T;
 };
 
-export type SelectedMenuItems<T = string> = SelectedMenuItem<T>[];
+export type SelectedMenuItems<T extends string> = SelectedMenuItem<T>[];
 
-export type SelectedMenuProps = {
-  initialSelectedItem?: SelectedMenuItem;
-  items: SelectedMenuItems;
-  onChange: (event: SelectedMenuItem) => void;
+export type SelectedMenuProps<T extends string> = {
+  initialSelectedItem?: SelectedMenuItem<T>;
+  items: SelectedMenuItems<T>;
+  onChange: (event: SelectedMenuItem<T>) => void;
   label?: string;
   placeholder?: string;
   id?: string;
@@ -27,7 +27,7 @@ export type SelectedMenuProps = {
   helperText?: string;
 };
 
-export const SelectedMenu: React.FC<SelectedMenuProps> = ({
+export const SelectedMenu = <T extends string>({
   label,
   initialSelectedItem,
   items,
@@ -36,19 +36,19 @@ export const SelectedMenu: React.FC<SelectedMenuProps> = ({
   id,
   error,
   helperText,
-}) => {
+}: SelectedMenuProps<T>) => {
   const [selectedItem, setSelectedItem] = useState<
-    SelectedMenuItem | undefined
+    SelectedMenuItem<T> | undefined
   >(initialSelectedItem ?? undefined);
 
   const handleChange = useCallback(
-    (event: SelectChangeEvent<string>) => {
+    (event: SelectChangeEvent<T>) => {
       const selectedItem = items.find(
         (item) => item.value === event.target.value
       );
-      setSelectedItem(selectedItem);
+      setSelectedItem(selectedItem as SelectedMenuItem<T> | undefined);
       if (selectedItem != null) {
-        onChange(selectedItem);
+        onChange(selectedItem as SelectedMenuItem<T>);
       }
     },
     [items, onChange]
@@ -59,7 +59,7 @@ export const SelectedMenu: React.FC<SelectedMenuProps> = ({
       <InputLabel htmlFor={`${id}-label`}>{label}</InputLabel>
       <Select
         labelId={`${id}-label`}
-        defaultValue={selectedItem?.value}
+        value={selectedItem?.value}
         onChange={handleChange}
         label={label}
         inputProps={{

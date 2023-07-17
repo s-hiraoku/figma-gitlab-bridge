@@ -5,6 +5,7 @@ import {
   FigJamColorLabel,
   FIGJAM_COLOR_VALUE,
   FigJamColor,
+  FigJamColorValue,
 } from "../contents/FigmaStickyToGitLabIssues/types";
 import { SelectedMenuItem } from "@components/SelectedMenu";
 
@@ -32,11 +33,11 @@ export const SelectFigJamSticky: React.FC<SelectFigJamStickyProps> = ({
   error = false,
   onChange,
 }) => {
-  const handleChange = (item: SelectedMenuItem) => {
+  const handleChange = (item: SelectedMenuItem<FigJamColorValue>) => {
     onChange(item as unknown as FigJamColor);
   };
   return (
-    <SelectedMenu
+    <SelectedMenu<FigJamColorValue>
       id="select-figjam-sticky"
       initialSelectedItem={items[0]}
       error={error}

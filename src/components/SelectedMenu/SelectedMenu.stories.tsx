@@ -1,7 +1,7 @@
 import { type Meta, type StoryObj } from "@storybook/react";
 import { SelectedMenu, SelectedMenuItems } from "./SelectedMenu";
 
-const sampleMenuItems: SelectedMenuItems = [
+const sampleMenuItems: SelectedMenuItems<string> = [
   { label: <div>Option 1</div>, value: "option1" },
   { label: <div>Option 2</div>, value: "option2" },
   { label: <div>Option 3</div>, value: "option3" },
