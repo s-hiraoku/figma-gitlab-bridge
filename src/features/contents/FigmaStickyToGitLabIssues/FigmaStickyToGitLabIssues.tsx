@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import React, { Suspense, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { LexicalEditorWrapper } from "@components/LexicalEditor";
 import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
 import { FigmaPreview } from "@components/FigmaPreview";
@@ -17,8 +17,6 @@ import { useDebounce } from "@hooks/useDebounce";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/system";
-import { GitLabIssues } from "./components/sample/GitLabIssues";
-import { GitLabLabels } from "./components/sample/GitLabLabels";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
