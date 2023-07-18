@@ -72,9 +72,7 @@ export const CheckboxMenu = <T extends string>({
         value={selectedItemValues}
         multiple
         onChange={handleChange}
-        renderValue={(selected) =>
-          (selected as unknown as Array<string>).join(", ")
-        }
+        renderValue={(selected) => selected.join(", ")}
         input={<OutlinedInput label={label} />}
         inputProps={{
           name: "checkbox-menu",
