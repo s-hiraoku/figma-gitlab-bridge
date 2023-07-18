@@ -13,5 +13,5 @@ export default {
 } as Meta<typeof SelectedMenu>;
 
 export const Default: StoryObj<typeof SelectedMenu> = {
-  args: { items: sampleMenuItems, label: "Select Menu" },
+  args: { id: "sample", items: sampleMenuItems, label: "Select Menu" },
 };

@@ -42,11 +42,11 @@ export const SelectedMenu = <T extends string>({
   >(initialSelectedItem ?? undefined);
 
   const handleChange = useCallback(
-    (event: SelectChangeEvent<T>) => {
+    (event: SelectChangeEvent<SelectedMenuItem<T>>) => {
       const selectedItem = items.find(
         (item) => item.value === event.target.value
       );
-      setSelectedItem(selectedItem as SelectedMenuItem<T> | undefined);
+      setSelectedItem(selectedItem);
       if (selectedItem != null) {
         onChange(selectedItem as SelectedMenuItem<T>);
       }
@@ -56,10 +56,10 @@ export const SelectedMenu = <T extends string>({
 
   return (
     <FormControl fullWidth variant="outlined" error={error}>
-      <InputLabel htmlFor={`${id}-label`}>{label}</InputLabel>
+      <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <Select
         labelId={`${id}-label`}
-        value={selectedItem?.value}
+        value={selectedItem}
         onChange={handleChange}
         label={label}
         inputProps={{
