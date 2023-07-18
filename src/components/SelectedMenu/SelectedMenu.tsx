@@ -42,7 +42,7 @@ export const SelectedMenu = <T extends string>({
   >(initialSelectedItem ?? undefined);
 
   const handleChange = useCallback(
-    (event: SelectChangeEvent<SelectedMenuItem<T>>) => {
+    (event: SelectChangeEvent<T>) => {
       const selectedItem = items.find(
         (item) => item.value === event.target.value
       );
@@ -59,7 +59,7 @@ export const SelectedMenu = <T extends string>({
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <Select
         labelId={`${id}-label`}
-        value={selectedItem}
+        value={selectedItem?.value}
         onChange={handleChange}
         label={label}
         inputProps={{
