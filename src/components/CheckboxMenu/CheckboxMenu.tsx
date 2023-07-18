@@ -4,6 +4,7 @@ import {
   FormHelperText,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   SelectChangeEvent,
 } from "@mui/material";
@@ -17,6 +18,17 @@ export type CheckboxMenuItem<T extends string> = {
 };
 
 export type CheckboxMenuItems<T extends string> = CheckboxMenuItem<T>[];
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 export type CheckboxListProps<T extends string> = {
   initialSelectedItems?: CheckboxMenuItems<T>;
@@ -63,11 +75,13 @@ export const CheckboxMenu = <T extends string>({
         renderValue={(selected) =>
           (selected as unknown as Array<string>).join(", ")
         }
+        input={<OutlinedInput label={label} />}
         inputProps={{
           name: "checkbox-menu",
           id,
           "aria-label": ariaLabel,
         }}
+        MenuProps={MenuProps}
       >
         {items.map((item) => (
           <MenuItem key={item.value} value={item.value}>
