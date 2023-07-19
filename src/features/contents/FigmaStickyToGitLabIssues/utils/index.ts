@@ -18,10 +18,15 @@ export const FIGMA_NODE_TYPE: Record<Figma.NodeType, Figma.NodeType> = {
   INSTANCE: "INSTANCE",
   COMPONENT_SET: "COMPONENT_SET",
   STICKY: "STICKY",
+  SECTION: "SECTION",
 };
 
 export const isStickyNode = (node: Figma.Node): node is Figma.Sticky => {
   return node.type === FIGMA_NODE_TYPE.STICKY;
+};
+
+export const isSectionNode = (node: Figma.Node): node is Figma.Section => {
+  return node.type === FIGMA_NODE_TYPE.SECTION;
 };
 
 export const isNodeWithChildren = (

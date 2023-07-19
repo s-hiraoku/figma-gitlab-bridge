@@ -107,7 +107,8 @@ export type NodeType =
   | "COMPONENT"
   | "COMPONENT_SET"
   | "INSTANCE"
-  | "STICKY";
+  | "STICKY"
+  | "SECTION";
 
 export type Node =
   | Document
@@ -126,7 +127,8 @@ export type Node =
   | Component
   | ComponentSet
   | Instance
-  | Sticky;
+  | Sticky
+  | Section;
 
 /** Node Properties */
 
@@ -585,6 +587,21 @@ export interface Instance extends FrameBase {
    * table (see endpoints section below)
    */
   readonly componentId: string;
+}
+
+export interface Section {
+  readonly id: string;
+  readonly name: string;
+  readonly type: "SECTION";
+  readonly fills: ReadonlyArray<Paint>;
+  readonly children: ReadonlyArray<Node>;
+  readonly absoluteBoundingBox: Rect;
+  readonly absoluteRenderBounds: Rect;
+  readonly scrollBehavior: string; // e.g., "SCROLLS"
+  readonly sectionContentsHidden: boolean;
+  readonly strokeAlign: "INSIDE" | "OUTSIDE" | "CENTER";
+  readonly strokeWeight: number;
+  readonly strokes: ReadonlyArray<Paint>;
 }
 
 export interface Sticky {

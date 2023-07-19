@@ -6,6 +6,7 @@ import {
   parseFigmaId,
   isNodeWithChildren,
   rgbaToHexWithoutAlpha,
+  isSectionNode,
 } from "../../utils";
 import { FIGJAM_COLOR_VALUE, FigJamColor } from "../../types";
 import { useFigmaSettings } from "@hooks/useFigmaSettings";
@@ -14,7 +15,8 @@ export type UseFigJamResponseConverter = () => {
   converter: (
     figmaUrl: string,
     pickColor: FigJamColor,
-    fileResponse: Figma.FileResponse | undefined
+    fileResponse: Figma.FileResponse | undefined,
+    sections?: string[]
   ) => StickyNote[];
 };
 
@@ -34,7 +36,8 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
     (
       figmaUrl: string,
       pickColor: FigJamColor,
-      fileResponse: Figma.FileResponse | undefined
+      fileResponse: Figma.FileResponse | undefined,
+      sections?: string[]
     ): StickyNote[] => {
       if (fileResponse == null) {
         return [];
@@ -44,6 +47,15 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
       const { children } = document;
 
       const searchStickyNotes = (node: Figma.Node): StickyNote[] => {
+        if (isSectionNode(node)) {
+          const { name, children } = node;
+          if (
+            sections == null ||
+            sections.some((section) => section === name)
+          ) {
+            return children.flatMap(searchStickyNotes);
+          }
+        }
         if (isStickyNode(node)) {
           const { id, characters: text, fills } = node;
           if (

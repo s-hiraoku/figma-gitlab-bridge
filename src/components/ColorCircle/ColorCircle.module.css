@@ -20,5 +20,5 @@
 }
 
 .colorChange {
-  animation: colorChange 5s infinite;
+  animation: colorChange 0.5s infinite;
 }
