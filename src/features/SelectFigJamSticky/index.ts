@@ -1,1 +1,0 @@
-export { SelectFigJamSticky } from './SelectFigJamSticky';
