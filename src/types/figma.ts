@@ -619,6 +619,10 @@ export interface Sticky {
   readonly effects: ReadonlyArray<Effect>;
 }
 
+export interface HasChildrenNode extends Global {
+  readonly children: ReadonlyArray<Node>;
+}
+
 // Types
 
 /** An RGBA color */
