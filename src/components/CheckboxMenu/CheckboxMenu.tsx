@@ -81,6 +81,7 @@ export const CheckboxMenu = <T extends string>({
         }}
         MenuProps={MenuProps}
       >
+        {/* TODO: Add Search UI to filter items */}
         {items.map((item) => (
           <MenuItem key={item.value} value={item.value}>
             <Checkbox checked={selectedItemValues.indexOf(item.value) > -1} />

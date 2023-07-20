@@ -25,15 +25,22 @@ export const isStickyNode = (node: Figma.Node): node is Figma.Sticky => {
   return node.type === FIGMA_NODE_TYPE.STICKY;
 };
 
-export const isSectionNode = (node: Figma.Node): node is Figma.Section => {
+export const isSectionNode = (
+  node: Figma.Node
+): node is Figma.Section & { name: string } => {
   return node.type === FIGMA_NODE_TYPE.SECTION;
 };
 
 export const isNodeWithChildren = (
   node: Figma.Node
-): node is Figma.Frame | Figma.Group | Figma.Canvas => {
+): node is (Figma.Frame | Figma.Group | Figma.Canvas | Figma.Section) & {
+  children: ReadonlyArray<Node>;
+} => {
   return (
-    node.type === "FRAME" || node.type === "GROUP" || node.type === "CANVAS"
+    node.type === "FRAME" ||
+    node.type === "GROUP" ||
+    node.type === "CANVAS" ||
+    node.type === "SECTION"
   );
 };
 

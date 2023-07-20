@@ -18,6 +18,7 @@ export type UseFigJamResponseConverter = () => {
     fileResponse: Figma.FileResponse | undefined,
     sections?: string[]
   ) => StickyNote[];
+  getSections: (fileResponse: Figma.FileResponse | undefined) => string[];
 };
 
 export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
@@ -32,7 +33,7 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
     [figmaAPIEndpoint]
   );
 
-  const convertFileResponseToStickyNotes = useCallback(
+  const convertFileResponseToSectionsAndStickyNotes = useCallback(
     (
       figmaUrl: string,
       pickColor: FigJamColor,
@@ -83,5 +84,34 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
     [createFigmaNodeURL]
   );
 
-  return { converter: convertFileResponseToStickyNotes };
+  const getSections = useCallback(
+    (fileResponse: Figma.FileResponse | undefined): string[] => {
+      if (fileResponse == null) {
+        return [];
+      }
+
+      const { document } = fileResponse;
+      const { children } = document;
+
+      const searchSections = (node: Figma.Node): string[] => {
+        if (!isNodeWithChildren(node)) {
+          return isSectionNode(node) ? [node.name] : [];
+        }
+
+        if (isSectionNode(node)) {
+          return [node.name, ...node.children.flatMap(searchSections)];
+        }
+
+        return node.children.flatMap(searchSections);
+      };
+
+      return children.flatMap(searchSections);
+    },
+    []
+  );
+
+  return {
+    converter: convertFileResponseToSectionsAndStickyNotes,
+    getSections,
+  };
 };

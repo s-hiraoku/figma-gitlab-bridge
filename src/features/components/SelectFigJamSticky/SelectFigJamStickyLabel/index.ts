@@ -1,0 +1,1 @@
+export { SelectFigJamStickyLabel } from "./SelectFigJamStickyLabel";
