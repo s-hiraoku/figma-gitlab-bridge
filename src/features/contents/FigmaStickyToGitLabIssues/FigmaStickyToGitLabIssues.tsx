@@ -36,7 +36,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const [stickyNote, setStickyNote] = useState<string>("");
   const {
     data: fileResponse,
-    error,
+    error: fileResponseError,
     isValidating,
     fetchStickyNotes,
   } = useFigJamStickyNotes(figmaUrl);
@@ -45,47 +45,57 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const { debounce } = useDebounce();
   const theme = useTheme();
 
-  const checkFigmaIdAndSetStatus = useCallback((value: string) => {
-    if (value === "") {
-      setStatus(FIGJAM_STATUS.initialStage);
-      return;
-    }
-    if (parseFigmaId(value)) {
-      setStatus(FIGJAM_STATUS.fileSetupCompleted);
-      return;
-    }
-    setStatus(FIGJAM_STATUS.initialStage);
-  }, []);
+  const validateFigmaId = (value: string): boolean => {
+    return parseFigmaId(value) !== null;
+  };
+
+  const updateStatusBasedOnValidation = (isValid: boolean): void => {
+    setStatus(
+      isValid ? FIGJAM_STATUS.fileSetupCompleted : FIGJAM_STATUS.initialStage
+    );
+  };
+
+  const checkFigmaIdAndSetFileSetupStatus = useCallback(
+    (value: string): boolean => {
+      const isValid = validateFigmaId(value);
+      updateStatusBasedOnValidation(isValid);
+      return isValid;
+    },
+    []
+  );
 
   const handleFigmaUrlChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       setFigmaUrl(value);
-      debounce(() => checkFigmaIdAndSetStatus(value));
+      debounce(() => checkFigmaIdAndSetFileSetupStatus(value));
     },
-    [checkFigmaIdAndSetStatus, debounce]
+    [checkFigmaIdAndSetFileSetupStatus, debounce]
   );
 
   const handleFigmaUrlBlur = useCallback(
     (event: React.FocusEvent<HTMLInputElement>) => {
-      checkFigmaIdAndSetStatus(event.target.value);
-      fetchStickyNotes();
+      if (checkFigmaIdAndSetFileSetupStatus(event.target.value)) {
+        fetchStickyNotes();
+      }
     },
-    [checkFigmaIdAndSetStatus, fetchStickyNotes]
+    [checkFigmaIdAndSetFileSetupStatus, fetchStickyNotes]
   );
 
   const handleFigmaUrlPaste = useCallback(
     (event: React.ClipboardEvent<HTMLInputElement>) => {
       const pastedText = event.clipboardData.getData("Text");
-      checkFigmaIdAndSetStatus(pastedText);
-      fetchStickyNotes();
+      if (checkFigmaIdAndSetFileSetupStatus(pastedText)) {
+        fetchStickyNotes();
+      }
     },
-    [checkFigmaIdAndSetStatus, fetchStickyNotes]
+    [checkFigmaIdAndSetFileSetupStatus, fetchStickyNotes]
   );
 
   const handleExtractStickyNoteClick = useCallback(() => {
-    setStatus(FIGJAM_STATUS.extractStickyNote);
-    fetchStickyNotes();
+    fetchStickyNotes().then(() => {
+      setStatus(FIGJAM_STATUS.extractStickyNote);
+    });
   }, [fetchStickyNotes]);
 
   const handleEditorChange = useCallback((text: string) => {
@@ -119,7 +129,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!error && !isValidating && fileResponse) {
+    if (!fileResponseError && !isValidating && fileResponse) {
       const stickyNotes = convertFileResponseToStickyNotes(
         figmaUrl,
         stickyColor,
@@ -135,7 +145,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     };
   }, [
     convertFileResponseToStickyNotes,
-    error,
+    fileResponseError,
     figmaUrl,
     fileResponse,
     getSections,
