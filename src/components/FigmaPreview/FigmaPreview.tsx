@@ -1,5 +1,6 @@
-import { Loading } from "@components/Loading";
+import { useTheme } from "@mui/system";
 import React, { useState } from "react";
+import { PacmanLoader } from "react-spinners";
 
 type FigmaPreviewProps = {
   url: string;
@@ -11,11 +12,12 @@ export const FigmaPreview: React.FC<FigmaPreviewProps> = ({
   title = "Figma Preview",
 }) => {
   const [loading, setLoading] = useState(true);
+  const theme = useTheme();
   return (
     <>
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Loading />
+        <div className="w-full h-full flex items-center justify-center">
+          <PacmanLoader color={theme.palette.primary.main} />
         </div>
       )}
       <iframe

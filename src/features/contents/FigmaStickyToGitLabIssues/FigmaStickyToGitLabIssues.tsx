@@ -14,9 +14,10 @@ import {
   FigJamStatusType,
 } from "./types";
 import { useDebounce } from "@hooks/useDebounce";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
+
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/system";
+import { ResetButton } from "./components/ResetButton";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -126,6 +127,9 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
 
   const handleReset = useCallback(() => {
     setStatus(FIGJAM_STATUS.initialStage);
+    setSelectSections(undefined);
+    setStickyNote("");
+    setFigmaUrl("");
   }, []);
 
   useEffect(() => {
@@ -194,9 +198,11 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
             <Box sx={{ mt: 8 }}>
               <ExtractStickyNotes
                 sections={sections}
+                selectSections={selectSections}
                 onChangeSelectSections={handleChangeSelectSections}
                 onChangeSelectStickyColor={handleChangeSelectStickyColor}
                 onClickExtractStickyNote={handleExtractStickyNoteClick}
+                onClickReset={handleReset}
               />
             </Box>
           )}
@@ -220,14 +226,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
             </Box>
           </Box>
           <Box sx={{ mt: 4 }}>
-            <Button
-              variant="outlined"
-              startIcon={<RestartAltIcon />}
-              onClick={handleReset}
-              color="warning"
-            >
-              Reset
-            </Button>
+            <ResetButton onClickReset={handleReset} />
             <Button
               variant="outlined"
               startIcon={<PublishOutlinedIcon />}

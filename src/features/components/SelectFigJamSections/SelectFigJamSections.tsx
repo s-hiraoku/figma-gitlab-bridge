@@ -5,11 +5,15 @@ import React from "react";
 export type SelectFigJamSectionsProps = {
   sections: string[] | undefined;
   onChange(sections: string[] | undefined): void;
+  error: boolean;
+  helperText: string;
 };
 
 export const SelectFigJamSections: React.FC<SelectFigJamSectionsProps> = ({
   sections,
   onChange,
+  error,
+  helperText,
 }) => {
   const handleChange = (items: string[]) => {
     onChange(items);
@@ -25,6 +29,8 @@ export const SelectFigJamSections: React.FC<SelectFigJamSectionsProps> = ({
       label="Select Section"
       items={sectionItems ?? []}
       onChange={handleChange}
+      error={error}
+      helperText={helperText}
     />
   );
 };

@@ -8,7 +8,6 @@ import {
   FilledInput,
   InputLabel,
   InputAdornment,
-  Button,
   IconButton,
   FormControl,
 } from "@mui/material";
@@ -22,11 +21,12 @@ import { useBoolean } from "@hooks/useBoolean";
 import { FIllED_INPUT_TYPE } from "@utils/ui";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 import { Loading } from "@components/Loading";
 import { ErrorBoundary } from "@components/ErrorBoundary";
 import { useFigmaSettings } from "@hooks/useFigmaSettings";
 import { useGitLabSettings } from "@hooks/useGitLabSettings";
+import { BackButton } from "@pages/_components/BackButton";
 
 const FIELD_DEFAULT_STYLE: SxProps<Theme> = { mt: 8, width: 800 };
 const FIELD_DEFAULT_TITLE_STYLE: SxProps<Theme> = {
@@ -195,19 +195,7 @@ export default function Settings() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Box>
-        <Button
-          sx={{
-            position: "absolute",
-            left: 20,
-            top: 20,
-            fontSize: "1rem",
-          }}
-          onClick={handleGoBack}
-          color="secondary"
-          startIcon={<ArrowBackIcon />}
-        >
-          Back
-        </Button>
+        <BackButton onClickBack={handleGoBack} />
       </Box>
       <Box
         sx={{
