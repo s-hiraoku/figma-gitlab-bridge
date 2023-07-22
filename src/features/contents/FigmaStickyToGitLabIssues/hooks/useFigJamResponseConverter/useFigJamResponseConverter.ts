@@ -47,17 +47,20 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
       const { document } = fileResponse;
       const { children } = document;
 
-      const searchStickyNotes = (node: Figma.Node): StickyNote[] => {
+      const searchStickyNotes = (
+        node: Figma.Node,
+        isIncludedSection = false
+      ): StickyNote[] => {
         if (isSectionNode(node)) {
-          const { name, children } = node;
-          if (
+          const isIncluded =
             sections == null ||
-            sections.some((section) => section === name)
-          ) {
-            return children.flatMap(searchStickyNotes);
-          }
+            sections.some((section) => section === node.name);
+          return node.children.flatMap((child) =>
+            searchStickyNotes(child, isIncluded)
+          );
         }
-        if (isStickyNode(node)) {
+
+        if (isStickyNode(node) && isIncludedSection) {
           const { id, characters: text, fills } = node;
           if (
             pickColor.value !== FIGJAM_COLOR_VALUE.All &&
@@ -67,17 +70,22 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
             return [];
           }
           const url = createFigmaNodeURL(figmaId ?? "", id);
-          const stickyNote: StickyNote = {
-            text,
-            url,
-          };
+          const stickyNote: StickyNote = { text, url };
           return [stickyNote];
         }
-        if (!isNodeWithChildren(node)) return [];
-        return node.children.flatMap(searchStickyNotes);
+
+        if (isNodeWithChildren(node)) {
+          return node.children.flatMap((child) =>
+            searchStickyNotes(child, isIncludedSection)
+          );
+        }
+
+        return [];
       };
 
-      const stickyNotes: StickyNote[] = children.flatMap(searchStickyNotes);
+      const stickyNotes: StickyNote[] = children.flatMap((child) =>
+        searchStickyNotes(child, sections == null)
+      );
 
       return stickyNotes;
     },

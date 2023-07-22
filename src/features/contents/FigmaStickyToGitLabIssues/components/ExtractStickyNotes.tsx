@@ -1,7 +1,7 @@
 import { SelectFigJamSticky, SelectFigJamSections } from "@features/components";
-import { Button } from "@mui/material";
+import { Button, Switch, FormControlLabel } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { FigJamColor } from "../types";
 import { ResetButton } from "./ResetButton";
@@ -12,7 +12,7 @@ type Props = {
   onChangeSelectStickyColor: (color: FigJamColor) => void;
   onClickExtractStickyNote: () => void;
   onClickReset: () => void;
-  onChangeSelectSections(sections: string[]): void;
+  onChangeSelectSections(sections: string[] | undefined): void;
 };
 
 export const ExtractStickyNotes: React.FC<Props> = ({
@@ -24,16 +24,19 @@ export const ExtractStickyNotes: React.FC<Props> = ({
   onChangeSelectSections,
 }) => {
   const [error, setError] = useState<boolean>(false);
+  const [modeSelectSection, setModeSelectSection] = useState<boolean>(false);
 
   const validate = useCallback(() => {
-    console.log(selectSections);
-    if (selectSections === undefined || selectSections.length === 0) {
+    if (
+      modeSelectSection === true &&
+      (selectSections === undefined || selectSections.length === 0)
+    ) {
       setError(true);
       return false;
     }
     setError(false);
     return true;
-  }, [selectSections]);
+  }, [modeSelectSection, selectSections]);
 
   const handleExtractStickyNoteClick = useCallback(() => {
     if (!validate()) {
@@ -42,6 +45,12 @@ export const ExtractStickyNotes: React.FC<Props> = ({
     onClickExtractStickyNote();
   }, [onClickExtractStickyNote, validate]);
 
+  const handleModeSelectSection = useCallback(() => {
+    setModeSelectSection((prev) => !prev);
+    setError(false);
+    onChangeSelectSections(undefined);
+  }, [onChangeSelectSections]);
+
   return (
     <Box
       display="flex"
@@ -49,12 +58,29 @@ export const ExtractStickyNotes: React.FC<Props> = ({
       flexDirection="column"
       alignItems="center"
     >
-      <Box display="flex" justifyContent="center" gap="80px">
+      <Box
+        display="flex"
+        justifyContent="center"
+        gap="80px"
+        position="relative"
+        sx={{ mt: 4 }}
+      >
+        <FormControlLabel
+          className="absolute -mt-12 left-0"
+          control={
+            <Switch
+              checked={modeSelectSection}
+              onChange={handleModeSelectSection}
+            />
+          }
+          label="Select Section"
+        />
         <Box sx={{ width: 264 }}>
           <SelectFigJamSections
             sections={sections}
             onChange={onChangeSelectSections}
             error={error}
+            disabled={!modeSelectSection}
             helperText={error ? "Please select at least one section" : ""}
           />
         </Box>
