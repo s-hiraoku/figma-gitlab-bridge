@@ -1,4 +1,4 @@
-type FIlledInputType = {
+type FilledInputType = {
   text: string;
   password: string;
 };
@@ -6,4 +6,4 @@ type FIlledInputType = {
 export const FIllED_INPUT_TYPE = {
   text: "text",
   password: "password",
-} as const satisfies FIlledInputType;
+} as const satisfies FilledInputType;

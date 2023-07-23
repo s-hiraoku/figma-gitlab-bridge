@@ -34,6 +34,7 @@ export type CheckboxListProps<T extends string> = {
   initialSelectedItems?: CheckboxMenuItems<T>;
   items: CheckboxMenuItems<T>;
   onChange: (event: T[]) => void;
+  disabled?: boolean;
   label?: string;
   placeholder?: string;
   id?: string;
@@ -46,6 +47,7 @@ export const CheckboxMenu = <T extends string>({
   items,
   initialSelectedItems,
   onChange,
+  disabled = false,
   label,
   ariaLabel,
   id,
@@ -65,7 +67,7 @@ export const CheckboxMenu = <T extends string>({
     [onChange]
   );
   return (
-    <FormControl fullWidth variant="outlined" error={error}>
+    <FormControl fullWidth variant="outlined" error={error} disabled={disabled}>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <Select
         labelId={`${id}-label`}

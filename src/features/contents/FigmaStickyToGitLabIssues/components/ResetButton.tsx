@@ -13,7 +13,7 @@ export const ResetButton: React.FC<ResetButtonProps> = ({ onClickReset }) => {
       onClick={onClickReset}
       color="warning"
     >
-      Reset
+      Reset all
     </Button>
   );
 };

@@ -78,3 +78,5 @@ export const DEFAULT_FIGMA_STICKY_COLOR: FigJamColor = {
   label: FIGJAM_COLOR_LABEL.All,
   value: FIGJAM_COLOR_VALUE.All,
 };
+
+export type Sections = string[] | undefined;

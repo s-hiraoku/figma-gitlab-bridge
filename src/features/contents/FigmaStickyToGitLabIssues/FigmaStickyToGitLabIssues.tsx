@@ -12,6 +12,7 @@ import {
   FIGJAM_STATUS,
   FigJamColor,
   FigJamStatusType,
+  Sections,
 } from "./types";
 import { useDebounce } from "@hooks/useDebounce";
 
@@ -69,18 +70,20 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       setFigmaUrl(value);
-      debounce(() => checkFigmaIdAndSetFileSetupStatus(value));
+      debounce(() => {
+        if (checkFigmaIdAndSetFileSetupStatus(value)) {
+          fetchStickyNotes();
+        }
+      });
     },
-    [checkFigmaIdAndSetFileSetupStatus, debounce]
+    [checkFigmaIdAndSetFileSetupStatus, debounce, fetchStickyNotes]
   );
 
   const handleFigmaUrlBlur = useCallback(
     (event: React.FocusEvent<HTMLInputElement>) => {
-      if (checkFigmaIdAndSetFileSetupStatus(event.target.value)) {
-        fetchStickyNotes();
-      }
+      checkFigmaIdAndSetFileSetupStatus(event.target.value);
     },
-    [checkFigmaIdAndSetFileSetupStatus, fetchStickyNotes]
+    [checkFigmaIdAndSetFileSetupStatus]
   );
 
   const handleFigmaUrlPaste = useCallback(
@@ -93,27 +96,17 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     [checkFigmaIdAndSetFileSetupStatus, fetchStickyNotes]
   );
 
-  const handleExtractStickyNoteClick = useCallback(() => {
-    fetchStickyNotes().then(() => {
+  const handleExtractStickyNoteClick = useCallback(
+    (selectStickyColor: FigJamColor, selectSections: Sections) => {
+      setSelectSections(selectSections);
+      setStickyColor(selectStickyColor);
       setStatus(FIGJAM_STATUS.extractStickyNote);
-    });
-  }, [fetchStickyNotes]);
-
-  const handleEditorChange = useCallback((text: string) => {
-    setStickyNote(text);
-  }, []);
-
-  const handleChangeSelectStickyColor = useCallback(
-    (stickyColor: FigJamColor) => {
-      setStickyColor(stickyColor);
-      setStickyNote("");
     },
     []
   );
 
-  const handleChangeSelectSections = useCallback((sections: string[]) => {
-    setSelectSections(sections);
-    setStickyNote("");
+  const handleEditorChange = useCallback((text: string) => {
+    setStickyNote(text);
   }, []);
 
   const handleFigmaUrlError = useCallback(
@@ -194,18 +187,21 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
             <FigmaPreview url={figmaUrl} />
           </Box>
 
-          {status !== FIGJAM_STATUS.extractStickyNote && (
+          <Box sx={{ mt: 8, width: 1200 }}>
+            <Typography
+              variant="subtitle1"
+              component="h2"
+              sx={{ ml: 1, color: theme.palette.primary.main }}
+            >
+              Extract Sticky Notes
+            </Typography>
             <Box sx={{ mt: 8 }}>
               <ExtractStickyNotes
                 sections={sections}
-                selectSections={selectSections}
-                onChangeSelectSections={handleChangeSelectSections}
-                onChangeSelectStickyColor={handleChangeSelectStickyColor}
                 onClickExtractStickyNote={handleExtractStickyNoteClick}
-                onClickReset={handleReset}
               />
             </Box>
-          )}
+          </Box>
         </>
       )}
       {status >= FIGJAM_STATUS.extractStickyNote && (
@@ -233,7 +229,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
               sx={{ ml: 4 }}
               onClick={handleRegisterIssuesWithGitLab}
             >
-              Registering issues with GitLab
+              Register issues with GitLab
             </Button>
           </Box>
         </>

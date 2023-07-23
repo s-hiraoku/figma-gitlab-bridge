@@ -1,10 +1,11 @@
 import { CheckboxMenu, CheckboxMenuItems } from "@components/CheckboxMenu";
+import { Sections } from "@features/contents/FigmaStickyToGitLabIssues/types";
 
 import React from "react";
 
 export type SelectFigJamSectionsProps = {
-  sections: string[] | undefined;
-  onChange(sections: string[] | undefined): void;
+  sections: Sections;
+  onChange(sections: Sections): void;
   disabled: boolean;
   error: boolean;
   helperText: string;
@@ -17,7 +18,7 @@ export const SelectFigJamSections: React.FC<SelectFigJamSectionsProps> = ({
   disabled,
   helperText,
 }) => {
-  const handleChange = (items: string[]) => {
+  const handleChange = (items: Sections) => {
     onChange(items);
   };
   const sectionItems: CheckboxMenuItems<string> | undefined =
