@@ -41,7 +41,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     error: fileResponseError,
     isValidating,
     fetchStickyNotes,
-  } = useFigJamStickyNotes(figmaUrl);
+  } = useFigJamStickyNotes();
   const { converter: convertFileResponseToStickyNotes, getSections } =
     useFigJamResponseConverter();
   const { debounce } = useDebounce();
@@ -72,7 +72,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       setFigmaUrl(value);
       debounce(() => {
         if (checkFigmaIdAndSetFileSetupStatus(value)) {
-          fetchStickyNotes();
+          fetchStickyNotes(value);
         }
       });
     },
@@ -89,8 +89,9 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const handleFigmaUrlPaste = useCallback(
     (event: React.ClipboardEvent<HTMLInputElement>) => {
       const pastedText = event.clipboardData.getData("Text");
+      setFigmaUrl(pastedText);
       if (checkFigmaIdAndSetFileSetupStatus(pastedText)) {
-        fetchStickyNotes();
+        fetchStickyNotes(pastedText);
       }
     },
     [checkFigmaIdAndSetFileSetupStatus, fetchStickyNotes]
