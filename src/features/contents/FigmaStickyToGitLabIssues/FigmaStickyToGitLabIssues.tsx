@@ -19,6 +19,7 @@ import { useDebounce } from "@hooks/useDebounce";
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/system";
 import { ResetButton } from "./components/ResetButton";
+import { BottomToolbar } from "@components/BottomToolbar";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -170,6 +171,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       }}
     >
       <Title title="FigJam Sticky To GitLab Issues" />
+      <BottomToolbar>test</BottomToolbar>
       {status >= FIGJAM_STATUS.initialStage &&
         status !== FIGJAM_STATUS.extractStickyNote && (
           <Box sx={{ mt: 8, width: 800 }}>

@@ -11,6 +11,8 @@ type IconSidebarProps = {
   initialSelected: number;
 };
 
+export const SIDEBAR_WIDTH = 56;
+
 export const IconSidebar: React.FC<IconSidebarProps> = ({
   icons,
   showSettingsIcon = true,
@@ -36,7 +38,7 @@ export const IconSidebar: React.FC<IconSidebarProps> = ({
   return (
     <AppBar
       position="static"
-      sx={{ width: 56, alignItems: "center", height: "100%" }}
+      sx={{ width: SIDEBAR_WIDTH, alignItems: "center", height: "100%" }}
     >
       <Toolbar>
         <Box
