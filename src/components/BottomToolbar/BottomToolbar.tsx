@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Box, Toolbar, AppBar } from "@mui/material";
 import { SIDEBAR_WIDTH } from "@components/IconSidebar/IconSidebar";
+import styles from "./BottomToolbar.module.css";
 
 export type ChildrenPosition = "left" | "center" | "right";
 export const CHILDREN_POSITION = {
@@ -41,13 +42,13 @@ export const BottomToolbar: React.FC<BottomToolbarProps> = ({
   return (
     <AppBar
       position="fixed"
+      className={styles.bottomToolbar}
       sx={{
         top: "auto",
         left: SIDEBAR_WIDTH,
         width: `calc(100% - ${SIDEBAR_WIDTH}px)`,
-        bottom: 0,
-        height: 56,
-        display: visible ? "block" : "none",
+        bottom: visible ? 0 : -56,
+        display: "block",
       }}
     >
       <Toolbar
