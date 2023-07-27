@@ -26,7 +26,6 @@ export const ExtractStickyNotes: React.FC<Props> = ({
   const [modeSelectSection, setModeSelectSection] = useState<boolean>(false);
 
   const validate = useCallback(() => {
-    console.log("validate", modeSelectSection, selectSections);
     if (
       modeSelectSection === true &&
       (selectSections === undefined || selectSections.length === 0)

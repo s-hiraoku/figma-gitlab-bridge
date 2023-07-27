@@ -1,10 +1,16 @@
 import { Box, Button } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { LexicalEditorWrapper } from "@components/LexicalEditor";
 import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
 import { FigmaPreview } from "@components/FigmaPreview";
 import { parseFigmaId, stickyNotesToText } from "./utils";
-import { ExtractStickyNotes, FigmaUrlTextField, Title } from "./components";
+import {
+  ExtractStickyNotes,
+  FigmaUrlTextField,
+  Title,
+  MultiSelectGitLabLabels,
+} from "./components";
+
 import { useFigJamStickyNotes } from "./hooks/useFigJamStickyNotes";
 import { useFigJamResponseConverter } from "./hooks/useFigJamResponseConverter";
 import {
@@ -18,8 +24,11 @@ import { useDebounce } from "@hooks/useDebounce";
 
 import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/system";
-import { ResetButton } from "./components/ResetButton";
+import { FooterToolbarButtons } from "./components/FooterToolbarButtons";
 import { BottomToolbar } from "@components/BottomToolbar";
+import { ErrorBoundary } from "@components/ErrorBoundary";
+import { ErrorFallback } from "./components/ErrorFallback";
+import { FadeLoader } from "react-spinners";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -36,6 +45,8 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const [status, setStatus] = useState<FigJamStatusType>(
     FIGJAM_STATUS.initialStage
   );
+  const [bottomToolbarVisible, setBottomToolbarVisible] =
+    useState<boolean>(false);
   const [stickyNote, setStickyNote] = useState<string>("");
   const {
     data: fileResponse,
@@ -128,6 +139,14 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (status >= FIGJAM_STATUS.fileSetupCompleted) {
+      setBottomToolbarVisible(true);
+      return;
+    }
+    setBottomToolbarVisible(false);
+  }, [status]);
+
+  useEffect(() => {
     if (!fileResponseError && !isValidating && fileResponse) {
       const stickyNotes = convertFileResponseToStickyNotes(
         figmaUrl,
@@ -141,6 +160,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     }
     return () => {
       setStickyNote("");
+      setSections(undefined);
     };
   }, [
     convertFileResponseToStickyNotes,
@@ -155,8 +175,12 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     stickyColor,
   ]);
 
-  const handleRegisterIssuesWithGitLab = useCallback(() => {
+  const handleCreateGitLabIssueData = useCallback(() => {
     setStatus(FIGJAM_STATUS.registerWithIssuesGitLab);
+  }, []);
+
+  const handleClickRegisterGitLabIssues = useCallback(() => {
+    console.log("hoge");
   }, []);
 
   return (
@@ -171,7 +195,12 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       }}
     >
       <Title title="FigJam Sticky To GitLab Issues" />
-      <BottomToolbar>test</BottomToolbar>
+      <BottomToolbar visible={bottomToolbarVisible}>
+        <FooterToolbarButtons
+          onClickReset={handleReset}
+          onClickRegisterGitLabIssues={handleClickRegisterGitLabIssues}
+        />
+      </BottomToolbar>
       {status >= FIGJAM_STATUS.initialStage &&
         status !== FIGJAM_STATUS.extractStickyNote && (
           <Box sx={{ mt: 8, width: 800 }}>
@@ -217,6 +246,14 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
             >
               Edit Issues Data for Import
             </Typography>
+            <Typography
+              variant="caption"
+              component="h6"
+              color="secondary"
+              sx={{ ml: 2, mt: 1 }}
+            >
+              The left side is the title and the right side is the description.
+            </Typography>
             <Box sx={{ mt: 1 }}>
               <LexicalEditorWrapper
                 initialText={stickyNote}
@@ -224,15 +261,36 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
               />
             </Box>
           </Box>
+          <Box sx={{ mt: 2, width: 1200 }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                mt: 2,
+                gap: "40px",
+              }}
+            >
+              <ErrorBoundary fallback={<ErrorFallback />}>
+                <Suspense
+                  fallback={<FadeLoader color={theme.palette.primary.main} />}
+                >
+                  <Box sx={{ width: 264 }}>
+                    <MultiSelectGitLabLabels />
+                  </Box>
+                  <Box sx={{ width: 264 }}>TODO: Select Author</Box>
+                </Suspense>
+              </ErrorBoundary>
+            </Box>
+          </Box>
           <Box sx={{ mt: 4 }}>
-            <ResetButton onClickReset={handleReset} />
             <Button
               variant="outlined"
               startIcon={<PublishOutlinedIcon />}
               sx={{ ml: 4 }}
-              onClick={handleRegisterIssuesWithGitLab}
+              onClick={handleCreateGitLabIssueData}
             >
-              Register issues with GitLab
+              Create GitLab issue Data
             </Button>
           </Box>
         </>

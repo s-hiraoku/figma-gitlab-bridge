@@ -1,9 +1,8 @@
 import React from "react";
-import { SvgIcon, SvgIconProps, useTheme } from "@mui/material";
+import { SvgIcon, SvgIconProps } from "@mui/material";
 import styles from "./GitHubIcon.module.css";
 
 export const GitHubIcon: React.FC<SvgIconProps> = (props) => {
-  const theme = useTheme();
   return (
     <SvgIcon
       viewBox="0 0 250 250"
