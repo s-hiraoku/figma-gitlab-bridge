@@ -1,15 +1,9 @@
-import { Box, Button } from "@mui/material";
-import React, { Suspense, useCallback, useEffect, useState } from "react";
-import { LexicalEditorWrapper } from "@components/LexicalEditor";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import { Box } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
+
 import { FigmaPreview } from "@components/FigmaPreview";
 import { parseFigmaId, stickyNotesToText } from "./utils";
-import {
-  ExtractStickyNotes,
-  FigmaUrlTextField,
-  Title,
-  MultiSelectGitLabLabels,
-} from "./components";
+import { ExtractStickyNotes, FigmaUrlTextField, Title } from "./components";
 
 import { useFigJamStickyNotes } from "./hooks/useFigJamStickyNotes";
 import { useFigJamResponseConverter } from "./hooks/useFigJamResponseConverter";
@@ -26,10 +20,8 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/system";
 import { FooterToolbarButtons } from "./components/FooterToolbarButtons";
 import { BottomToolbar } from "@components/BottomToolbar";
-import { ErrorBoundary } from "@components/ErrorBoundary";
-import { ErrorFallback } from "./components/ErrorFallback";
-import { FadeLoader } from "react-spinners";
 import { DataTable } from "@components/DataTable";
+import { EditIssuesDataForImport } from "./components/EditIssuesDataForImport";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -244,61 +236,11 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
         </>
       )}
       {status >= FIGJAM_STATUS.editImportData && (
-        <>
-          <Box sx={{ mt: 8, width: 1200 }}>
-            <Typography
-              variant="h5"
-              sx={{ ml: 1, color: theme.palette.primary.main }}
-            >
-              Edit Issues Data for Import
-            </Typography>
-            <Typography variant="body1" color="secondary" sx={{ ml: 2, mt: 1 }}>
-              The left side is the title and the right side is the description.
-            </Typography>
-            <Box sx={{ mt: 1 }}>
-              <LexicalEditorWrapper
-                initialText={stickyNote}
-                onChange={handleEditorChange}
-              />
-            </Box>
-          </Box>
-          <Box sx={{ mt: 2, width: 1200 }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mt: 2,
-                gap: "40px",
-              }}
-            >
-              <ErrorBoundary fallback={<ErrorFallback />}>
-                <Suspense
-                  fallback={<FadeLoader color={theme.palette.primary.main} />}
-                >
-                  <Box sx={{ width: 264 }}>
-                    <MultiSelectGitLabLabels
-                      onChange={(event: string[]) => {
-                        console.log(event);
-                      }}
-                    />
-                  </Box>
-                  <Box sx={{ width: 264 }}>TODO: Select Author</Box>
-                </Suspense>
-              </ErrorBoundary>
-            </Box>
-          </Box>
-          <Box sx={{ mt: 4 }}>
-            <Button
-              variant="outlined"
-              startIcon={<FileDownloadOutlinedIcon />}
-              sx={{ ml: 4 }}
-              onClick={handleCreateGitLabIssueData}
-            >
-              Create GitLab issue Data for registration
-            </Button>
-          </Box>
-        </>
+        <EditIssuesDataForImport
+          initialStickyNote={stickyNote}
+          onEditorChange={handleEditorChange}
+          onClickCreateGitLabIssueData={handleCreateGitLabIssueData}
+        />
       )}
       {status >= FIGJAM_STATUS.confirmImportData && (
         <Box sx={{ mt: 4 }}>
