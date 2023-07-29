@@ -21,7 +21,7 @@ export const MultiSelectGitLabLabels: React.FC<
   return (
     <CheckboxMenu
       id="gitlab-labels"
-      label="GitLab labels"
+      label="Set GitLab labels"
       items={labels}
       onChange={onChange}
     />

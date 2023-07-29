@@ -30,7 +30,6 @@ export const ExtractStickyNotes: React.FC<Props> = ({
       modeSelectSection === true &&
       (selectSections === undefined || selectSections.length === 0)
     ) {
-      console.log("validate error");
       setError(true);
       return false;
     }
@@ -56,8 +55,11 @@ export const ExtractStickyNotes: React.FC<Props> = ({
 
   const handleModeSelectSection = useCallback(() => {
     setModeSelectSection((prev) => !prev);
+    if (modeSelectSection) {
+      setSelectSections(undefined);
+    }
     setError(false);
-  }, []);
+  }, [modeSelectSection]);
 
   const handleChangeSelectStickyColor = useCallback(
     (color: FigJamColor) => {

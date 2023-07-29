@@ -20,8 +20,8 @@ import Typography from "@mui/material/Typography";
 import { useTheme } from "@mui/system";
 import { FooterToolbarButtons } from "./components/FooterToolbarButtons";
 import { BottomToolbar } from "@components/BottomToolbar";
-import { DataTable } from "@components/DataTable";
 import { EditIssuesDataForImport } from "./components/EditIssuesDataForImport";
+import { ConfirmImportData } from "./components/ConfirmImportData";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -185,6 +185,8 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
         flexDirection: "column",
         my: 16,
         width: "90%",
+        paddingBottom: 8,
+        overflow: "auto",
       }}
     >
       <Title title="FigJam Sticky To GitLab Issues" />
@@ -243,8 +245,16 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
         />
       )}
       {status >= FIGJAM_STATUS.confirmImportData && (
-        <Box sx={{ mt: 4 }}>
-          <DataTable headers={[]} rows={[]} />
+        <Box sx={{ mt: 8, width: 1200 }}>
+          <Typography
+            variant="h5"
+            sx={{ ml: 1, color: theme.palette.primary.main }}
+          >
+            GitLab issues to register
+          </Typography>
+          <Box sx={{ mt: 4 }}>
+            <ConfirmImportData stickyNote={stickyNote} />
+          </Box>
         </Box>
       )}
     </Box>

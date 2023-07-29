@@ -59,7 +59,6 @@ export const EditIssuesDataForImport: React.FC<
                   }}
                 />
               </Box>
-              <Box sx={{ width: 264 }}>TODO: Select Author</Box>
             </Suspense>
           </ErrorBoundary>
         </Box>

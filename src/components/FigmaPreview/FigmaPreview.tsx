@@ -5,11 +5,13 @@ import { PacmanLoader } from "react-spinners";
 type FigmaPreviewProps = {
   url: string;
   title?: string;
+  onLoaded?: () => void;
 };
 
 export const FigmaPreview: React.FC<FigmaPreviewProps> = ({
   url,
   title = "Figma Preview",
+  onLoaded,
 }) => {
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
@@ -26,7 +28,12 @@ export const FigmaPreview: React.FC<FigmaPreviewProps> = ({
         src={`https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(
           url
         )}`}
-        onLoad={() => setLoading(false)}
+        onLoad={() => {
+          setLoading(false);
+          if (onLoaded) {
+            onLoaded();
+          }
+        }}
         allowFullScreen
       />
     </>
