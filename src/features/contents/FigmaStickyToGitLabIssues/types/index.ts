@@ -33,15 +33,15 @@ export type FigJamColor = {
 
 export type FigJamStatus =
   | "initialStage"
-  | "fileSetupCompleted"
-  | "extractStickyNote"
-  | "registerWithIssuesGitLab";
+  | "extractStickyNotes"
+  | "editImportData"
+  | "confirmImportData";
 
 export const FIGJAM_STATUS: Record<FigJamStatus, number> = {
   initialStage: 0,
-  fileSetupCompleted: 1,
-  extractStickyNote: 2,
-  registerWithIssuesGitLab: 3,
+  extractStickyNotes: 1,
+  editImportData: 2,
+  confirmImportData: 3,
 } as const;
 
 export type FigJamStatusType = valueOf<typeof FIGJAM_STATUS>;

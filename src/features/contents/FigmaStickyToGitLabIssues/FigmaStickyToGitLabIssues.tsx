@@ -1,7 +1,7 @@
 import { Box, Button } from "@mui/material";
 import React, { Suspense, useCallback, useEffect, useState } from "react";
 import { LexicalEditorWrapper } from "@components/LexicalEditor";
-import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { FigmaPreview } from "@components/FigmaPreview";
 import { parseFigmaId, stickyNotesToText } from "./utils";
 import {
@@ -29,6 +29,7 @@ import { BottomToolbar } from "@components/BottomToolbar";
 import { ErrorBoundary } from "@components/ErrorBoundary";
 import { ErrorFallback } from "./components/ErrorFallback";
 import { FadeLoader } from "react-spinners";
+import { DataTable } from "@components/DataTable";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -65,7 +66,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
 
   const updateStatusBasedOnValidation = (isValid: boolean): void => {
     setStatus(
-      isValid ? FIGJAM_STATUS.fileSetupCompleted : FIGJAM_STATUS.initialStage
+      isValid ? FIGJAM_STATUS.extractStickyNotes : FIGJAM_STATUS.initialStage
     );
   };
 
@@ -113,7 +114,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     (selectStickyColor: FigJamColor, selectSections: Sections) => {
       setSelectSections(selectSections);
       setStickyColor(selectStickyColor);
-      setStatus(FIGJAM_STATUS.extractStickyNote);
+      setStatus(FIGJAM_STATUS.editImportData);
     },
     []
   );
@@ -139,7 +140,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (status >= FIGJAM_STATUS.fileSetupCompleted) {
+    if (status >= FIGJAM_STATUS.extractStickyNotes) {
       setBottomToolbarVisible(true);
       return;
     }
@@ -176,7 +177,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   ]);
 
   const handleCreateGitLabIssueData = useCallback(() => {
-    setStatus(FIGJAM_STATUS.registerWithIssuesGitLab);
+    setStatus(FIGJAM_STATUS.confirmImportData);
   }, []);
 
   const handleClickRegisterGitLabIssues = useCallback(() => {
@@ -202,27 +203,33 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
         />
       </BottomToolbar>
       {status >= FIGJAM_STATUS.initialStage &&
-        status !== FIGJAM_STATUS.extractStickyNote && (
+        status !== FIGJAM_STATUS.editImportData && (
           <Box sx={{ mt: 8, width: 800 }}>
-            <FigmaUrlTextField
-              figmaUrl={figmaUrl}
-              onChange={handleFigmaUrlChange}
-              onBlur={handleFigmaUrlBlur}
-              onPaste={handleFigmaUrlPaste}
-              onError={handleFigmaUrlError}
-            />
+            <Typography
+              variant="h5"
+              sx={{ ml: 1, color: theme.palette.primary.main }}
+            >
+              Setup Figma File
+            </Typography>
+            <Box sx={{ mt: 2 }}>
+              <FigmaUrlTextField
+                figmaUrl={figmaUrl}
+                onChange={handleFigmaUrlChange}
+                onBlur={handleFigmaUrlBlur}
+                onPaste={handleFigmaUrlPaste}
+                onError={handleFigmaUrlError}
+              />
+            </Box>
           </Box>
         )}
-      {status >= FIGJAM_STATUS.fileSetupCompleted && (
+      {status >= FIGJAM_STATUS.extractStickyNotes && (
         <>
           <Box sx={{ mt: 8, width: 1200, height: 800 }}>
             <FigmaPreview url={figmaUrl} />
           </Box>
-
           <Box sx={{ mt: 8, width: 1200 }}>
             <Typography
-              variant="subtitle1"
-              component="h2"
+              variant="h5"
               sx={{ ml: 1, color: theme.palette.primary.main }}
             >
               Extract Sticky Notes
@@ -236,22 +243,16 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
           </Box>
         </>
       )}
-      {status >= FIGJAM_STATUS.extractStickyNote && (
+      {status >= FIGJAM_STATUS.editImportData && (
         <>
           <Box sx={{ mt: 8, width: 1200 }}>
             <Typography
-              variant="subtitle1"
-              component="h2"
+              variant="h5"
               sx={{ ml: 1, color: theme.palette.primary.main }}
             >
               Edit Issues Data for Import
             </Typography>
-            <Typography
-              variant="caption"
-              component="h6"
-              color="secondary"
-              sx={{ ml: 2, mt: 1 }}
-            >
+            <Typography variant="body1" color="secondary" sx={{ ml: 2, mt: 1 }}>
               The left side is the title and the right side is the description.
             </Typography>
             <Box sx={{ mt: 1 }}>
@@ -276,7 +277,11 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
                   fallback={<FadeLoader color={theme.palette.primary.main} />}
                 >
                   <Box sx={{ width: 264 }}>
-                    <MultiSelectGitLabLabels />
+                    <MultiSelectGitLabLabels
+                      onChange={(event: string[]) => {
+                        console.log(event);
+                      }}
+                    />
                   </Box>
                   <Box sx={{ width: 264 }}>TODO: Select Author</Box>
                 </Suspense>
@@ -286,14 +291,19 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
           <Box sx={{ mt: 4 }}>
             <Button
               variant="outlined"
-              startIcon={<PublishOutlinedIcon />}
+              startIcon={<FileDownloadOutlinedIcon />}
               sx={{ ml: 4 }}
               onClick={handleCreateGitLabIssueData}
             >
-              Create GitLab issue Data
+              Create GitLab issue Data for registration
             </Button>
           </Box>
         </>
+      )}
+      {status >= FIGJAM_STATUS.confirmImportData && (
+        <Box sx={{ mt: 4 }}>
+          <DataTable headers={[]} rows={[]} />
+        </Box>
       )}
     </Box>
   );
