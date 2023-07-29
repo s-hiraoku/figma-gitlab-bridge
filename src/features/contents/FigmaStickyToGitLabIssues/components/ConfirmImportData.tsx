@@ -1,8 +1,11 @@
 import { DataTable, DataTableHeaderColumns } from "@components/DataTable";
-import React from "react";
+import React, { useEffect } from "react";
+import { GitLabIssues, convertStickyNoteToGitLabIssues } from "../utils";
 
 export type ConfirmImportDataProps = {
   stickyNote: string;
+  labels: string[];
+  onChangeGitLabIssues: (gitLabIssues: GitLabIssues) => void;
 };
 
 const gitLabIssueHeaders: DataTableHeaderColumns = [
@@ -14,7 +17,13 @@ const gitLabIssueHeaders: DataTableHeaderColumns = [
 
 export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
   stickyNote,
+  labels,
+  onChangeGitLabIssues,
 }) => {
-  const issues = [];
+  const issues = convertStickyNoteToGitLabIssues(stickyNote, labels);
+  useEffect(() => {
+    const issues = convertStickyNoteToGitLabIssues(stickyNote, labels);
+    onChangeGitLabIssues(issues);
+  }, [stickyNote, labels, onChangeGitLabIssues]);
   return <DataTable headers={gitLabIssueHeaders} rows={issues} />;
 };

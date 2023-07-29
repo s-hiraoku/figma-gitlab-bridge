@@ -1,16 +1,16 @@
 export type Label = {
-  id: string;
+  id?: string;
   title: string;
-  color: string;
+  color?: string;
   description?: string;
-  createdAt: string;
+  createdAt?: string;
 };
 
 export type Issue = {
   title: string;
   description: string;
   labels: LabelNodes;
-  createdAt: string;
+  createdAt?: string;
 };
 
 export type IssueNodes = {

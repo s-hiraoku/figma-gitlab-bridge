@@ -1,4 +1,4 @@
-import { Figma } from "@types";
+import { Figma, GitLab } from "@types";
 
 export const FIGMA_NODE_TYPE: Record<Figma.NodeType, Figma.NodeType> = {
   DOCUMENT: "DOCUMENT",
@@ -49,6 +49,15 @@ export type StickyNote = {
   url: string;
 };
 
+export type GitLabIssue = {
+  title: string;
+  description: string;
+  labels: string;
+  milestone: string;
+};
+
+export type GitLabIssues = Array<GitLabIssue>;
+
 export const parseFigmaId = (figmaURL: string) => {
   const match =
     /https:\/\/([\w.-]+\.)?figma.com\/(file|proto)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/.exec(
@@ -83,4 +92,39 @@ export const rgbaToHexWithoutAlpha = (
 
 export const stickyNotesToText = (stickyNotes: StickyNote[]): string => {
   return stickyNotes.map((note) => `${note.text},${note.url}`).join("\n");
+};
+
+export const convertStickyNoteToGitLabIssues = (
+  stickyNote: string,
+  Labels: string[]
+): GitLabIssue[] => {
+  const stickyNotes = stickyNote.split("\n");
+
+  return stickyNotes.map((note) => {
+    const [title = "", url] = note.split(",");
+
+    return {
+      title,
+      description: url,
+      labels: Labels.join(","),
+      milestone: "-",
+    };
+  });
+};
+
+export const convertStickyNotesToGitLabIssues = (
+  gitLabIssue: GitLabIssue
+): GitLab.Issue => {
+  const labels: GitLab.LabelNodes = {
+    nodes: gitLabIssue.labels.split(",").map((label) => ({
+      title: label,
+    })),
+  };
+
+  return {
+    title: gitLabIssue.title,
+    description: gitLabIssue.description,
+    labels,
+    // milestone: gitLabIssue.milestone,
+  };
 };

@@ -2,7 +2,12 @@ import { Box } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 
 import { FigmaPreview } from "@components/FigmaPreview";
-import { parseFigmaId, stickyNotesToText } from "./utils";
+import {
+  GitLabIssues,
+  convertStickyNotesToGitLabIssues,
+  parseFigmaId,
+  stickyNotesToText,
+} from "./utils";
 import { ExtractStickyNotes, FigmaUrlTextField, Title } from "./components";
 
 import { useFigJamStickyNotes } from "./hooks/useFigJamStickyNotes";
@@ -22,6 +27,7 @@ import { FooterToolbarButtons } from "./components/FooterToolbarButtons";
 import { BottomToolbar } from "@components/BottomToolbar";
 import { EditIssuesDataForImport } from "./components/EditIssuesDataForImport";
 import { ConfirmImportData } from "./components/ConfirmImportData";
+import { useGitLabIssues } from "@hooks/useGitLabIssues";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -51,6 +57,13 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     useFigJamResponseConverter();
   const { debounce } = useDebounce();
   const theme = useTheme();
+  const [selectedGitLabLabels, setSelectedGitLabLabels] = useState<string[]>(
+    []
+  );
+  const { data, createIssue } = useGitLabIssues();
+  console.log(data);
+
+  const [gitLabIssues, setGitLabIssues] = useState<GitLabIssues>([]);
 
   const validateFigmaId = (value: string): boolean => {
     return parseFigmaId(value) !== null;
@@ -172,9 +185,26 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     setStatus(FIGJAM_STATUS.confirmImportData);
   }, []);
 
-  const handleClickRegisterGitLabIssues = useCallback(() => {
-    console.log("hoge");
-  }, []);
+  const handleChangeLabels = useCallback(
+    (labels: string[]) => {
+      setSelectedGitLabLabels(labels);
+    },
+    [setSelectedGitLabLabels]
+  );
+
+  const handleChangeGitLabIssues = useCallback(
+    (gitLabIssues: GitLabIssues) => {
+      setGitLabIssues(gitLabIssues);
+    },
+    [setGitLabIssues]
+  );
+
+  const handleClickRegisterGitLabIssues = useCallback(async () => {
+    for (const issue of gitLabIssues) {
+      const convertedIssue = convertStickyNotesToGitLabIssues(issue);
+      await createIssue(convertedIssue);
+    }
+  }, [createIssue, gitLabIssues]);
 
   return (
     <Box
@@ -242,6 +272,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
           initialStickyNote={stickyNote}
           onEditorChange={handleEditorChange}
           onClickCreateGitLabIssueData={handleCreateGitLabIssueData}
+          onChangeLabels={handleChangeLabels}
         />
       )}
       {status >= FIGJAM_STATUS.confirmImportData && (
@@ -253,7 +284,11 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
             GitLab issues to register
           </Typography>
           <Box sx={{ mt: 4 }}>
-            <ConfirmImportData stickyNote={stickyNote} />
+            <ConfirmImportData
+              stickyNote={stickyNote}
+              labels={selectedGitLabLabels}
+              onChangeGitLabIssues={handleChangeGitLabIssues}
+            />
           </Box>
         </Box>
       )}

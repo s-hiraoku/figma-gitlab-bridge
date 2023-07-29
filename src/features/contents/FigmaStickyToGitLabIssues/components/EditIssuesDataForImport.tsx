@@ -13,11 +13,17 @@ export type EditIssuesDataForImportProps = {
   initialStickyNote: string;
   onEditorChange: (text: string) => void;
   onClickCreateGitLabIssueData: () => void;
+  onChangeLabels: (labels: string[]) => void;
 };
 
 export const EditIssuesDataForImport: React.FC<
   EditIssuesDataForImportProps
-> = ({ initialStickyNote, onEditorChange, onClickCreateGitLabIssueData }) => {
+> = ({
+  initialStickyNote,
+  onEditorChange,
+  onClickCreateGitLabIssueData,
+  onChangeLabels,
+}) => {
   const theme = useTheme();
   return (
     <>
@@ -53,11 +59,7 @@ export const EditIssuesDataForImport: React.FC<
               fallback={<FadeLoader color={theme.palette.primary.main} />}
             >
               <Box sx={{ width: 264 }}>
-                <MultiSelectGitLabLabels
-                  onChange={(event: string[]) => {
-                    console.log(event);
-                  }}
-                />
+                <MultiSelectGitLabLabels onChange={onChangeLabels} />
               </Box>
             </Suspense>
           </ErrorBoundary>
