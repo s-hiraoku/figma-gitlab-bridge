@@ -11,6 +11,9 @@ import { useTheme } from "@mui/material";
 
 const DEFAULT_MAX_HEIGHT = 440;
 const DEFAULT_ROWS_PER_PAGE = 10;
+const DEFAULT_ROWS_PER_PAGE_OPTIONS: DefaultRowsPerPage[] = [10, 25, 50, 100];
+
+export type DefaultRowsPerPage = 10 | 25 | 50 | 100;
 
 export type TableCellAlign =
   | "center"
@@ -47,6 +50,7 @@ export type DataTableProps = {
   ariaLabel?: string;
   headers: DataTableHeaderColumns;
   rows: DataTableRows;
+  defaultRowsPerPage?: DefaultRowsPerPage;
 };
 
 export const DataTable: React.FC<DataTableProps> = ({
@@ -54,9 +58,12 @@ export const DataTable: React.FC<DataTableProps> = ({
   ariaLabel,
   headers,
   rows,
+  defaultRowsPerPage,
 }) => {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
+  const [rowsPerPage, setRowsPerPage] = useState(
+    defaultRowsPerPage ?? DEFAULT_ROWS_PER_PAGE
+  );
 
   const theme = useTheme();
 
@@ -70,19 +77,25 @@ export const DataTable: React.FC<DataTableProps> = ({
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(+event.target.value);
+    setRowsPerPage(+event.target.value as DefaultRowsPerPage);
     setPage(0);
   };
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight }}>
+      <TableContainer
+        sx={{
+          maxHeight,
+          borderRight: `2px solid ${theme.palette.divider}`,
+          borderLeft: `2px solid ${theme.palette.divider}`,
+        }}
+      >
         <Table
           stickyHeader
           aria-label={ariaLabel}
           style={{
             backgroundColor: theme.palette.background.default,
-            border: `2px solid ${theme.palette.divider}`,
+            borderCollapse: "separate",
           }}
         >
           <TableHead>
@@ -91,7 +104,11 @@ export const DataTable: React.FC<DataTableProps> = ({
                 <TableCell
                   key={header.id}
                   align={header.align}
-                  style={{ minWidth: header.minWidth }}
+                  style={{
+                    minWidth: header.minWidth,
+                    borderTop: `2px solid ${theme.palette.divider}`,
+                    borderBottom: `2px solid ${theme.palette.divider}`,
+                  }}
                 >
                   {header.label}
                 </TableCell>
@@ -117,7 +134,7 @@ export const DataTable: React.FC<DataTableProps> = ({
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 50, 100]}
+        rowsPerPageOptions={DEFAULT_ROWS_PER_PAGE_OPTIONS}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}

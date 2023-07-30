@@ -20,10 +20,19 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
   labels,
   onChangeGitLabIssues,
 }) => {
-  const issues = convertStickyNoteToGitLabIssues(stickyNote, labels);
+  const [issues, setIssues] = React.useState<GitLabIssues>([]);
   useEffect(() => {
     const issues = convertStickyNoteToGitLabIssues(stickyNote, labels);
+    setIssues(issues);
     onChangeGitLabIssues(issues);
+    console.log(issues);
   }, [stickyNote, labels, onChangeGitLabIssues]);
-  return <DataTable headers={gitLabIssueHeaders} rows={issues} />;
+  return (
+    <DataTable
+      ariaLabel="Gitlab issues to be imported"
+      headers={gitLabIssueHeaders}
+      rows={issues}
+      defaultRowsPerPage={25}
+    />
+  );
 };

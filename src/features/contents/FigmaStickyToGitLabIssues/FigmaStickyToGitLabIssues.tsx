@@ -60,8 +60,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const [selectedGitLabLabels, setSelectedGitLabLabels] = useState<string[]>(
     []
   );
-  const { data, createIssue } = useGitLabIssues();
-  console.log(data);
+  const { createIssue } = useGitLabIssues();
 
   const [gitLabIssues, setGitLabIssues] = useState<GitLabIssues>([]);
 
@@ -170,14 +169,12 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     };
   }, [
     convertFileResponseToStickyNotes,
-    fileResponseError,
     figmaUrl,
     fileResponse,
+    fileResponseError,
     getSections,
     isValidating,
-    sections,
     selectSections,
-    setStickyColor,
     stickyColor,
   ]);
 

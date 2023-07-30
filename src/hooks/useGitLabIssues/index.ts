@@ -45,7 +45,7 @@ export const useGitLabIssues = () => {
 
   const query: UseQueryResult<GitLab.IssueData> = useQuery({
     ...gitLabIssuesQueries.list(graphQLApiClient, defaultVariables),
-    suspense: true,
+    suspense: false, // TODO: I wanted to use Suspense, but since it didn't work, I've set it to false.
     enabled: !!gitLabAPIEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
   });
 
