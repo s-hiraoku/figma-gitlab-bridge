@@ -26,7 +26,7 @@ import { Loading } from "@components/Loading";
 import { ErrorBoundary } from "@components/ErrorBoundary";
 import { useFigmaSettings } from "@hooks/useFigmaSettings";
 import { useGitLabSettings } from "@hooks/useGitLabSettings";
-import { BackButton } from "@pages/_components/BackButton";
+import { BackButton } from "@components/BackButton";
 
 const FIELD_DEFAULT_STYLE: SxProps<Theme> = { mt: 8, width: 800 };
 const FIELD_DEFAULT_TITLE_STYLE: SxProps<Theme> = {
