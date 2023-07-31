@@ -5,7 +5,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { CssBaseline } from "@mui/material";
 import { AppProvider } from "@stores/context/AppContext";
 import { blue, red } from "@mui/material/colors";
-import { AppContent } from "./_components";
+import { AppContent } from "@features/components";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
