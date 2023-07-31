@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { BackButton } from "@pages/_components/BackButton";
+import { BackButton } from "@components/BackButton";
 import React from "react";
 import { useRouter } from "next/router";
 
