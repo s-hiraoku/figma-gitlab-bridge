@@ -25,7 +25,6 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
     const issues = convertStickyNoteToGitLabIssues(stickyNote, labels);
     setIssues(issues);
     onChangeGitLabIssues(issues);
-    console.log(issues);
   }, [stickyNote, labels, onChangeGitLabIssues]);
   return (
     <DataTable

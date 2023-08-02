@@ -80,6 +80,6 @@ export const useGitLabIssues = () => {
   return {
     data: query.data,
     getIssues: query.refetch,
-    createIssue: mutation.mutate,
+    createIssue: mutation.mutateAsync,
   };
 };

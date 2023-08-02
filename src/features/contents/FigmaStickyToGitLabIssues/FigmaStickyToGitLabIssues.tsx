@@ -28,6 +28,7 @@ import { BottomToolbar } from "@components/BottomToolbar";
 import { EditIssuesDataForImport } from "./components/EditIssuesDataForImport";
 import { ConfirmImportData } from "./components/ConfirmImportData";
 import { useGitLabIssues } from "@hooks/useGitLabIssues";
+import { toast } from "react-toastify";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =
   "figma-sticky-to-gitlab-issues";
@@ -197,10 +198,23 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   );
 
   const handleClickRegisterGitLabIssues = useCallback(async () => {
+    let hasError = false;
+
     for (const issue of gitLabIssues) {
       const convertedIssue = convertStickyNotesToGitLabIssues(issue);
-      await createIssue(convertedIssue);
+      try {
+        await createIssue(convertedIssue);
+      } catch (error) {
+        console.error(error);
+        hasError = true;
+      }
     }
+
+    if (hasError) {
+      toast.error("Failed to register GitLab issues.");
+      return;
+    }
+    toast.success("GitLab issues successfully registered!");
   }, [createIssue, gitLabIssues]);
 
   return (
