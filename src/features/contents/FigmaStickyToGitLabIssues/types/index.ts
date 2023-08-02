@@ -10,7 +10,7 @@ export type FigJamColorValue =
   | "#FFAFA3"
   | "#FFC470"
   | "#FFD966"
-  | "#86E0A3"
+  | "#85E0A3"
   | "#75D7F0";
 
 export type FigJamColorLabel =
@@ -56,7 +56,7 @@ export const FIGJAM_COLOR_VALUE: Record<FigJamColorLabel, FigJamColorValue> = {
   Red: "#FFAFA3",
   Orange: "#FFC470",
   Yellow: "#FFD966",
-  Green: "#86E0A3",
+  Green: "#85E0A3",
   "Blue Green": "#75D7F0",
 } as const;
 
