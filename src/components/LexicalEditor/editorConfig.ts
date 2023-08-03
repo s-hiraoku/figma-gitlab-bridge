@@ -6,7 +6,7 @@ const editorConfig: InitialConfigType = {
   namespace: "lexical-editor",
   theme: ExampleTheme,
   onError: (error: Error, editor: LexicalEditor) => {
-    console.error(error);
+    console.error(error, editor);
   },
 };
 

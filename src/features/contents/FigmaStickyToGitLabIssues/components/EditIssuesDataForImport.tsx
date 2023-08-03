@@ -11,7 +11,7 @@ import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 export type EditIssuesDataForImportProps = {
   initialStickyNote: string;
-  onEditorChange: (text: string) => void;
+  onEditorBlur: (text: string) => void;
   onClickCreateGitLabIssueData: () => void;
   onChangeLabels: (labels: string[]) => void;
 };
@@ -20,7 +20,7 @@ export const EditIssuesDataForImport: React.FC<
   EditIssuesDataForImportProps
 > = ({
   initialStickyNote,
-  onEditorChange,
+  onEditorBlur,
   onClickCreateGitLabIssueData,
   onChangeLabels,
 }) => {
@@ -40,7 +40,7 @@ export const EditIssuesDataForImport: React.FC<
         <Box sx={{ mt: 1 }}>
           <LexicalEditorWrapper
             initialText={initialStickyNote}
-            onChange={onEditorChange}
+            onBlur={onEditorBlur}
           />
         </Box>
       </Box>

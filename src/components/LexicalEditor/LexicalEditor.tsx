@@ -5,46 +5,62 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import editorConfig from "./editorConfig";
-import onChange from "./onChange";
 import styles from "./LexicalEditor.module.css";
 import { useTheme } from "@mui/material";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import InitializePlugin from "./plugins/InitializePlugin";
+import { EditorState } from "lexical";
 
 type LexicalEditorProps = {
   initialText: string;
+  onChange?: (editorState: EditorState) => void;
+  onBlur?: (editorState: EditorState) => void;
 };
 
 export function LexicalEditor(props: LexicalEditorProps) {
   const theme = useTheme();
-  const { initialText } = props;
+  const { initialText, onChange, onBlur } = props;
 
   const [borderColor, setBorderColor] = useState<string>(theme.palette.divider);
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [currentEditorState, setCurrentEditorState] = useState<
+    EditorState | undefined
+  >(undefined);
 
   const cursorColor = theme.palette.text.primary;
 
-  const handleFocus = () => {
+  const handleEditorStateChange = useCallback(
+    (editorState: EditorState) => {
+      onChange?.(editorState);
+      setCurrentEditorState(editorState);
+    },
+    [onChange]
+  );
+
+  const handleFocus = useCallback(() => {
     setIsFocused(true);
     setBorderColor(theme.palette.primary.main);
-  };
+  }, [theme.palette.primary.main]);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     setIsFocused(false);
     setBorderColor(theme.palette.divider);
-  };
+    if (currentEditorState) {
+      onBlur?.(currentEditorState);
+    }
+  }, [currentEditorState, onBlur, theme.palette.divider]);
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = useCallback(() => {
     if (!isFocused) {
       setBorderColor(theme.palette.action.hover);
     }
-  };
+  }, [isFocused, theme.palette.action.hover]);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     if (!isFocused) {
       setBorderColor(theme.palette.divider);
     }
-  };
+  }, [isFocused, theme.palette.divider]);
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
@@ -69,7 +85,7 @@ export function LexicalEditor(props: LexicalEditorProps) {
           placeholder={<Placeholder />}
           ErrorBoundary={LexicalErrorBoundary}
         />
-        <OnChangePlugin onChange={onChange} />
+        <OnChangePlugin onChange={handleEditorStateChange} />
         <HistoryPlugin />
         <InitializePlugin text={initialText} />
       </div>

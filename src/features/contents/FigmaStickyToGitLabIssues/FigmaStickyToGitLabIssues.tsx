@@ -124,7 +124,8 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     []
   );
 
-  const handleEditorChange = useCallback((text: string) => {
+  const handleEditorBlur = useCallback((text: string) => {
+    console.log("blur");
     setStickyNote(text);
   }, []);
 
@@ -281,7 +282,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       {status >= FIGJAM_STATUS.editImportData && (
         <EditIssuesDataForImport
           initialStickyNote={stickyNote}
-          onEditorChange={handleEditorChange}
+          onEditorBlur={handleEditorBlur}
           onClickCreateGitLabIssueData={handleCreateGitLabIssueData}
           onChangeLabels={handleChangeLabels}
         />
