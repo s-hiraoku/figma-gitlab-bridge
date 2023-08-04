@@ -4,27 +4,35 @@ import { Box, useTheme } from "@mui/system";
 import { ErrorBoundary, Suspense } from "@suspensive/react";
 import { ErrorFallback } from "./ErrorFallback";
 import { FadeLoader } from "react-spinners";
-import React from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { MultiSelectGitLabLabels } from "./MultiSelectGitLabLabels";
 
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 export type EditIssuesDataForImportProps = {
   initialStickyNote: string;
-  onEditorBlur: (text: string) => void;
-  onClickCreateGitLabIssueData: () => void;
+  onClickCreateGitLabIssueData: (stickyNote: string) => void;
   onChangeLabels: (labels: string[]) => void;
 };
 
 export const EditIssuesDataForImport: React.FC<
   EditIssuesDataForImportProps
-> = ({
-  initialStickyNote,
-  onEditorBlur,
-  onClickCreateGitLabIssueData,
-  onChangeLabels,
-}) => {
+> = ({ initialStickyNote, onClickCreateGitLabIssueData, onChangeLabels }) => {
   const theme = useTheme();
+  const [stickyNote, setStickyNote] = useState<string>(initialStickyNote);
+
+  useEffect(() => {
+    setStickyNote(initialStickyNote);
+  }, [initialStickyNote]);
+
+  const handleEditorBlur = useCallback((text: string) => {
+    setStickyNote(text);
+  }, []);
+
+  const handleClickCreateGitLabIssueData = useCallback(() => {
+    onClickCreateGitLabIssueData(stickyNote);
+  }, [onClickCreateGitLabIssueData, stickyNote]);
+
   return (
     <>
       <Box sx={{ mt: 8, width: 1200 }}>
@@ -39,8 +47,8 @@ export const EditIssuesDataForImport: React.FC<
         </Typography>
         <Box sx={{ mt: 1 }}>
           <LexicalEditorWrapper
-            initialText={initialStickyNote}
-            onBlur={onEditorBlur}
+            initialText={stickyNote}
+            onBlur={handleEditorBlur}
           />
         </Box>
       </Box>
@@ -70,7 +78,7 @@ export const EditIssuesDataForImport: React.FC<
           variant="outlined"
           startIcon={<FileDownloadOutlinedIcon />}
           sx={{ ml: 4 }}
-          onClick={onClickCreateGitLabIssueData}
+          onClick={handleClickCreateGitLabIssueData}
         >
           Create GitLab issue Data for registration
         </Button>

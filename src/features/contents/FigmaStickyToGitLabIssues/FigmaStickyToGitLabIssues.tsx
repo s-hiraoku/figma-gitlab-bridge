@@ -124,11 +124,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     []
   );
 
-  const handleEditorBlur = useCallback((text: string) => {
-    console.log("blur");
-    setStickyNote(text);
-  }, []);
-
   const handleFigmaUrlError = useCallback(
     (error: boolean) => {
       if (error) {
@@ -180,16 +175,14 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     stickyColor,
   ]);
 
-  const handleCreateGitLabIssueData = useCallback(() => {
+  const handleCreateGitLabIssueData = useCallback((stickyNote: string) => {
+    setStickyNote(stickyNote);
     setStatus(FIGJAM_STATUS.confirmImportData);
   }, []);
 
-  const handleChangeLabels = useCallback(
-    (labels: string[]) => {
-      setSelectedGitLabLabels(labels);
-    },
-    [setSelectedGitLabLabels]
-  );
+  const handleChangeLabels = useCallback((labels: string[]) => {
+    setSelectedGitLabLabels(labels);
+  }, []);
 
   const handleChangeGitLabIssues = useCallback(
     (gitLabIssues: GitLabIssues) => {
@@ -282,7 +275,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       {status >= FIGJAM_STATUS.editImportData && (
         <EditIssuesDataForImport
           initialStickyNote={stickyNote}
-          onEditorBlur={handleEditorBlur}
           onClickCreateGitLabIssueData={handleCreateGitLabIssueData}
           onChangeLabels={handleChangeLabels}
         />
