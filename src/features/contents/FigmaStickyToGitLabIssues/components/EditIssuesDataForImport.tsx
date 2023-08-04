@@ -1,23 +1,18 @@
 import { LexicalEditorWrapper } from "@components/LexicalEditor";
 import { Button, Typography } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
-import { ErrorBoundary, Suspense } from "@suspensive/react";
-import { ErrorFallback } from "./ErrorFallback";
-import { FadeLoader } from "react-spinners";
 import React, { useCallback, useState, useEffect } from "react";
-import { MultiSelectGitLabLabels } from "./MultiSelectGitLabLabels";
 
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 export type EditIssuesDataForImportProps = {
   initialStickyNote: string;
   onClickCreateGitLabIssueData: (stickyNote: string) => void;
-  onChangeLabels: (labels: string[]) => void;
 };
 
 export const EditIssuesDataForImport: React.FC<
   EditIssuesDataForImportProps
-> = ({ initialStickyNote, onClickCreateGitLabIssueData, onChangeLabels }) => {
+> = ({ initialStickyNote, onClickCreateGitLabIssueData }) => {
   const theme = useTheme();
   const [stickyNote, setStickyNote] = useState<string>(initialStickyNote);
 
@@ -50,27 +45,6 @@ export const EditIssuesDataForImport: React.FC<
             initialText={stickyNote}
             onBlur={handleEditorBlur}
           />
-        </Box>
-      </Box>
-      <Box sx={{ mt: 2, width: 1200 }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mt: 2,
-            gap: "40px",
-          }}
-        >
-          <ErrorBoundary fallback={<ErrorFallback />}>
-            <Suspense
-              fallback={<FadeLoader color={theme.palette.primary.main} />}
-            >
-              <Box sx={{ width: 264 }}>
-                <MultiSelectGitLabLabels onChange={onChangeLabels} />
-              </Box>
-            </Suspense>
-          </ErrorBoundary>
         </Box>
       </Box>
       <Box sx={{ mt: 4 }}>

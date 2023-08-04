@@ -1,11 +1,18 @@
 import { DataTable, DataTableHeaderColumns } from "@components/DataTable";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { GitLabIssues, convertStickyNoteToGitLabIssues } from "../utils";
+import { Box, useTheme } from "@mui/system";
+import { ErrorBoundary } from "@suspensive/react";
+import { ErrorFallback } from "./ErrorFallback";
+import { FadeLoader } from "react-spinners";
+import { MultiSelectGitLabLabels } from "./MultiSelectGitLabLabels";
+import { Card, Typography } from "@mui/material";
 
 export type ConfirmImportDataProps = {
   stickyNote: string;
   labels: string[];
   onChangeGitLabIssues: (gitLabIssues: GitLabIssues) => void;
+  onChangeLabels: (labels: string[]) => void;
 };
 
 const gitLabIssueHeaders: DataTableHeaderColumns = [
@@ -19,7 +26,9 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
   stickyNote,
   labels,
   onChangeGitLabIssues,
+  onChangeLabels,
 }) => {
+  const theme = useTheme();
   const [issues, setIssues] = React.useState<GitLabIssues>([]);
   useEffect(() => {
     const issues = convertStickyNoteToGitLabIssues(stickyNote, labels);
@@ -27,11 +36,39 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
     onChangeGitLabIssues(issues);
   }, [stickyNote, labels, onChangeGitLabIssues]);
   return (
-    <DataTable
-      ariaLabel="Gitlab issues to be imported"
-      headers={gitLabIssueHeaders}
-      rows={issues}
-      defaultRowsPerPage={25}
-    />
+    <>
+      <Card sx={{ mt: 2, py: 2, width: 1200 }}>
+        <Typography variant="caption" color="secondary" sx={{ ml: 1 }}>
+          Edit Label of issues data for import
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "40px",
+            mt: 1,
+            ml: 2,
+          }}
+        >
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <Suspense
+              fallback={<FadeLoader color={theme.palette.primary.main} />}
+            >
+              <Box sx={{ width: 264 }}>
+                <MultiSelectGitLabLabels onChange={onChangeLabels} />
+              </Box>
+            </Suspense>
+          </ErrorBoundary>
+        </Box>
+      </Card>
+      <Box sx={{ mt: 2 }}>
+        <DataTable
+          ariaLabel="Gitlab issues to be imported"
+          headers={gitLabIssueHeaders}
+          rows={issues}
+          defaultRowsPerPage={25}
+        />
+      </Box>
+    </>
   );
 };

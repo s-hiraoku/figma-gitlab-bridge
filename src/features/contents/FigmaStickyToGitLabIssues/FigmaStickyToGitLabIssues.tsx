@@ -276,7 +276,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
         <EditIssuesDataForImport
           initialStickyNote={stickyNote}
           onClickCreateGitLabIssueData={handleCreateGitLabIssueData}
-          onChangeLabels={handleChangeLabels}
         />
       )}
       {status >= FIGJAM_STATUS.confirmImportData && (
@@ -291,6 +290,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
             <ConfirmImportData
               stickyNote={stickyNote}
               labels={selectedGitLabLabels}
+              onChangeLabels={handleChangeLabels}
               onChangeGitLabIssues={handleChangeGitLabIssues}
             />
           </Box>
