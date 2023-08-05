@@ -1,7 +1,7 @@
 import { zSettings } from "@lib/validators";
 import { prisma } from "@api/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { HTTP_STATUS_CODES } from "@utils/httpStatusCodes";
+import { HTTP_STATUS_CODES } from "@utils/http";
 import { SETTING_KEY, findValueInSettingsByKey } from "@features/settings";
 
 export default async function handler(

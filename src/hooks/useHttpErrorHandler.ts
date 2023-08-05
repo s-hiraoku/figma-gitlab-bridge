@@ -1,4 +1,4 @@
-import { HTTP_STATUS_CODES } from "@utils/httpStatusCodes";
+import { HTTP_STATUS_CODES } from "@utils/http";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
