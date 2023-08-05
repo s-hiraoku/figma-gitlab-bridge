@@ -11,7 +11,7 @@ import {
   IconButton,
   FormControl,
 } from "@mui/material";
-import { useSettings } from "@hooks/useSettings";
+import { useSettings } from "@features/settings/hooks/useSettings";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { FetchError } from "@components/FetchError";
 import { toast } from "react-toastify";
@@ -24,8 +24,8 @@ import { useRouter } from "next/router";
 
 import { Loading } from "@components/Loading";
 import { ErrorBoundary } from "@components/ErrorBoundary";
-import { useFigmaSettings } from "@hooks/useFigmaSettings";
-import { useGitLabSettings } from "@hooks/useGitLabSettings";
+import { useFigmaSettings } from "@features/settings/hooks/useFigmaSettings";
+import { useGitLabSettings } from "@features/settings/hooks/useGitLabSettings";
 import { BackButton } from "@components/BackButton";
 
 const FIELD_DEFAULT_STYLE: SxProps<Theme> = { mt: 8, width: 800 };

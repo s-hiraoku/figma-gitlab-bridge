@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
-
 import { FigmaPreview } from "@components/FigmaPreview";
 import {
   GitLabIssues,
@@ -9,9 +8,8 @@ import {
   stickyNotesToText,
 } from "./utils";
 import { ExtractStickyNotes, FigmaUrlTextField, Title } from "./components";
-
-import { useFigJamStickyNotes } from "./hooks/useFigJamStickyNotes";
-import { useFigJamResponseConverter } from "./hooks/useFigJamResponseConverter";
+import { useFigJamStickyNotes } from "../../hooks/useFigJamStickyNotes";
+import { useFigJamResponseConverter } from "../../hooks/useFigJamResponseConverter";
 import {
   DEFAULT_FIGMA_STICKY_COLOR,
   FIGJAM_STATUS,
@@ -27,7 +25,7 @@ import { FooterToolbarButtons } from "./components/FooterToolbarButtons";
 import { BottomToolbar } from "@components/BottomToolbar";
 import { EditIssuesDataForImport } from "./components/EditIssuesDataForImport";
 import { ConfirmImportData } from "./components/ConfirmImportData";
-import { useGitLabIssues } from "@hooks/useGitLabIssues";
+import { useGitLabIssues } from "@features/hooks/useGitLabIssues";
 import { toast } from "react-toastify";
 
 export const FIGMA_STICKY_TO_GIT_LAB_ISSUES_APP_ID =

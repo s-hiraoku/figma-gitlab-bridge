@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { CheckboxMenu } from "@components/CheckboxMenu";
-import { useGitLabLabels } from "@hooks/useGitLabLabels";
+import { useGitLabLabels } from "@features/hooks/useGitLabLabels";
 
 type MultiSelectGitLabLabelsProps = {
   onChange: (event: string[]) => void;

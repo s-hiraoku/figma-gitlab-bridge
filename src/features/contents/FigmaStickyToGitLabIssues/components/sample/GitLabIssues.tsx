@@ -1,7 +1,7 @@
 // GitLab の issues を取得して表示するサンプルコンポーネント
 
 import React, { useCallback, useEffect } from "react";
-import { useGitLabIssues } from "@hooks/useGitLabIssues";
+import { useGitLabIssues } from "@features/hooks/useGitLabIssues";
 import { Button } from "@mui/material";
 import { GitLab } from "@types";
 

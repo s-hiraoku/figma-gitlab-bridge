@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { useGitLabLabels } from "@hooks/useGitLabLabels";
+import { useGitLabLabels } from "@features/hooks/useGitLabLabels";
 import { GitLab } from "@types";
 
 export const GitLabLabels = () => {
