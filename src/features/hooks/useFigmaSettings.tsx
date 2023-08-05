@@ -22,8 +22,8 @@ export const useFigmaSettings = () => {
       () => getSetting(SETTING_KEY.figmaAccessToken),
       [getSetting]
     ),
-    getFigmaAPIEndpoint: useCallback(
-      () => getSetting(SETTING_KEY.figmaAPIEndpoint),
+    getFigmaApiEndpoint: useCallback(
+      () => getSetting(SETTING_KEY.figmaApiEndpoint),
       [getSetting]
     ),
   };

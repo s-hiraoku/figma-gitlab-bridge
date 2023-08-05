@@ -6,12 +6,12 @@ import { useGraphQLApiClient } from "@hooks/useGraphQLApiClient";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 
 export const useGitLabLabels = () => {
-  const { getGitLabAPIEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
+  const { getGitLabApiEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
     useGitLabSettings();
 
-  const gitLabAPIEndpoint = useMemo(
-    () => getGitLabAPIEndpoint(),
-    [getGitLabAPIEndpoint]
+  const gitLabApiEndpoint = useMemo(
+    () => getGitLabApiEndpoint(),
+    [getGitLabApiEndpoint]
   );
   const gitLabAccessToken = useMemo(
     () => getGitLabAccessToken(),
@@ -33,14 +33,14 @@ export const useGitLabLabels = () => {
   }, [gitLabAccessToken]);
 
   const { graphQLApiClient } = useGraphQLApiClient(
-    gitLabAPIEndpoint ?? "",
+    gitLabApiEndpoint ?? "",
     requestHeaders
   );
 
   const query: UseQueryResult<GitLab.LabelData> = useQuery({
     ...gitLabLabelsQueries.list(graphQLApiClient, defaultVariables),
     suspense: true,
-    enabled: !!gitLabAPIEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
+    enabled: !!gitLabApiEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
   });
 
   return {

@@ -3,7 +3,7 @@ import { Settings } from "@lib/validators";
 
 const settings: Settings = [
   { id: 0, key: "figmaAccessToken", value: "1234567890abcdef" },
-  { id: 1, key: "figmaAPIEndpoint", value: "https://api.figma.com/v1/" },
+  { id: 1, key: "figmaApiEndpoint", value: "https://api.figma.com/v1/" },
 ];
 
 describe("findValueInSettingsByKey", () => {
@@ -12,7 +12,7 @@ describe("findValueInSettingsByKey", () => {
       findValueInSettingsByKey(settings, SETTING_KEY.figmaAccessToken)
     ).toBe("1234567890abcdef");
     expect(
-      findValueInSettingsByKey(settings, SETTING_KEY.figmaAPIEndpoint)
+      findValueInSettingsByKey(settings, SETTING_KEY.figmaApiEndpoint)
     ).toBe("https://api.figma.com/v1/");
   });
 

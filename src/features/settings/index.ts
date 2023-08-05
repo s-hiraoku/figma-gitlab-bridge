@@ -1,18 +1,18 @@
 import { Settings } from "@lib/validators";
 
 export type settingKey = figmaSettingKey | gitLabSettingKey;
-type figmaSettingKey = "figmaAccessToken" | "figmaAPIEndpoint";
+type figmaSettingKey = "figmaAccessToken" | "figmaApiEndpoint";
 type gitLabSettingKey =
   | "gitLabProjectPath"
   | "gitLabAccessToken"
-  | "gitLabAPIEndpoint";
+  | "gitLabApiEndpoint";
 
 export const SETTING_KEY: Record<settingKey, settingKey> = {
   figmaAccessToken: "figmaAccessToken",
-  figmaAPIEndpoint: "figmaAPIEndpoint",
+  figmaApiEndpoint: "figmaApiEndpoint",
   gitLabProjectPath: "gitLabProjectPath",
   gitLabAccessToken: "gitLabAccessToken",
-  gitLabAPIEndpoint: "gitLabAPIEndpoint",
+  gitLabApiEndpoint: "gitLabApiEndpoint",
 } as const;
 
 export const findValueInSettingsByKey = (array: Settings, key: string) => {

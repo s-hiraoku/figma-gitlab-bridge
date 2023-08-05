@@ -25,15 +25,15 @@ export type UseFigJamResponseConverter = () => {
 };
 
 export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
-  const { getFigmaAPIEndpoint } = useFigmaSettings();
+  const { getFigmaApiEndpoint } = useFigmaSettings();
 
-  const figmaAPIEndpoint = getFigmaAPIEndpoint();
+  const figmaApiEndpoint = getFigmaApiEndpoint();
 
   const createFigmaNodeURL = useCallback(
     (figmaId: string, nodeId: string) => {
-      return `${figmaAPIEndpoint}/files/${figmaId}?node-id=${nodeId}`;
+      return `${figmaApiEndpoint}/files/${figmaId}?node-id=${nodeId}`;
     },
-    [figmaAPIEndpoint]
+    [figmaApiEndpoint]
   );
 
   const convertFileResponseToSectionsAndStickyNotes = useCallback(

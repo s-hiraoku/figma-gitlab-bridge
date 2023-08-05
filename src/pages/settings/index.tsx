@@ -11,7 +11,7 @@ import {
   IconButton,
   FormControl,
 } from "@mui/material";
-import { useSettings } from "@features/settings/hooks/useSettings";
+import { useSettings } from "@features/hooks/useSettings";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { FetchError } from "@components/FetchError";
 import { toast } from "react-toastify";
@@ -24,9 +24,11 @@ import { useRouter } from "next/router";
 
 import { Loading } from "@components/Loading";
 import { ErrorBoundary } from "@components/ErrorBoundary";
-import { useFigmaSettings } from "@features/settings/hooks/useFigmaSettings";
-import { useGitLabSettings } from "@features/settings/hooks/useGitLabSettings";
+import { useFigmaSettings } from "@features/hooks/useFigmaSettings";
+import { useGitLabSettings } from "@features/hooks/useGitLabSettings";
 import { BackButton } from "@components/BackButton";
+import { useUpdateSettings } from "@features/hooks/useUpdateSettings";
+import { SETTING_KEY } from "@features/settings";
 
 const FIELD_DEFAULT_STYLE: SxProps<Theme> = { mt: 8, width: 800 };
 const FIELD_DEFAULT_TITLE_STYLE: SxProps<Theme> = {
@@ -40,8 +42,8 @@ export default function Settings() {
   const { mutate: revalidate } = useSettings();
   const { apiClient } = useApiClient();
   const router = useRouter();
-  const { getFigmaAccessToken, getFigmaAPIEndpoint } = useFigmaSettings();
-  const { getGitLabAPIEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
+  const { getFigmaAccessToken, getFigmaApiEndpoint } = useFigmaSettings();
+  const { getGitLabApiEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
     useGitLabSettings();
 
   const [figmaApiEndpoint, setFigmaApiEndpoint] = useState<string>("");
@@ -55,17 +57,23 @@ export default function Settings() {
   const { value: showGitLabAccessToken, toggle: toggleShowGitLabAccessToken } =
     useBoolean(false);
 
+  const {
+    updateSetting: updateFigmaApiEndpoint,
+    isLoading: isUpdatingFigmaApiEndpoint,
+    isError: figmaApiEndpointUpdateError,
+  } = useUpdateSettings(SETTING_KEY.figmaApiEndpoint);
+
   useEffect(() => {
-    setFigmaApiEndpoint(getFigmaAPIEndpoint() ?? "");
+    setFigmaApiEndpoint(getFigmaApiEndpoint() ?? "");
     setFigmaAccessToken(getFigmaAccessToken() ?? "");
     setGitLabProjectPath(getGitLabProjectPath() ?? "");
-    setGitLabApiEndpoint(getGitLabAPIEndpoint() ?? "");
+    setGitLabApiEndpoint(getGitLabApiEndpoint() ?? "");
     setGitLabAccessToken(getGitLabAccessToken() ?? "");
   }, [
-    getFigmaAPIEndpoint,
+    getFigmaApiEndpoint,
     getFigmaAccessToken,
     getGitLabProjectPath,
-    getGitLabAPIEndpoint,
+    getGitLabApiEndpoint,
     getGitLabAccessToken,
   ]);
 
@@ -101,7 +109,7 @@ export default function Settings() {
 
   const handleFigmaApiEndpointBlur = useCallback(() => {
     apiClient
-      .put("/api/settings/figmaAPIEndpoint", { value: figmaApiEndpoint })
+      .put("/api/settings/figmaApiEndpoint", { value: figmaApiEndpoint })
       .then(() => {
         revalidate();
       })
@@ -137,7 +145,7 @@ export default function Settings() {
 
   const handleGitLabApiEndpointBlur = useCallback(() => {
     apiClient
-      .put("/api/settings/gitLabAPIEndpoint", { value: gitLabApiEndpoint })
+      .put("/api/settings/gitLabApiEndpoint", { value: gitLabApiEndpoint })
       .then(() => {
         revalidate();
       })

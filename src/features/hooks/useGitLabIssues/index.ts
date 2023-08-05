@@ -12,12 +12,12 @@ import {
 import { DeepPartial } from "@utils/deepPartial";
 
 export const useGitLabIssues = () => {
-  const { getGitLabAPIEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
+  const { getGitLabApiEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
     useGitLabSettings();
 
-  const gitLabAPIEndpoint = useMemo(
-    () => getGitLabAPIEndpoint(),
-    [getGitLabAPIEndpoint]
+  const gitLabApiEndpoint = useMemo(
+    () => getGitLabApiEndpoint(),
+    [getGitLabApiEndpoint]
   );
   const gitLabAccessToken = useMemo(
     () => getGitLabAccessToken(),
@@ -39,14 +39,14 @@ export const useGitLabIssues = () => {
   }, [gitLabAccessToken]);
 
   const { graphQLApiClient } = useGraphQLApiClient(
-    gitLabAPIEndpoint ?? "",
+    gitLabApiEndpoint ?? "",
     requestHeaders
   );
 
   const query: UseQueryResult<GitLab.IssueData> = useQuery({
     ...gitLabIssuesQueries.list(graphQLApiClient, defaultVariables),
     suspense: false, // TODO: I wanted to use Suspense, but since it didn't work, I've set it to false.
-    enabled: !!gitLabAPIEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
+    enabled: !!gitLabApiEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
   });
 
   const queryClient = useQueryClient();

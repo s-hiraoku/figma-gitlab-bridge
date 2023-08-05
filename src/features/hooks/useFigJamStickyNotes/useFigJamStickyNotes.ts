@@ -12,9 +12,9 @@ export const useFigJamStickyNotes = () => {
   const [data, setData] = useState<Figma.FileResponse | undefined>(undefined);
   const [error, setError] = useState<AxiosError | undefined>(undefined);
   const [isValidating, setIsValidating] = useState<boolean>(false);
-  const { getFigmaAPIEndpoint } = useFigmaSettings();
+  const { getFigmaApiEndpoint } = useFigmaSettings();
 
-  const { figmaApiClient } = useFigmaApiClient(getFigmaAPIEndpoint() ?? "");
+  const { figmaApiClient } = useFigmaApiClient(getFigmaApiEndpoint() ?? "");
 
   const { getFigmaAccessToken } = useFigmaSettings();
 

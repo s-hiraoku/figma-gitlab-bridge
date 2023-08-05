@@ -2,6 +2,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useReducer, useCallback } from "react";
 import { HTTP_METHODS } from "@utils/http";
 import { useApiClient } from "@hooks/useApiClient";
+import { valueOf } from "@types";
 
 export type MutationStatus = "idle" | "loading" | "success" | "error";
 
@@ -65,7 +66,7 @@ export const useMutation = <D, R = D>() => {
   const mutate = useCallback(
     async (
       url: string,
-      method: Omit<keyof typeof HTTP_METHODS, "GET">,
+      method: Omit<valueOf<typeof HTTP_METHODS>, "get">,
       data?: D
     ): Promise<AxiosResponse<R> | undefined> => {
       dispatch({ type: ACTION_TYPE.LOADING, payload: null });

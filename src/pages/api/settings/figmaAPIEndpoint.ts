@@ -11,7 +11,7 @@ export default async function handler(
     if (req.method === "PUT") {
       const { value } = req.body;
       await prisma.settings.update({
-        where: { key: SETTING_KEY.figmaAPIEndpoint },
+        where: { key: SETTING_KEY.figmaApiEndpoint },
         data: { value: value ?? "" },
       });
       res.status(HTTP_STATUS_CODES.NO_CONTENT).end();

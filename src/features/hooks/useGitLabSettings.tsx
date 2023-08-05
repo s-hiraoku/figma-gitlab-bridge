@@ -18,8 +18,8 @@ export const useGitLabSettings = () => {
   );
 
   return {
-    getGitLabAPIEndpoint: useCallback(
-      () => getSetting(SETTING_KEY.gitLabAPIEndpoint),
+    getGitLabApiEndpoint: useCallback(
+      () => getSetting(SETTING_KEY.gitLabApiEndpoint),
       [getSetting]
     ),
     getGitLabAccessToken: useCallback(

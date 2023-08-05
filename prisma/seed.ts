@@ -12,7 +12,7 @@ async function main() {
       value: "",
     },
     {
-      key: "figmaAPIEndpoint",
+      key: "figmaApiEndpoint",
       value: "https://api.figma.com/v1",
     },
     {
@@ -24,7 +24,7 @@ async function main() {
       value: "",
     },
     {
-      key: "gitLabAPIEndpoint",
+      key: "gitLabApiEndpoint",
       value: "https://gitlab.com/api/graphql",
     },
   ];
