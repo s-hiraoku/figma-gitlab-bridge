@@ -3,7 +3,7 @@ import { AxiosError, isAxiosError } from "axios";
 import { parseFigmaId } from "../../contents/FigmaStickyToGitLabIssues/utils";
 import { Figma } from "@types";
 import { useFigmaApiClient } from "@features/hooks/useFigmaApiClient";
-import { useFigmaSettings } from "@features/settings/hooks/useFigmaSettings";
+import { useFigmaSettings } from "@features/hooks/useFigmaSettings";
 
 const FIGMA_FILES_PATH = "/files";
 

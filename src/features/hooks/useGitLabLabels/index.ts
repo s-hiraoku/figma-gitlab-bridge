@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { GitLab } from "@types";
 import { gitLabLabelsQueries } from "./queries";
-import { useGitLabSettings } from "@features/settings/hooks/useGitLabSettings";
+import { useGitLabSettings } from "@features/hooks/useGitLabSettings";
 import { useGraphQLApiClient } from "@hooks/useGraphQLApiClient";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 

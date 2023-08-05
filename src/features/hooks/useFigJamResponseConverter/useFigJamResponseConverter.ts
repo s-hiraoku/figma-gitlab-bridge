@@ -12,7 +12,7 @@ import {
   FIGJAM_COLOR_VALUE,
   FigJamColor,
 } from "../../contents/FigmaStickyToGitLabIssues/types";
-import { useFigmaSettings } from "@features/settings/hooks/useFigmaSettings";
+import { useFigmaSettings } from "@features/hooks/useFigmaSettings";
 
 export type UseFigJamResponseConverter = () => {
   converter: (
