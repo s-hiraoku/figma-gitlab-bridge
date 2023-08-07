@@ -60,8 +60,27 @@ export default function Settings() {
   const {
     updateSetting: updateFigmaApiEndpoint,
     isLoading: isUpdatingFigmaApiEndpoint,
-    isError: figmaApiEndpointUpdateError,
   } = useUpdateSettings(SETTING_KEY.figmaApiEndpoint);
+
+  const {
+    updateSetting: updateFigmaAccessToken,
+    isLoading: isUpdatingFigmaAccessToken,
+  } = useUpdateSettings(SETTING_KEY.figmaAccessToken);
+
+  const {
+    updateSetting: updateGitLabProjectPath,
+    isLoading: isUpdatingGitLabProjectPath,
+  } = useUpdateSettings(SETTING_KEY.gitLabProjectPath);
+
+  const {
+    updateSetting: updateGitLabApiEndpoint,
+    isLoading: isUpdatingGitLabApiEndpoint,
+  } = useUpdateSettings(SETTING_KEY.gitLabApiEndpoint);
+
+  const {
+    updateSetting: updateGitLabAccessToken,
+    isLoading: isUpdatingGitLabAccessToken,
+  } = useUpdateSettings(SETTING_KEY.gitLabAccessToken);
 
   useEffect(() => {
     setFigmaApiEndpoint(getFigmaApiEndpoint() ?? "");
@@ -108,64 +127,44 @@ export default function Settings() {
   };
 
   const handleFigmaApiEndpointBlur = useCallback(() => {
-    apiClient
-      .put("/api/settings/figmaApiEndpoint", { value: figmaApiEndpoint })
-      .then(() => {
-        revalidate();
-      })
-      .catch((error) => {
-        console.error("Failed to update Figma API endpoint:", error);
-        toast.error("Failed to update Figma API endpoint");
-      });
-  }, [apiClient, figmaApiEndpoint, revalidate]);
+    if (isUpdatingFigmaApiEndpoint) return;
+    updateFigmaApiEndpoint(figmaApiEndpoint).catch((error) => {
+      console.error("Failed to update Figma API endpoint:", error);
+      toast.error("Failed to update Figma API endpoint");
+    });
+  }, [updateFigmaApiEndpoint, figmaApiEndpoint, isUpdatingFigmaApiEndpoint]);
 
   const handleFigmaAccessTokenBlur = useCallback(() => {
-    apiClient
-      .put("/api/settings/figmaAccessToken", { value: figmaAccessToken })
-      .then(() => {
-        revalidate();
-      })
-      .catch((error) => {
-        console.error("Failed to update Figma access token:", error);
-        toast.error("Failed to update Figma access token");
-      });
-  }, [apiClient, figmaAccessToken, revalidate]);
+    if (isUpdatingFigmaAccessToken) return;
+    updateFigmaAccessToken(figmaAccessToken).catch((error) => {
+      console.error("Failed to update Figma access token:", error);
+      toast.error("Failed to update Figma access token");
+    });
+  }, [figmaAccessToken, isUpdatingFigmaAccessToken, updateFigmaAccessToken]);
 
   const handleGitLabProjectPathBlur = useCallback(() => {
-    apiClient
-      .put("/api/settings/gitLabProjectPath", { value: gitLabProjectPath })
-      .then(() => {
-        revalidate();
-      })
-      .catch((error) => {
-        console.error("Failed to update GitLab project path:", error);
-        toast.error("Failed to update GitLab project path");
-      });
-  }, [apiClient, gitLabProjectPath, revalidate]);
+    if (isUpdatingGitLabProjectPath) return;
+    updateGitLabProjectPath(gitLabProjectPath).catch((error) => {
+      console.error("Failed to update GitLab project path:", error);
+      toast.error("Failed to update GitLab project path");
+    });
+  }, [gitLabProjectPath, isUpdatingGitLabProjectPath, updateGitLabProjectPath]);
 
   const handleGitLabApiEndpointBlur = useCallback(() => {
-    apiClient
-      .put("/api/settings/gitLabApiEndpoint", { value: gitLabApiEndpoint })
-      .then(() => {
-        revalidate();
-      })
-      .catch((error) => {
-        console.error("Failed to update GitLab API endpoint:", error);
-        toast.error("Failed to update GitLab API endpoint");
-      });
-  }, [apiClient, gitLabApiEndpoint, revalidate]);
+    if (isUpdatingGitLabApiEndpoint) return;
+    updateGitLabApiEndpoint(gitLabApiEndpoint).catch((error) => {
+      console.error("Failed to update GitLab API endpoint:", error);
+      toast.error("Failed to update GitLab API endpoint");
+    });
+  }, [gitLabApiEndpoint, isUpdatingGitLabApiEndpoint, updateGitLabApiEndpoint]);
 
   const handleGitLabAccessTokenBlur = useCallback(() => {
-    apiClient
-      .put("/api/settings/gitLabAccessToken", { value: gitLabAccessToken })
-      .then(() => {
-        revalidate();
-      })
-      .catch((error) => {
-        console.error("Failed to update GitLab access token:", error);
-        toast.error("Failed to update GitLab access token");
-      });
-  }, [apiClient, gitLabAccessToken, revalidate]);
+    if (isUpdatingGitLabAccessToken) return;
+    updateGitLabAccessToken(gitLabAccessToken).catch((error) => {
+      console.error("Failed to update GitLab access token:", error);
+      toast.error("Failed to update GitLab access token");
+    });
+  }, [gitLabAccessToken, isUpdatingGitLabAccessToken, updateGitLabAccessToken]);
 
   const handleClickShowFigmaAccessTokenPassword = useCallback(() => {
     toggleShowFigmaAccessToken();
