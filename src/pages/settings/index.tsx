@@ -39,8 +39,6 @@ const FIELD_DEFAULT_TITLE_STYLE: SxProps<Theme> = {
 
 export default function Settings() {
   const theme = useTheme();
-  const { mutate: revalidate } = useSettings();
-  const { apiClient } = useApiClient();
   const router = useRouter();
   const { getFigmaAccessToken, getFigmaApiEndpoint } = useFigmaSettings();
   const { getGitLabApiEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
