@@ -225,6 +225,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       <Title title="FigJam Sticky To GitLab Issues" />
       <BottomToolbar visible={bottomToolbarVisible}>
         <FooterToolbarButtons
+          registerButtonDisabled={status !== FIGJAM_STATUS.confirmImportData}
           onClickReset={handleReset}
           onClickRegisterGitLabIssues={handleClickRegisterGitLabIssues}
         />

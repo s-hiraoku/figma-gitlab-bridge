@@ -4,11 +4,13 @@ import PublishOutlinedIcon from "@mui/icons-material/PublishOutlined";
 import React from "react";
 
 type FooterToolbarButtonsProps = {
+  registerButtonDisabled: boolean;
   onClickReset(): void;
   onClickRegisterGitLabIssues(): void;
 };
 
 export const FooterToolbarButtons: React.FC<FooterToolbarButtonsProps> = ({
+  registerButtonDisabled,
   onClickReset,
   onClickRegisterGitLabIssues,
 }) => {
@@ -23,6 +25,7 @@ export const FooterToolbarButtons: React.FC<FooterToolbarButtonsProps> = ({
         Reset all
       </Button>
       <Button
+        disabled={registerButtonDisabled}
         variant="outlined"
         startIcon={<PublishOutlinedIcon />}
         onClick={onClickRegisterGitLabIssues}

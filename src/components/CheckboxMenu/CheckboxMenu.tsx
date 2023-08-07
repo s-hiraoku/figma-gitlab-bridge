@@ -1,4 +1,5 @@
 import {
+  Box,
   Checkbox,
   FormControl,
   FormHelperText,
@@ -87,7 +88,15 @@ export const CheckboxMenu = <T extends string>({
         {items.map((item) => (
           <MenuItem key={item.value} value={item.value}>
             <Checkbox checked={selectedItemValues.indexOf(item.value) > -1} />
-            {item.label}
+            <Box
+              sx={{
+                whiteSpace: "normal",
+                wordWrap: "break-word",
+                width: "100%",
+              }}
+            >
+              {item.label}
+            </Box>
           </MenuItem>
         ))}
       </Select>
