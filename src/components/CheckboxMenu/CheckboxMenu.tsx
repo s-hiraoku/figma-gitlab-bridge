@@ -1,3 +1,4 @@
+import { useDebounce } from "@hooks/useDebounce";
 import {
   Box,
   Checkbox,
@@ -8,8 +9,9 @@ import {
   OutlinedInput,
   Select,
   SelectChangeEvent,
+  TextField,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 type Label = React.ReactNode | string;
 
@@ -58,6 +60,7 @@ export const CheckboxMenu = <T extends string>({
   const [selectedItemValues, setSelectedItemValues] = useState<T[]>(
     () => initialSelectedItems?.map((item) => item.value) ?? []
   );
+  const [searchText, setSearchText] = useState("");
 
   const handleChange = useCallback(
     (event: SelectChangeEvent<T[]>) => {
@@ -67,6 +70,22 @@ export const CheckboxMenu = <T extends string>({
     },
     [onChange]
   );
+
+  const filteredItems = useMemo(
+    () =>
+      items.filter((item) =>
+        String(item.value).toLowerCase().includes(searchText.toLowerCase())
+      ),
+    [items, searchText]
+  );
+
+  const handleChangeSearchText = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchText(event.target.value);
+    },
+    []
+  );
+
   return (
     <FormControl fullWidth variant="outlined" error={error} disabled={disabled}>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
@@ -84,8 +103,27 @@ export const CheckboxMenu = <T extends string>({
         }}
         MenuProps={MenuProps}
       >
-        {/* TODO: Add Search UI to filter items */}
-        {items.map((item) => (
+        <Box
+          sx={{
+            px: 2,
+            py: 1,
+          }}
+        >
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Search"
+            value={searchText}
+            onChange={handleChangeSearchText}
+            disabled={disabled}
+            size="small"
+            inputProps={{
+              "aria-label": "Search",
+              role: "searchbox",
+            }}
+          />
+        </Box>
+        {filteredItems.map((item) => (
           <MenuItem key={item.value} value={item.value}>
             <Checkbox checked={selectedItemValues.indexOf(item.value) > -1} />
             <Box
