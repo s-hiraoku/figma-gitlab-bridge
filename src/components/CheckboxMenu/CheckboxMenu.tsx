@@ -1,4 +1,3 @@
-import { useDebounce } from "@hooks/useDebounce";
 import {
   Box,
   Checkbox,
@@ -81,6 +80,7 @@ export const CheckboxMenu = <T extends string>({
 
   const handleChangeSearchText = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      event.stopPropagation();
       setSearchText(event.target.value);
     },
     []
