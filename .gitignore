@@ -43,3 +43,6 @@ next-env.d.ts
 # prisma
 /prisma/migrations
 dev.db
+
+# css modules typed files directory
+/__generated__/
