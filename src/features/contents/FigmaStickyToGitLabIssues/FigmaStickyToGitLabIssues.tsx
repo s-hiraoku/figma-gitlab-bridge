@@ -62,6 +62,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const { createIssue } = useGitLabIssues();
 
   const [gitLabIssues, setGitLabIssues] = useState<GitLabIssues>([]);
+  const [shouldUpdateEditor, setShouldUpdateEditor] = useState<boolean>(false);
 
   const validateFigmaId = (value: string): boolean => {
     return parseFigmaId(value) !== null;
@@ -115,6 +116,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
 
   const handleExtractStickyNoteClick = useCallback(
     (selectStickyColor: FigJamColor, selectSections: Sections) => {
+      setShouldUpdateEditor(true);
       setSelectSections(selectSections);
       setStickyColor(selectStickyColor);
       setStatus(FIGJAM_STATUS.editImportData);
@@ -147,7 +149,10 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   }, [status]);
 
   useEffect(() => {
-    if (!fileResponseError && !isValidating && fileResponse) {
+    if (
+      (!fileResponseError && !isValidating && fileResponse) ||
+      shouldUpdateEditor
+    ) {
       const stickyNotes = convertFileResponseToStickyNotes(
         figmaUrl,
         stickyColor,
@@ -170,6 +175,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     getSections,
     isValidating,
     selectSections,
+    shouldUpdateEditor,
     stickyColor,
   ]);
 
@@ -208,6 +214,10 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     }
     toast.success("GitLab issues successfully registered!");
   }, [createIssue, gitLabIssues]);
+
+  const handleCompleteUpdateEditor = useCallback(() => {
+    setShouldUpdateEditor(false);
+  }, []);
 
   return (
     <Box
@@ -274,7 +284,9 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       {status >= FIGJAM_STATUS.editImportData && (
         <EditIssuesDataForImport
           initialStickyNote={stickyNote}
+          shouldUpdateEditor={shouldUpdateEditor}
           onClickCreateGitLabIssueData={handleCreateGitLabIssueData}
+          onCompleteUpdateEditor={handleCompleteUpdateEditor}
         />
       )}
       {status >= FIGJAM_STATUS.confirmImportData && (

@@ -3,21 +3,30 @@ import { Button, Typography } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
 import React, { useCallback, useState, useEffect } from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+import { set } from "zod";
 
 export type EditIssuesDataForImportProps = {
   initialStickyNote: string;
+  shouldUpdateEditor: boolean;
   onClickCreateGitLabIssueData: (stickyNote: string) => void;
+  onCompleteUpdateEditor: () => void;
 };
 
 export const EditIssuesDataForImport: React.FC<
   EditIssuesDataForImportProps
-> = ({ initialStickyNote, onClickCreateGitLabIssueData }) => {
+> = ({
+  initialStickyNote,
+  onClickCreateGitLabIssueData,
+  shouldUpdateEditor,
+  onCompleteUpdateEditor,
+}) => {
   const theme = useTheme();
   const [stickyNote, setStickyNote] = useState<string>(initialStickyNote);
 
   useEffect(() => {
     setStickyNote(initialStickyNote);
-  }, [initialStickyNote]);
+    onCompleteUpdateEditor();
+  }, [shouldUpdateEditor, initialStickyNote, onCompleteUpdateEditor]);
 
   const handleEditorBlur = useCallback((text: string) => {
     setStickyNote(text);
