@@ -11,7 +11,7 @@ export const useHttpErrorHandler = (): UseHttpErrorHandlerReturnType => {
   const router = useRouter();
 
   const handleHttpError = <E extends AxiosError>(error: E) => {
-    toast.error("エラーが発生しました。");
+    toast.error("An error has occurred.");
     switch (error.response?.status) {
       case HTTP_STATUS_CODES.UNAUTHORIZED:
         // TODO: Uncomment this line when login page is ready.

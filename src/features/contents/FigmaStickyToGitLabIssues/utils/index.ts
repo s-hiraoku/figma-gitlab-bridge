@@ -98,10 +98,10 @@ export const convertStickyNoteToGitLabIssues = (
   stickyNote: string,
   Labels: string[]
 ): GitLabIssue[] => {
-  const stickyNotes = stickyNote.split("\n");
+  const stickyNotes = stickyNote.trim().split("\n");
 
   return stickyNotes.map((note) => {
-    const [title = "", url] = note.split(",");
+    const [title = "", url = ""] = note.split(",");
 
     return {
       title,

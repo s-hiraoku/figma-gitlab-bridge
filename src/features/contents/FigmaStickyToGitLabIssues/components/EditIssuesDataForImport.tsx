@@ -2,7 +2,6 @@ import { LexicalEditorWrapper } from "@components/LexicalEditor";
 import { Button, Typography } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
 import React, { useCallback, useState, useEffect } from "react";
-
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 export type EditIssuesDataForImportProps = {
@@ -53,6 +52,7 @@ export const EditIssuesDataForImport: React.FC<
           startIcon={<FileDownloadOutlinedIcon />}
           sx={{ ml: 4 }}
           onClick={handleClickCreateGitLabIssueData}
+          disabled={stickyNote === ""}
         >
           Create GitLab issue Data for registration
         </Button>
