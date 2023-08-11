@@ -149,10 +149,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   }, [status]);
 
   useEffect(() => {
-    if (
-      (!fileResponseError && !isValidating && fileResponse) ||
-      shouldUpdateEditor
-    ) {
+    if (!fileResponseError && !isValidating && fileResponse) {
       const stickyNotes = convertFileResponseToStickyNotes(
         figmaUrl,
         stickyColor,
@@ -175,7 +172,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     getSections,
     isValidating,
     selectSections,
-    shouldUpdateEditor,
     stickyColor,
   ]);
 
