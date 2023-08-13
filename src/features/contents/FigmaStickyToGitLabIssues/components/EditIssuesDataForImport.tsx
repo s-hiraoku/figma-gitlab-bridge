@@ -3,7 +3,6 @@ import { Button, Typography } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
 import React, { useCallback, useState, useEffect } from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
-import { set } from "zod";
 
 export type EditIssuesDataForImportProps = {
   initialStickyNote: string;
