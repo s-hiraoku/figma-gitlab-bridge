@@ -26,13 +26,13 @@ const ITEM_PADDING_TOP = 8;
 const MenuProps = {
   PaperProps: {
     style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      // maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
       width: 250,
     },
   },
 };
 
-export type CheckboxListProps<T extends string> = {
+type CheckboxListProps<T extends string> = {
   initialSelectedItems?: CheckboxMenuItems<T>;
   items: CheckboxMenuItems<T>;
   onChange: (event: T[]) => void;
@@ -123,23 +123,34 @@ export const CheckboxMenu = <T extends string>({
             }}
           />
         </Box>
-        {filteredItems.map((item) => (
-          <MenuItem key={item.value} value={item.value} sx={{ width: "100%" }}>
-            <Checkbox
-              checked={selectedItemValues.indexOf(item.value) > -1}
-              sx={{ width: "20%" }}
-            />
-            <Box
-              sx={{
-                whiteSpace: "normal",
-                wordWrap: "break-word",
-                width: "80%",
-              }}
+        <Box
+          sx={{
+            overflowY: "auto",
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+          }}
+        >
+          {filteredItems.map((item) => (
+            <MenuItem
+              key={item.value}
+              value={item.value}
+              sx={{ width: "100%" }}
             >
-              {item.label}
-            </Box>
-          </MenuItem>
-        ))}
+              <Checkbox
+                checked={selectedItemValues.indexOf(item.value) > -1}
+                sx={{ width: "20%" }}
+              />
+              <Box
+                sx={{
+                  whiteSpace: "normal",
+                  wordWrap: "break-word",
+                  width: "80%",
+                }}
+              >
+                {item.label}
+              </Box>
+            </MenuItem>
+          ))}
+        </Box>
       </Select>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
