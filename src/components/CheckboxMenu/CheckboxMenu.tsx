@@ -10,6 +10,7 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
+import { alignProperty } from "@mui/material/styles/cssUtils";
 import React, { useCallback, useMemo, useState } from "react";
 
 type Label = React.ReactNode | string;
@@ -124,13 +125,16 @@ export const CheckboxMenu = <T extends string>({
           />
         </Box>
         {filteredItems.map((item) => (
-          <MenuItem key={item.value} value={item.value}>
-            <Checkbox checked={selectedItemValues.indexOf(item.value) > -1} />
+          <MenuItem key={item.value} value={item.value} sx={{ width: "100%" }}>
+            <Checkbox
+              checked={selectedItemValues.indexOf(item.value) > -1}
+              sx={{ width: "20%" }}
+            />
             <Box
               sx={{
                 whiteSpace: "normal",
                 wordWrap: "break-word",
-                width: "100%",
+                width: "80%",
               }}
             >
               {item.label}
