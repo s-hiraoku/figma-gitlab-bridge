@@ -6,6 +6,7 @@ import {
   convertStickyNotesToGitLabIssues,
   parseFigmaId,
   stickyNotesToText,
+  validateGitLabIssues,
 } from "./utils";
 import { ExtractStickyNotes, FigmaUrlTextField, Title } from "./components";
 import { useFigJamStickyNotes } from "../../hooks/useFigJamStickyNotes";
@@ -59,6 +60,8 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const [selectedGitLabLabels, setSelectedGitLabLabels] = useState<string[]>(
     []
   );
+  const [validationError, setValidationError] = useState<boolean>(false);
+
   const { createIssue } = useGitLabIssues();
 
   const [gitLabIssues, setGitLabIssues] = useState<GitLabIssues>([]);
@@ -195,12 +198,19 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const handleClickRegisterGitLabIssues = useCallback(async () => {
     let hasError = false;
 
+    setValidationError(false);
+
+    const isValid = validateGitLabIssues(gitLabIssues);
+    if (!isValid) {
+      setValidationError(true);
+      return;
+    }
+
     for (const issue of gitLabIssues) {
       const convertedIssue = convertStickyNotesToGitLabIssues(issue);
       try {
         await createIssue(convertedIssue);
       } catch (error) {
-        console.error(error);
         hasError = true;
       }
     }
@@ -296,6 +306,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
           </Typography>
           <Box sx={{ mt: 4 }}>
             <ConfirmImportData
+              validationError={validationError}
               stickyNote={stickyNote}
               labels={selectedGitLabLabels}
               onChangeLabels={handleChangeLabels}

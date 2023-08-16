@@ -6,9 +6,10 @@ import { ErrorBoundary } from "@suspensive/react";
 import { ErrorFallback } from "./ErrorFallback";
 import { FadeLoader } from "react-spinners";
 import { MultiSelectGitLabLabels } from "./MultiSelectGitLabLabels";
-import { Card, Typography } from "@mui/material";
+import { Alert, Card, Typography } from "@mui/material";
 
 export type ConfirmImportDataProps = {
+  validationError: boolean;
   stickyNote: string;
   labels: string[];
   onChangeGitLabIssues: (gitLabIssues: GitLabIssues) => void;
@@ -23,6 +24,7 @@ const gitLabIssueHeaders: DataTableHeaderColumns = [
 ];
 
 export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
+  validationError,
   stickyNote,
   labels,
   onChangeGitLabIssues,
@@ -68,6 +70,11 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
           rows={issues}
           defaultRowsPerPage={25}
         />
+        {validationError && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            There is data for which no title has been set. Please set a title.
+          </Alert>
+        )}
       </Box>
     </>
   );

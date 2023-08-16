@@ -128,3 +128,7 @@ export const convertStickyNotesToGitLabIssues = (
     // milestone: gitLabIssue.milestone,
   };
 };
+
+export const validateGitLabIssues = (gitLabIssues: GitLabIssues): boolean => {
+  return !gitLabIssues.some((issue) => issue.title === "");
+};
