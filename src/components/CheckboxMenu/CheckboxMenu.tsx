@@ -7,7 +7,6 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
-  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 import React, { useCallback, useMemo, useState } from "react";
@@ -26,7 +25,6 @@ const ITEM_PADDING_TOP = 8;
 const MenuProps = {
   PaperProps: {
     style: {
-      // maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
       width: 250,
     },
   },
@@ -61,15 +59,6 @@ export const CheckboxMenu = <T extends string>({
   );
   const [searchText, setSearchText] = useState("");
 
-  const handleChange = useCallback(
-    (event: SelectChangeEvent<T[]>) => {
-      const selectedItems = event.target.value as T[];
-      setSelectedItemValues(selectedItems);
-      onChange(selectedItems);
-    },
-    [onChange]
-  );
-
   const filteredItems = useMemo(
     () =>
       items.filter((item) =>
@@ -77,6 +66,15 @@ export const CheckboxMenu = <T extends string>({
       ),
     [items, searchText]
   );
+
+  const handleMenuItemClick = (value: T) => {
+    const updatedValues = selectedItemValues.includes(value)
+      ? selectedItemValues.filter((item) => item !== value)
+      : [...selectedItemValues, value];
+
+    setSelectedItemValues(updatedValues);
+    onChange(updatedValues);
+  };
 
   const handleChangeSearchText = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +91,6 @@ export const CheckboxMenu = <T extends string>({
         labelId={`${id}-label`}
         value={selectedItemValues}
         multiple
-        onChange={handleChange}
         renderValue={(selected) => selected.join(", ")}
         input={<OutlinedInput label={label} />}
         inputProps={{
@@ -134,6 +131,7 @@ export const CheckboxMenu = <T extends string>({
               key={item.value}
               value={item.value}
               sx={{ width: "100%" }}
+              onClick={() => handleMenuItemClick(item.value)}
             >
               <Checkbox
                 checked={selectedItemValues.indexOf(item.value) > -1}
