@@ -45,7 +45,11 @@ export default function InitializePlugin(props: Props) {
         // Get the RootNode from the EditorState
         const rootNode = $getRoot();
         // Remove all children from the root
-        rootNode.removeChildren();
+        if (rootNode) {
+          while (rootNode.firstChild) {
+            rootNode.removeChild(rootNode.firstChild);
+          }
+        }
       });
     };
   }, [editor, text]);
