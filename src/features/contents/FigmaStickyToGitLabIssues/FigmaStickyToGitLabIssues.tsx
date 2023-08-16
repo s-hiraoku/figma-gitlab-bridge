@@ -138,6 +138,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     setSelectSections(undefined);
     setStickyNote("");
     setFigmaUrl("");
+    setSelectedGitLabLabels([]);
   }, []);
 
   useEffect(() => {
