@@ -9,13 +9,13 @@ type MultiSelectGitLabLabelsProps = {
 export const MultiSelectGitLabLabels: React.FC<
   MultiSelectGitLabLabelsProps
 > = ({ onChange }) => {
-  const { data } = useGitLabLabels();
+  const { groupLabels } = useGitLabLabels();
   const labels = useMemo(
     () =>
-      data?.project?.labels.nodes?.map((label) => {
+      groupLabels?.project?.labels.nodes?.map((label) => {
         return { label: label.title, value: label.title };
       }) ?? [],
-    [data]
+    [groupLabels]
   );
 
   return (
