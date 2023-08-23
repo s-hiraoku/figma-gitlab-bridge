@@ -45,7 +45,7 @@ export const gitLabLabelsQueries = createQueryKeys("GitLabLabels", {
   }),
 });
 
-export const gitLabGroupLabelsQueries = createQueryKeys("GitLabLabels", {
+export const gitLabGroupLabelsQueries = createQueryKeys("GitLabGroupLabels", {
   list: (apiClient: GraphQLClient, variables: Variables) => ({
     queryKey: [{ variables }],
     queryFn: () => {

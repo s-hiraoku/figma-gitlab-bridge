@@ -33,6 +33,10 @@ export type IssueData = {
   project: IssuesProject;
 };
 
-export type LabelData = {
+export type ProjectLabelData = {
   project: LabelsProject;
+};
+
+export type GroupLabelData = {
+  group: LabelsProject;
 };

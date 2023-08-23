@@ -37,13 +37,13 @@ export const useGitLabLabels = () => {
     requestHeaders
   );
 
-  const projectLabelQuery: UseQueryResult<GitLab.LabelData> = useQuery({
+  const projectLabelQuery: UseQueryResult<GitLab.ProjectLabelData> = useQuery({
     ...gitLabLabelsQueries.list(graphQLApiClient, defaultVariables),
     suspense: true,
     enabled: !!gitLabApiEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
   });
 
-  const groupLabelQuery: UseQueryResult<GitLab.LabelData> = useQuery({
+  const groupLabelQuery: UseQueryResult<GitLab.GroupLabelData> = useQuery({
     ...gitLabGroupLabelsQueries.list(graphQLApiClient, defaultVariables),
     suspense: true,
     enabled: !!gitLabApiEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
