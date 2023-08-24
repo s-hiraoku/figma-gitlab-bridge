@@ -7,13 +7,15 @@ import {
 export const GET_LABELS_QUERY = gql`
   query GetLabels($fullPath: ID!) {
     project(fullPath: $fullPath) {
-      labels {
-        nodes {
-          id
-          title
-          color
-          description
-          createdAt
+      group {
+        labels {
+          nodes {
+            id
+            title
+            color
+            description
+            createdAt
+          }
         }
       }
     }
@@ -36,7 +38,7 @@ export const GET_GROUP_LABELS_QUERY = gql`
   }
 `;
 
-export const gitLabLabelsQueries = createQueryKeys("GitLabLabels", {
+export const gitLabProjectLabelsQueries = createQueryKeys("GitLabLabels", {
   list: (apiClient: GraphQLClient, variables: Variables) => ({
     queryKey: [{ variables }],
     queryFn: () => {
@@ -54,7 +56,9 @@ export const gitLabGroupLabelsQueries = createQueryKeys("GitLabGroupLabels", {
   }),
 });
 
-export type GitLabLabelsQueries = inferQueryKeys<typeof gitLabLabelsQueries>;
+export type GitLabLabelsQueries = inferQueryKeys<
+  typeof gitLabProjectLabelsQueries
+>;
 export type GitLabGroupLabelsQueries = inferQueryKeys<
   typeof gitLabGroupLabelsQueries
 >;

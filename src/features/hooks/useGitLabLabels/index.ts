@@ -1,6 +1,9 @@
 import { useMemo } from "react";
 import { GitLab } from "@types";
-import { gitLabLabelsQueries, gitLabGroupLabelsQueries } from "./queries";
+import {
+  gitLabGroupLabelsQueries,
+  gitLabProjectLabelsQueries,
+} from "./queries";
 import { useGitLabSettings } from "@features/hooks/useGitLabSettings";
 import { useGraphQLApiClient } from "@hooks/useGraphQLApiClient";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
@@ -38,7 +41,7 @@ export const useGitLabLabels = () => {
   );
 
   const projectLabelQuery: UseQueryResult<GitLab.ProjectLabelData> = useQuery({
-    ...gitLabLabelsQueries.list(graphQLApiClient, defaultVariables),
+    ...gitLabProjectLabelsQueries.list(graphQLApiClient, defaultVariables),
     suspense: true,
     enabled: !!gitLabApiEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
   });

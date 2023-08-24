@@ -34,7 +34,7 @@ export type IssueData = {
 };
 
 export type ProjectLabelData = {
-  project: LabelsProject;
+  project: GroupLabelData;
 };
 
 export type GroupLabelData = {
