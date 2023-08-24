@@ -47,7 +47,8 @@ export const useGitLabLabels = () => {
   });
 
   const groupLabelQuery: UseQueryResult<GitLab.GroupLabelData> = useQuery({
-    ...gitLabGroupLabelsQueries.list(graphQLApiClient, defaultVariables),
+    // TODO: variables is not set correctly. It should be the group path, not the project path.
+    ...gitLabGroupLabelsQueries.list(graphQLApiClient, { fullPath: "" }),
     suspense: true,
     enabled: !!gitLabApiEndpoint && !!gitLabProjectPath && !!gitLabAccessToken,
   });
