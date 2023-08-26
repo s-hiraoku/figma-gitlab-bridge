@@ -26,5 +26,9 @@ export const useFigmaSettings = () => {
       () => getSetting(SETTING_KEY.figmaApiEndpoint),
       [getSetting]
     ),
+    getFigmaUrl: useCallback(
+      () => getSetting(SETTING_KEY.figmaUrl),
+      [getSetting]
+    ),
   };
 };

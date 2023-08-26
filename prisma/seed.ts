@@ -11,6 +11,7 @@ async function main() {
       key: "figmaAccessToken",
       value: "",
     },
+    { key: "figmaUrl", value: "https://www.figma.com" },
     {
       key: "figmaApiEndpoint",
       value: "https://api.figma.com/v1",

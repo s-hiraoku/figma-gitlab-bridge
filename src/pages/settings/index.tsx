@@ -38,14 +38,14 @@ const FIELD_DEFAULT_TITLE_STYLE: SxProps<Theme> = {
 export default function Settings() {
   const theme = useTheme();
   const router = useRouter();
-  const { getFigmaAccessToken, getFigmaApiEndpoint, getFigmaBaseFileUrl } =
+  const { getFigmaAccessToken, getFigmaApiEndpoint, getFigmaUrl } =
     useFigmaSettings();
   const { getGitLabApiEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
     useGitLabSettings();
 
   const [figmaApiEndpoint, setFigmaApiEndpoint] = useState<string>("");
   const [figmaAccessToken, setFigmaAccessToken] = useState<string>("");
-  const [figmaBaseFileUrl, setFigmaBaseFileUrl] = useState<string>("");
+  const [figmaUrl, setFigmaUrl] = useState<string>("");
   const [gitLabProjectPath, setGitLabProjectPath] = useState<string>("");
   const [gitLabApiEndpoint, setGitLabApiEndpoint] = useState<string>("");
   const [gitLabAccessToken, setGitLabAccessToken] = useState<string>("");
@@ -65,10 +65,8 @@ export default function Settings() {
     isLoading: isUpdatingFigmaAccessToken,
   } = useUpdateSettings(SETTING_KEY.figmaAccessToken);
 
-  const {
-    updateSetting: updateFigmaBaseFileUrl,
-    isLoading: isUpdatingFigmaBaseFileUrl,
-  } = useUpdateSettings(SETTING_KEY.figmaBaseFileUrl);
+  const { updateSetting: updatefigmaUrl, isLoading: isUpdatingfigmaUrl } =
+    useUpdateSettings(SETTING_KEY.figmaUrl);
 
   const {
     updateSetting: updateGitLabProjectPath,
@@ -88,14 +86,14 @@ export default function Settings() {
   useEffect(() => {
     setFigmaApiEndpoint(getFigmaApiEndpoint() ?? "");
     setFigmaAccessToken(getFigmaAccessToken() ?? "");
-    setFigmaBaseFileUrl(getFigmaBaseFileUrl() ?? "");
+    setFigmaUrl(getFigmaUrl() ?? "");
     setGitLabProjectPath(getGitLabProjectPath() ?? "");
     setGitLabApiEndpoint(getGitLabApiEndpoint() ?? "");
     setGitLabAccessToken(getGitLabAccessToken() ?? "");
   }, [
     getFigmaApiEndpoint,
     getFigmaAccessToken,
-    getFigmaBaseFileUrl,
+    getFigmaUrl,
     getGitLabProjectPath,
     getGitLabApiEndpoint,
     getGitLabAccessToken,
@@ -113,10 +111,8 @@ export default function Settings() {
     setFigmaAccessToken(event.target.value);
   };
 
-  const handleFigmaBaseFileUrlChange = (
-    event: React.FocusEvent<HTMLInputElement>
-  ) => {
-    setFigmaBaseFileUrl(event.target.value);
+  const handleFigmaUrlChange = (event: React.FocusEvent<HTMLInputElement>) => {
+    setFigmaUrl(event.target.value);
   };
 
   const handleGitLabProjectPathChange = (
@@ -153,13 +149,13 @@ export default function Settings() {
     });
   }, [figmaAccessToken, isUpdatingFigmaAccessToken, updateFigmaAccessToken]);
 
-  const handleFigmaBaseFileUrlBlur = useCallback(() => {
-    if (isUpdatingFigmaBaseFileUrl) return;
-    updateFigmaBaseFileUrl(figmaBaseFileUrl).catch((error) => {
-      console.error("Failed to update Figma base file URL:", error);
-      toast.error("Failed to update Figma base file URL");
+  const handleFigmaUrlBlur = useCallback(() => {
+    if (isUpdatingfigmaUrl) return;
+    updatefigmaUrl(figmaUrl).catch((error) => {
+      console.error("Failed to update Figma URL:", error);
+      toast.error("Failed to update Figma URL");
     });
-  }, [figmaBaseFileUrl, isUpdatingFigmaBaseFileUrl, updateFigmaBaseFileUrl]);
+  }, [figmaUrl, isUpdatingfigmaUrl, updatefigmaUrl]);
 
   const handleGitLabProjectPathBlur = useCallback(() => {
     if (isUpdatingGitLabProjectPath) return;
@@ -300,11 +296,11 @@ export default function Settings() {
             <Box sx={FIELD_DEFAULT_STYLE}>
               <TextField
                 fullWidth
-                label=" Figma base file URL"
+                label=" Figma URL"
                 variant="filled"
-                value={figmaBaseFileUrl}
-                onChange={handleFigmaBaseFileUrlChange}
-                onBlur={handleFigmaBaseFileUrlBlur}
+                value={figmaUrl}
+                onChange={handleFigmaUrlChange}
+                onBlur={handleFigmaUrlBlur}
               />
             </Box>
           </Suspense>

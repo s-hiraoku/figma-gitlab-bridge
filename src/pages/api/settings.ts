@@ -24,6 +24,10 @@ export default async function handler(
         parsedData,
         SETTING_KEY.figmaAccessToken
       );
+      const figmaUrl = findValueInSettingsByKey(
+        parsedData,
+        SETTING_KEY.figmaUrl
+      );
       const gitLabApiEndpoint = findValueInSettingsByKey(
         parsedData,
         SETTING_KEY.gitLabApiEndpoint
@@ -40,6 +44,10 @@ export default async function handler(
         prisma.settings.update({
           where: { key: SETTING_KEY.figmaAccessToken },
           data: { value: figmaToken ?? "" },
+        }),
+        prisma.settings.update({
+          where: { key: SETTING_KEY.figmaUrl },
+          data: { value: figmaUrl ?? "" },
         }),
         prisma.settings.update({
           where: { key: SETTING_KEY.gitLabProjectPath },
