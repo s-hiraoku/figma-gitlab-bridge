@@ -142,6 +142,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     setStickyNote("");
     setFigmaUrl("");
     setSelectedGitLabLabels([]);
+    setValidationError(false);
   }, []);
 
   useEffect(() => {
