@@ -106,7 +106,7 @@ export const convertStickyNoteToGitLabIssues = (
     return {
       title,
       description: url,
-      labels: Labels.join(","),
+      labels: Labels?.join(","),
       milestone: "-",
     };
   });

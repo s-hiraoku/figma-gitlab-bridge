@@ -16,9 +16,7 @@ import { EditIssueModal } from "./EditIssueModal";
 export type ConfirmImportDataProps = {
   validationError: boolean;
   stickyNote: string;
-  labels: string[];
   onChangeGitLabIssues: (gitLabIssues: GitLabIssues) => void;
-  onChangeLabels: (labels: string[]) => void;
 };
 
 const gitLabIssueHeaders: DataTableHeaderColumns = [
@@ -31,26 +29,23 @@ const gitLabIssueHeaders: DataTableHeaderColumns = [
 export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
   validationError,
   stickyNote,
-  labels,
   onChangeGitLabIssues,
-  onChangeLabels,
 }) => {
   const theme = useTheme();
   const [issues, setIssues] = React.useState<GitLabIssues>([]);
   const [editingIndex, setEditingIndex] = React.useState<number | null>(null);
 
   useEffect(() => {
-    const issues = convertStickyNoteToGitLabIssues(stickyNote, labels);
+    const issues = convertStickyNoteToGitLabIssues(stickyNote, []);
     setIssues(issues);
     onChangeGitLabIssues(issues);
     return () => {
       setIssues([]);
       setEditingIndex(null);
     };
-  }, [stickyNote, labels, onChangeGitLabIssues]);
+  }, [stickyNote, onChangeGitLabIssues]);
 
   const handleClickTableRow = useCallback((index: number) => {
-    console.log(index);
     setEditingIndex(index);
   }, []);
 
@@ -69,6 +64,15 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
       onChangeGitLabIssues(newIssues);
     },
     [issues, editingIndex, onChangeGitLabIssues]
+  );
+
+  const handleChangeLabels = useCallback(
+    (labels: string[]) => {
+      const newIssues = convertStickyNoteToGitLabIssues(stickyNote, labels);
+      setIssues(newIssues);
+      onChangeGitLabIssues(newIssues);
+    },
+    [stickyNote, onChangeGitLabIssues]
   );
 
   return (
@@ -91,7 +95,7 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
               fallback={<FadeLoader color={theme.palette.primary.main} />}
             >
               <Box sx={{ width: 264 }}>
-                <MultiSelectGitLabLabels onChange={onChangeLabels} />
+                <MultiSelectGitLabLabels onChange={handleChangeLabels} />
               </Box>
             </Suspense>
           </ErrorBoundary>
