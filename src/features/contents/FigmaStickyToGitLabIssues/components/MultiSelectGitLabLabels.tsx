@@ -10,9 +10,10 @@ export const MultiSelectGitLabLabels: React.FC<
   MultiSelectGitLabLabelsProps
 > = ({ onChange }) => {
   const { projectLabels } = useGitLabLabels();
+  console.log("projectLabels", projectLabels);
   const labels = useMemo(
     () =>
-      projectLabels?.project?.group.labels.nodes?.map((label) => {
+      projectLabels?.project?.labels.nodes?.map((label) => {
         return { label: label.title, value: label.title };
       }) ?? [],
     [projectLabels]

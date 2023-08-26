@@ -11,12 +11,10 @@ import {
   IconButton,
   FormControl,
 } from "@mui/material";
-import { useSettings } from "@features/hooks/useSettings";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { FetchError } from "@components/FetchError";
 import { toast } from "react-toastify";
 import { useTheme } from "@mui/system";
-import { useApiClient } from "@hooks/useApiClient";
 import { useBoolean } from "@hooks/useBoolean";
 import { FIllED_INPUT_TYPE } from "@utils/ui";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -40,12 +38,14 @@ const FIELD_DEFAULT_TITLE_STYLE: SxProps<Theme> = {
 export default function Settings() {
   const theme = useTheme();
   const router = useRouter();
-  const { getFigmaAccessToken, getFigmaApiEndpoint } = useFigmaSettings();
+  const { getFigmaAccessToken, getFigmaApiEndpoint, getFigmaBaseFileUrl } =
+    useFigmaSettings();
   const { getGitLabApiEndpoint, getGitLabAccessToken, getGitLabProjectPath } =
     useGitLabSettings();
 
   const [figmaApiEndpoint, setFigmaApiEndpoint] = useState<string>("");
   const [figmaAccessToken, setFigmaAccessToken] = useState<string>("");
+  const [figmaBaseFileUrl, setFigmaBaseFileUrl] = useState<string>("");
   const [gitLabProjectPath, setGitLabProjectPath] = useState<string>("");
   const [gitLabApiEndpoint, setGitLabApiEndpoint] = useState<string>("");
   const [gitLabAccessToken, setGitLabAccessToken] = useState<string>("");
@@ -66,6 +66,11 @@ export default function Settings() {
   } = useUpdateSettings(SETTING_KEY.figmaAccessToken);
 
   const {
+    updateSetting: updateFigmaBaseFileUrl,
+    isLoading: isUpdatingFigmaBaseFileUrl,
+  } = useUpdateSettings(SETTING_KEY.figmaBaseFileUrl);
+
+  const {
     updateSetting: updateGitLabProjectPath,
     isLoading: isUpdatingGitLabProjectPath,
   } = useUpdateSettings(SETTING_KEY.gitLabProjectPath);
@@ -83,12 +88,14 @@ export default function Settings() {
   useEffect(() => {
     setFigmaApiEndpoint(getFigmaApiEndpoint() ?? "");
     setFigmaAccessToken(getFigmaAccessToken() ?? "");
+    setFigmaBaseFileUrl(getFigmaBaseFileUrl() ?? "");
     setGitLabProjectPath(getGitLabProjectPath() ?? "");
     setGitLabApiEndpoint(getGitLabApiEndpoint() ?? "");
     setGitLabAccessToken(getGitLabAccessToken() ?? "");
   }, [
     getFigmaApiEndpoint,
     getFigmaAccessToken,
+    getFigmaBaseFileUrl,
     getGitLabProjectPath,
     getGitLabApiEndpoint,
     getGitLabAccessToken,
@@ -104,6 +111,12 @@ export default function Settings() {
     event: React.FocusEvent<HTMLInputElement>
   ) => {
     setFigmaAccessToken(event.target.value);
+  };
+
+  const handleFigmaBaseFileUrlChange = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    setFigmaBaseFileUrl(event.target.value);
   };
 
   const handleGitLabProjectPathChange = (
@@ -139,6 +152,14 @@ export default function Settings() {
       toast.error("Failed to update Figma access token");
     });
   }, [figmaAccessToken, isUpdatingFigmaAccessToken, updateFigmaAccessToken]);
+
+  const handleFigmaBaseFileUrlBlur = useCallback(() => {
+    if (isUpdatingFigmaBaseFileUrl) return;
+    updateFigmaBaseFileUrl(figmaBaseFileUrl).catch((error) => {
+      console.error("Failed to update Figma base file URL:", error);
+      toast.error("Failed to update Figma base file URL");
+    });
+  }, [figmaBaseFileUrl, isUpdatingFigmaBaseFileUrl, updateFigmaBaseFileUrl]);
 
   const handleGitLabProjectPathBlur = useCallback(() => {
     if (isUpdatingGitLabProjectPath) return;
@@ -275,6 +296,16 @@ export default function Settings() {
                   onBlur={handleFigmaAccessTokenBlur}
                 />
               </FormControl>
+            </Box>
+            <Box sx={FIELD_DEFAULT_STYLE}>
+              <TextField
+                fullWidth
+                label=" Figma base file URL"
+                variant="filled"
+                value={figmaBaseFileUrl}
+                onChange={handleFigmaBaseFileUrlChange}
+                onBlur={handleFigmaBaseFileUrlBlur}
+              />
             </Box>
           </Suspense>
           <Typography
