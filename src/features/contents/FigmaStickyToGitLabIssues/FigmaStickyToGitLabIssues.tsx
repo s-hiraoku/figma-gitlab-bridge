@@ -57,9 +57,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     useFigJamResponseConverter();
   const { debounce } = useDebounce();
   const theme = useTheme();
-  const [selectedGitLabLabels, setSelectedGitLabLabels] = useState<string[]>(
-    []
-  );
+
   const [validationError, setValidationError] = useState<boolean>(false);
 
   const { createIssue } = useGitLabIssues();
@@ -106,17 +104,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     [checkFigmaIdAndSetFileSetupStatus]
   );
 
-  const handleFigmaUrlPaste = useCallback(
-    (event: React.ClipboardEvent<HTMLInputElement>) => {
-      const pastedText = event.clipboardData.getData("Text");
-      setFigmaUrl(pastedText);
-      if (checkFigmaIdAndSetFileSetupStatus(pastedText)) {
-        fetchStickyNotes(pastedText);
-      }
-    },
-    [checkFigmaIdAndSetFileSetupStatus, fetchStickyNotes]
-  );
-
   const handleExtractStickyNoteClick = useCallback(
     (selectStickyColor: FigJamColor, selectSections: Sections) => {
       setShouldUpdateEditor(true);
@@ -141,7 +128,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     setSelectSections(undefined);
     setStickyNote("");
     setFigmaUrl("");
-    setSelectedGitLabLabels([]);
     setValidationError(false);
   }, []);
 
@@ -183,10 +169,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   const handleCreateGitLabIssueData = useCallback((stickyNote: string) => {
     setStickyNote(stickyNote);
     setStatus(FIGJAM_STATUS.confirmImportData);
-  }, []);
-
-  const handleChangeLabels = useCallback((labels: string[]) => {
-    setSelectedGitLabLabels(labels);
   }, []);
 
   const handleChangeGitLabIssues = useCallback(
@@ -262,7 +244,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
                 figmaUrl={figmaUrl}
                 onChange={handleFigmaUrlChange}
                 onBlur={handleFigmaUrlBlur}
-                onPaste={handleFigmaUrlPaste}
                 onError={handleFigmaUrlError}
               />
             </Box>
@@ -309,8 +290,6 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
             <ConfirmImportData
               validationError={validationError}
               stickyNote={stickyNote}
-              labels={selectedGitLabLabels}
-              onChangeLabels={handleChangeLabels}
               onChangeGitLabIssues={handleChangeGitLabIssues}
             />
           </Box>

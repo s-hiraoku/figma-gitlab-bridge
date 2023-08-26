@@ -6,7 +6,6 @@ type Props = {
   figmaUrl: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
-  onPaste: (event: React.ClipboardEvent<HTMLInputElement>) => void;
   onError: (error: boolean) => void;
 };
 
@@ -16,7 +15,6 @@ export const FigmaUrlTextField: React.FC<Props> = ({
   figmaUrl,
   onChange,
   onBlur,
-  onPaste,
   onError,
 }) => {
   const [error, setError] = React.useState(false);
@@ -44,7 +42,6 @@ export const FigmaUrlTextField: React.FC<Props> = ({
       value={figmaUrl}
       onChange={handleFigmaUrlChange}
       onBlur={onBlur}
-      onPaste={onPaste}
       helperText={error ? ERROR_MESSAGE : null}
     />
   );
