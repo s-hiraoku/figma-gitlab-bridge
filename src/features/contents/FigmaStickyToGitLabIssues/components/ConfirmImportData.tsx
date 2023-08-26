@@ -1,12 +1,17 @@
 import { DataTable, DataTableHeaderColumns } from "@components/DataTable";
-import React, { Suspense, useEffect } from "react";
-import { GitLabIssues, convertStickyNoteToGitLabIssues } from "../utils";
+import React, { Suspense, useCallback, useEffect } from "react";
+import {
+  GitLabIssue,
+  GitLabIssues,
+  convertStickyNoteToGitLabIssues,
+} from "../utils";
 import { Box, useTheme } from "@mui/system";
 import { ErrorBoundary } from "@suspensive/react";
 import { ErrorFallback } from "./ErrorFallback";
 import { FadeLoader } from "react-spinners";
 import { MultiSelectGitLabLabels } from "./MultiSelectGitLabLabels";
 import { Alert, Card, Typography } from "@mui/material";
+import { EditIssueModal } from "./EditIssueModal";
 
 export type ConfirmImportDataProps = {
   validationError: boolean;
@@ -32,11 +37,40 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
 }) => {
   const theme = useTheme();
   const [issues, setIssues] = React.useState<GitLabIssues>([]);
+  const [editingIndex, setEditingIndex] = React.useState<number | null>(null);
+
   useEffect(() => {
     const issues = convertStickyNoteToGitLabIssues(stickyNote, labels);
     setIssues(issues);
     onChangeGitLabIssues(issues);
+    return () => {
+      setIssues([]);
+      setEditingIndex(null);
+    };
   }, [stickyNote, labels, onChangeGitLabIssues]);
+
+  const handleClickTableRow = useCallback((index: number) => {
+    console.log(index);
+    setEditingIndex(index);
+  }, []);
+
+  const handleEditModalClose = useCallback(() => {
+    setEditingIndex(null);
+  }, []);
+
+  const handleChangeIssue = useCallback(
+    (issue: GitLabIssue) => {
+      const newIssues = [...issues];
+      if (editingIndex == null) {
+        return;
+      }
+      newIssues[editingIndex] = issue;
+      setIssues(newIssues);
+      onChangeGitLabIssues(newIssues);
+    },
+    [issues, editingIndex, onChangeGitLabIssues]
+  );
+
   return (
     <>
       <Card sx={{ mt: 2, py: 2, width: 1200 }}>
@@ -63,12 +97,16 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
           </ErrorBoundary>
         </Box>
       </Card>
+      <Typography variant="body1" color="secondary" sx={{ ml: 2, mt: 1 }}>
+        Click on a row in the table to edit it.
+      </Typography>
       <Box sx={{ mt: 2 }}>
         <DataTable
           ariaLabel="Gitlab issues to be imported"
           headers={gitLabIssueHeaders}
           rows={issues}
           defaultRowsPerPage={25}
+          onClickTableRow={handleClickTableRow}
         />
         {validationError && (
           <Alert severity="error" sx={{ mt: 2 }}>
@@ -76,6 +114,14 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
           </Alert>
         )}
       </Box>
+      {issues.length > 0 && (
+        <EditIssueModal
+          open={editingIndex != null}
+          issue={issues[editingIndex ?? 0]}
+          onChangeIssue={handleChangeIssue}
+          onClose={handleEditModalClose}
+        />
+      )}
     </>
   );
 };

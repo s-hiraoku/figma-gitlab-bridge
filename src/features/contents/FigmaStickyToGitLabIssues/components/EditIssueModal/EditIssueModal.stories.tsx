@@ -3,7 +3,7 @@ import { EditIssueModal } from "./EditIssueModal";
 
 export default {
   component: EditIssueModal,
-  args: { open: true, issue: { title: "Fix bug", description: "description" } },
+  args: { open: true, issue: { title: "Fix bug", description: "" } },
 } as Meta<typeof EditIssueModal>;
 
 export const Default: StoryObj<typeof EditIssueModal> = {};

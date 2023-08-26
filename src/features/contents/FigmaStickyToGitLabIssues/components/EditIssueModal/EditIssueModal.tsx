@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { GitLabIssue } from "../../utils";
 import {
   Box,
@@ -18,6 +18,13 @@ type Props = {
   onClose: () => void;
 };
 
+const EMPTY_ISSUE: GitLabIssue = {
+  title: "",
+  description: "",
+  labels: "",
+  milestone: "",
+};
+
 export const EditIssueModal: React.FC<Props> = ({
   open,
   issue: initialIssue,
@@ -26,13 +33,21 @@ export const EditIssueModal: React.FC<Props> = ({
 }) => {
   const [issue, setIssue] = useState<GitLabIssue>(initialIssue);
 
+  useEffect(() => {
+    setIssue(initialIssue);
+  }, [initialIssue]);
+
   const handleSave = useCallback(() => {
     onChangeIssue(issue);
     onClose();
+    setIssue(EMPTY_ISSUE);
   }, [issue, onChangeIssue, onClose]);
+
   const handleCancel = useCallback(() => {
     onClose();
+    setIssue(EMPTY_ISSUE);
   }, [onClose]);
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>Edit Issue</DialogTitle>

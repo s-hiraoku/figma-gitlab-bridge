@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -45,12 +45,16 @@ export type DataTableRow = {
 
 export type DataTableRows = DataTableRow[];
 
-export type DataTableProps = {
+type DataTableProps = {
   maxHeight?: number;
   ariaLabel?: string;
   headers: DataTableHeaderColumns;
   rows: DataTableRows;
   defaultRowsPerPage?: DefaultRowsPerPage;
+  onClickTableRow?: (
+    index: number,
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
 };
 
 export const DataTable: React.FC<DataTableProps> = ({
@@ -59,6 +63,7 @@ export const DataTable: React.FC<DataTableProps> = ({
   headers,
   rows,
   defaultRowsPerPage,
+  onClickTableRow,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(
@@ -67,19 +72,27 @@ export const DataTable: React.FC<DataTableProps> = ({
 
   const theme = useTheme();
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
+  const handleChangePage = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+      setPage(newPage);
+    },
+    []
+  );
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(+event.target.value as DefaultRowsPerPage);
-    setPage(0);
-  };
+  const handleChangeRowsPerPage = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRowsPerPage(+event.target.value as DefaultRowsPerPage);
+      setPage(0);
+    },
+    []
+  );
+
+  const handleClickTableRow = useCallback(
+    (index: number, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      onClickTableRow?.(index, event);
+    },
+    [onClickTableRow]
+  );
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -119,7 +132,17 @@ export const DataTable: React.FC<DataTableProps> = ({
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => (
-                <TableRow hover tabIndex={-1} key={index}>
+                <TableRow
+                  hover
+                  tabIndex={-1}
+                  key={index}
+                  onClick={(event) => handleClickTableRow(index, event)}
+                  sx={
+                    onClickTableRow
+                      ? { cursor: "pointer" }
+                      : { cursor: "default" }
+                  }
+                >
                   {headers.map((header) => {
                     const value = row[header.id];
                     return (
