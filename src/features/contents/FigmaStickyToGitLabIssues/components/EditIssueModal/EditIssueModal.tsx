@@ -18,13 +18,6 @@ type Props = {
   onClose: () => void;
 };
 
-const EMPTY_ISSUE: GitLabIssue = {
-  title: "",
-  description: "",
-  labels: "",
-  milestone: "",
-};
-
 export const EditIssueModal: React.FC<Props> = ({
   open,
   issue: initialIssue,
@@ -34,19 +27,15 @@ export const EditIssueModal: React.FC<Props> = ({
   const [issue, setIssue] = useState<GitLabIssue>(initialIssue);
 
   useEffect(() => {
-    setIssue(initialIssue);
-  }, [initialIssue]);
+    if (open) {
+      setIssue(initialIssue);
+    }
+  }, [initialIssue, open]);
 
   const handleSave = useCallback(() => {
     onChangeIssue(issue);
     onClose();
-    setIssue(EMPTY_ISSUE);
   }, [issue, onChangeIssue, onClose]);
-
-  const handleCancel = useCallback(() => {
-    onClose();
-    setIssue(EMPTY_ISSUE);
-  }, [onClose]);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
@@ -79,7 +68,7 @@ export const EditIssueModal: React.FC<Props> = ({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel}>Cancel</Button>
+        <Button onClick={onClose}>Cancel</Button>
         <Button onClick={handleSave}>Save</Button>
       </DialogActions>
     </Dialog>
