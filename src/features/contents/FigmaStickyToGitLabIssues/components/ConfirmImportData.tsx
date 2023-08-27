@@ -4,6 +4,7 @@ import {
   GitLabIssue,
   GitLabIssues,
   convertStickyNoteToGitLabIssues,
+  setLabelsToAllIssues,
 } from "../utils";
 import { Box, useTheme } from "@mui/system";
 import { ErrorBoundary } from "@suspensive/react";
@@ -36,7 +37,7 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
   const [editingIndex, setEditingIndex] = React.useState<number | null>(null);
 
   useEffect(() => {
-    const issues = convertStickyNoteToGitLabIssues(stickyNote, []);
+    const issues = convertStickyNoteToGitLabIssues(stickyNote);
     setIssues(issues);
     onChangeGitLabIssues(issues);
     return () => {
@@ -68,11 +69,11 @@ export const ConfirmImportData: React.FC<ConfirmImportDataProps> = ({
 
   const handleChangeLabels = useCallback(
     (labels: string[]) => {
-      const newIssues = convertStickyNoteToGitLabIssues(stickyNote, labels);
+      const newIssues = setLabelsToAllIssues(issues, labels);
       setIssues(newIssues);
       onChangeGitLabIssues(newIssues);
     },
-    [stickyNote, onChangeGitLabIssues]
+    [issues, onChangeGitLabIssues]
   );
 
   return (

@@ -96,7 +96,7 @@ export const stickyNotesToText = (stickyNotes: StickyNote[]): string => {
 
 export const convertStickyNoteToGitLabIssues = (
   stickyNote: string,
-  Labels: string[]
+  Labels: string[] = []
 ): GitLabIssue[] => {
   const stickyNotes = stickyNote.trim().split("\n");
 
@@ -131,4 +131,14 @@ export const convertStickyNotesToGitLabIssues = (
 
 export const validateGitLabIssues = (gitLabIssues: GitLabIssues): boolean => {
   return !gitLabIssues.some((issue) => issue.title === "");
+};
+
+export const setLabelsToAllIssues = (
+  gitLabIssues: GitLabIssues,
+  labels: string[]
+): GitLabIssues => {
+  return gitLabIssues.map((issue) => ({
+    ...issue,
+    labels: labels.join(","),
+  }));
 };
