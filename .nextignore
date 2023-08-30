@@ -1,0 +1,4 @@
+# .nextignore
+
+# Ignore the docs directory
+docs/
