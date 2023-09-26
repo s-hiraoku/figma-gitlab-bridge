@@ -45,6 +45,7 @@ export const isNodeWithChildren = (
 };
 
 export type StickyNote = {
+  sectionName: string;
   text: string;
   url: string;
 };

@@ -49,6 +49,7 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
       const figmaId = parseFigmaId(figmaUrl);
       const { document } = fileResponse;
       const { children } = document;
+      let currentSectionName: string | undefined;
 
       const searchStickyNotes = (
         node: Figma.Node,
@@ -58,6 +59,7 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
           const isIncluded =
             sections == null ||
             sections.some((section) => section === node.name);
+          currentSectionName = node.name;
           return node.children.flatMap((child) =>
             searchStickyNotes(child, isIncluded)
           );
@@ -73,7 +75,11 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
             return [];
           }
           const url = createFigmaNodeURL(figmaId ?? "", id);
-          const stickyNote: StickyNote = { text, url };
+          const stickyNote: StickyNote = {
+            sectionName: currentSectionName ?? "",
+            text,
+            url,
+          };
           return [stickyNote];
         }
 
