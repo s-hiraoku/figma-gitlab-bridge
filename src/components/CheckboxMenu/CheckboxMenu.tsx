@@ -9,7 +9,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 type Label = React.ReactNode | string;
 
@@ -66,6 +66,12 @@ export const CheckboxMenu = <T extends string>({
       ),
     [items, searchText]
   );
+
+  useEffect(() => {
+    setSelectedItemValues(
+      initialSelectedItems?.map((item) => item.value) ?? []
+    );
+  }, [initialSelectedItems]);
 
   const handleMenuItemClick = (value: T) => {
     const updatedValues = selectedItemValues.includes(value)

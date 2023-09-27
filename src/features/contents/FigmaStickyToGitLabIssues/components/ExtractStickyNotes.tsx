@@ -99,6 +99,7 @@ export const ExtractStickyNotes: React.FC<Props> = ({
             label="Using Sections as Filters"
           />
           <SelectFigJamSections
+            resetSelectedItems={!modeSelectSection}
             sections={sections}
             onChange={handleChangeSelectSections}
             error={error}

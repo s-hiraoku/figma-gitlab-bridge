@@ -9,6 +9,7 @@ export type SelectFigJamSectionsProps = {
   disabled: boolean;
   error: boolean;
   helperText: string;
+  resetSelectedItems: boolean;
 };
 
 export const SelectFigJamSections: React.FC<SelectFigJamSectionsProps> = ({
@@ -17,6 +18,7 @@ export const SelectFigJamSections: React.FC<SelectFigJamSectionsProps> = ({
   error,
   disabled,
   helperText,
+  resetSelectedItems,
 }) => {
   const handleChange = (items: Sections) => {
     onChange(items);
@@ -29,6 +31,7 @@ export const SelectFigJamSections: React.FC<SelectFigJamSectionsProps> = ({
 
   return (
     <CheckboxMenu<string>
+      initialSelectedItems={resetSelectedItems ? [] : undefined}
       label="Select Section"
       items={sectionItems ?? []}
       onChange={handleChange}
