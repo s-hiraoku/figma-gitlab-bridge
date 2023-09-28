@@ -9,7 +9,8 @@ type Props = {
   sections: Sections;
   onClickExtractStickyNote: (
     selectStickyColor: FigJamColor,
-    selectSections: Sections
+    selectSections: Sections,
+    shouldAddPrefix: boolean
   ) => void;
 };
 
@@ -24,6 +25,7 @@ export const ExtractStickyNotes: React.FC<Props> = ({
   const [selectSections, setSelectSections] = useState<Sections>(undefined);
 
   const [modeSelectSection, setModeSelectSection] = useState<boolean>(false);
+  const [shouldAddPrefix, setShouldAddPrefix] = useState<boolean>(false);
 
   const validate = useCallback(() => {
     if (
@@ -43,9 +45,11 @@ export const ExtractStickyNotes: React.FC<Props> = ({
     }
     onClickExtractStickyNote(
       selectStickyColor,
-      modeSelectSection ? selectSections : undefined
+      modeSelectSection ? selectSections : undefined,
+      shouldAddPrefix
     );
   }, [
+    shouldAddPrefix,
     modeSelectSection,
     onClickExtractStickyNote,
     selectSections,
@@ -74,6 +78,10 @@ export const ExtractStickyNotes: React.FC<Props> = ({
     },
     [setSelectSections]
   );
+
+  const handleAddPrefix = useCallback(() => {
+    setShouldAddPrefix((prev) => !prev);
+  }, [setShouldAddPrefix]);
 
   return (
     <Box
@@ -117,6 +125,13 @@ export const ExtractStickyNotes: React.FC<Props> = ({
           Export
         </Button>
       </Box>
+      <FormControlLabel
+        className="mt-4"
+        control={
+          <Switch checked={shouldAddPrefix} onChange={handleAddPrefix} />
+        }
+        label="Add # Prefix to Section for Title"
+      />
     </Box>
   );
 };

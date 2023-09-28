@@ -64,6 +64,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
 
   const [gitLabIssues, setGitLabIssues] = useState<GitLabIssues>([]);
   const [shouldUpdateEditor, setShouldUpdateEditor] = useState<boolean>(false);
+  const [shouldAddPrefix, setShouldAddPrefix] = useState<boolean>(false);
 
   const validateFigmaId = (value: string): boolean => {
     return parseFigmaId(value) !== null;
@@ -105,10 +106,15 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
   );
 
   const handleExtractStickyNoteClick = useCallback(
-    (selectStickyColor: FigJamColor, selectSections: Sections) => {
+    (
+      selectStickyColor: FigJamColor,
+      selectSections: Sections,
+      shouldAddPrefix: boolean
+    ) => {
       setShouldUpdateEditor(true);
       setSelectSections(selectSections);
       setStickyColor(selectStickyColor);
+      setShouldAddPrefix(shouldAddPrefix);
       setStatus(FIGJAM_STATUS.editImportData);
     },
     []
@@ -149,7 +155,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
       );
 
       setSections(getSections(fileResponse));
-      setStickyNote(stickyNotesToText(stickyNotes));
+      setStickyNote(stickyNotesToText(stickyNotes, shouldAddPrefix));
     }
     return () => {
       setStickyNote("");
@@ -164,6 +170,7 @@ export const FigmaStickyToGitLabIssues: React.FC = () => {
     isValidating,
     selectSections,
     stickyColor,
+    shouldAddPrefix,
   ]);
 
   const handleCreateGitLabIssueData = useCallback((stickyNote: string) => {

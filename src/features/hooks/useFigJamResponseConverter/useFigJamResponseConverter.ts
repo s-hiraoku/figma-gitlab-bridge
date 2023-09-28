@@ -19,7 +19,8 @@ export type UseFigJamResponseConverter = () => {
     figmaUrl: string,
     pickColor: FigJamColor,
     fileResponse: Figma.FileResponse | undefined,
-    sections?: string[]
+    shouldAddPrefix: boolean,
+    sections: string[] | undefined
   ) => StickyNote[];
   getSections: (fileResponse: Figma.FileResponse | undefined) => string[];
 };
@@ -41,7 +42,7 @@ export const useFigJamResponseConverter: UseFigJamResponseConverter = () => {
       figmaUrl: string,
       pickColor: FigJamColor,
       fileResponse: Figma.FileResponse | undefined,
-      sections?: string[]
+      sections: string[] | undefined
     ): StickyNote[] => {
       if (fileResponse == null) {
         return [];

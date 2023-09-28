@@ -91,8 +91,23 @@ export const rgbaToHexWithoutAlpha = (
   return `#${red}${green}${blue}`;
 };
 
-export const stickyNotesToText = (stickyNotes: StickyNote[]): string => {
-  return stickyNotes.map((note) => `${note.text},${note.url}`).join("\n");
+const extractSectionNumber = (sectionName: string): string => {
+  const matches = sectionName.match(/#\d+/g);
+  return matches ? matches.join(" ") + " " : "";
+};
+
+export const stickyNotesToText = (
+  stickyNotes: StickyNote[],
+  shouldAddPrefix: boolean
+): string => {
+  return stickyNotes
+    .map(
+      (note) =>
+        `${shouldAddPrefix ? extractSectionNumber(note.sectionName) : ""}${
+          note.text
+        },${note.url}`
+    )
+    .join("\n");
 };
 
 export const convertStickyNoteToGitLabIssues = (
