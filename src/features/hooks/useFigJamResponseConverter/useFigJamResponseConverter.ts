@@ -19,7 +19,6 @@ export type UseFigJamResponseConverter = () => {
     figmaUrl: string,
     pickColor: FigJamColor,
     fileResponse: Figma.FileResponse | undefined,
-    shouldAddPrefix: boolean,
     sections: string[] | undefined
   ) => StickyNote[];
   getSections: (fileResponse: Figma.FileResponse | undefined) => string[];
