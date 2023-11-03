@@ -1,5 +1,7 @@
 import { Figma, GitLab } from "@types";
 
+const STICKY_NOTE_DELIMITER = "|||";
+
 export const FIGMA_NODE_TYPE: Record<Figma.NodeType, Figma.NodeType> = {
   DOCUMENT: "DOCUMENT",
   CANVAS: "CANVAS",
@@ -105,7 +107,7 @@ export const stickyNotesToText = (
       (note) =>
         `${shouldAddPrefix ? extractSectionNumber(note.sectionName) : ""}${
           note.text
-        },${note.url}`
+        }${STICKY_NOTE_DELIMITER}${note.url}`
     )
     .join("\n");
 };
@@ -117,7 +119,7 @@ export const convertStickyNoteToGitLabIssues = (
   const stickyNotes = stickyNote.trim().split("\n");
 
   return stickyNotes.map((note) => {
-    const [title = "", url = ""] = note.split(",");
+    const [title = "", url = ""] = note.split(STICKY_NOTE_DELIMITER);
 
     return {
       title,
