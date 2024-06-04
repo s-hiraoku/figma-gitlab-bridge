@@ -63,7 +63,7 @@ export type GitLabIssues = Array<GitLabIssue>;
 
 export const parseFigmaId = (figmaURL: string) => {
   const match =
-    /https:\/\/([\w.-]+\.)?figma.com\/(file|proto)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/.exec(
+    /https:\/\/([\w.-]+\.)?figma.com\/(file|proto|board)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/.exec(
       figmaURL
     );
 
